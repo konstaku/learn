@@ -19,3 +19,4 @@ const data = async() => {
 data()
   .then(result => console.log('Current balance:', result, 'ETH'))
   .catch(error => console.log('Error:', error.message));
+
