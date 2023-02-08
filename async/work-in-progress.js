@@ -1,25 +1,20 @@
 'use strict'
-
-let generator = function(num) {
-  return num * 16807 % 2147483647;
-}
-
-const generatorDecorator = function(func) {
-  let current = 0;
-  let next = 0;
-
-  return function(x) {
-    current = x;
-    next = func(current);
-    current += next;
-    return next;
+const makeObservable = function(target) {
+  target.observe = function(func) {
+    console.log('function observe triggered');
+  //  func();
   }
+
+  return new Proxy(target, {
+    set(target, property, value) {
+    //  target.observe(property, value);
+    }
+  })
 }
 
-generator = generatorDecorator(generator);
+let user = {};
+user = makeObservable(user);
 
-console.log(generator(1));
-console.log(generator(1));
-console.log(generator(1));
-console.log(generator(1));
-console.log(generator(1));
+user.observe((key, value) => { console.log(`SET ${key} = ${value}`); });
+
+//user.name = 'Konsta';
