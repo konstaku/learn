@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Work in progress...
+    </title>  
+  </head>
+  <body>    
+    <script>
+      'use strict'
+      const database = {
+        'Fish': {
+          'Trout':      {},
+          'Salmon':     {},
+        },
+
+        'Trees': {
+
+          'Giant': {
+            'Sequoia':  {},
+            'Oak':      {},
+          },
+
+          'Blooming':   {
+            'Apple':    {},
+            'Magnolia': {},
+          }
+        }
+      };
+
+      // Second argument is needed to append child lists of child objects.
+      // By default it is body, in recursive calls it will be the parent list.
+      function databaseLog(data, list = document.body) {
+        const ul = document.createElement('ul');
+        list.append(ul);
+
+        for (const [key, value] of Object.entries(data)) {
+          const li = document.createElement('li');
+          li.textContent = key;
+          ul.append(li);
+
+          // Here I check if the value is not an emty object - 
+          // to not create empty <ul></ul> on bottom levels
+          if (typeof(value) == 'object' && Object.keys(value) != 0) {
+            databaseLog(value, ul);
+          }
+        }
+      }
+
+      databaseLog(database);
+    
+    </script>
+  </body>
+</html>
+
