@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      What about hedgehogs?
+    </title>
+  </head>
+  <body>
+    
+
+    <script>
+      
+      'use strict'
+      let i, j;
+      let table = document.createElement('table');
+      let tbody = document.createElement('tbody');
+      for (let i = 1; i <= 25; i ++) {
+        let row = document.createElement('tr');
+
+        for (let j = 1; j <= 25; j ++) {
+          let cell = document.createElement('td');
+          let content = document.createTextNode(`${i}:${j}`);
+          cell.appendChild(content);
+          row.appendChild(cell)
+          cell.style = 'border: 1px solid';
+
+          if (i == j) {
+            cell.style = 'background-color: red; border: 1px solid';
+          }
+
+        }
+
+        tbody.appendChild(row);
+      }
+
+      table.style = 'border-collapse: collapse';
+      table.appendChild(tbody);
+      document.body.appendChild(table);
+
+    </script>
+
+  </body>
+  </html>

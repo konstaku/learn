@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style type="text/css">
+      h1 {
+        font-family: sans-serif;
+        font-weight: 200;
+        font-size: 32px;
+        color: gray;
+      }
+
+      table, th, td {
+        border-collapse: collapse;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        padding: 5px;
+      }
+
+      td {
+        text-align: left;
+        vertical-align: text-top;
+        font-family: sans-serif;
+        font-size: 12px;
+        color: gray;
+        height: 60px;
+        width: 100px;
+      }
+
+      th {
+        font-family: sans-serif;
+        font-size: 32px;
+        color: lightblue;
+      }
+
+      .sunday {
+        color: lightcoral;
+      }
+
+    </style>
+  </head>
+  <body>
+    <script>
+      'use strict'
+      function createCalendar(elem, year, month) {
+        const header = document.createElement('h1');
+        header.textContent = new Intl.DateTimeFormat('en-UK', { month: 'long', year: 'numeric' }).format(new Date(year, month));
+        document.body.append(header);
+
+        // Adjusting for human month input (1-12 instead of 0-11)
+        month = month - 1;
+
+        // Create and append table elements
+        const calendarTable = document.createElement('table');
+        const tableHead = document.createElement('thead');
+        const calendarBody = document.createElement('tbody');
+
+        calendarTable.append(tableHead);
+        calendarTable.append(calendarBody);
+        elem.append(calendarTable);
+
+        // Declare an array of weekdays
+        const weekDays = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
+
+        let weeks = [[]];
+        // Define last day in month to determine how much says to display
+        const lastDay = new Date(year, month + 1, 0).getDate();
+
+        // Define the weekday number of the first day in month 
+        let weekDay = new Date(year, month).getDay();
+        if (weekDay == 0) weekDay = 7;
+
+        let curWeek = 0;
+
+        const weekRow = document.createElement('tr');
+
+        weekDays.forEach(day => {
+          const dayCell = document.createElement('th');
+          dayCell.textContent = day;
+
+          if (dayCell.textContent == 'su') {
+            dayCell.className = 'sunday';
+          }
+
+          weekRow.append(dayCell);
+        });
+
+        tableHead.append(weekRow);
+
+        // Add empty elements if the first day is not Monday
+        weeks[curWeek] = [];
+
+        for (let i = 0; i < weekDay - 1; i++) {
+          weeks[curWeek].push('');
+        }
+
+        // Push the days into an array
+        for (let i = 1; i <= lastDay; i++) {
+          if (weeks[curWeek].length < 7) {
+            weeks[curWeek].push(i);
+          } else {
+            curWeek++;
+            weeks[curWeek] = [];
+            i--;
+          }
+        }
+
+        // Add empty elements for last unused days
+        if (weeks[curWeek].length < 7) {
+          while (weeks[curWeek].length != 7) {
+            weeks[curWeek].push('');
+          }
+        }
+
+        for (let i = 0; i < weeks.length; i++) {
+          const weekRow = document.createElement('tr');
+
+          for (let day of weeks[i]) {
+            const dayCell = document.createElement('td');
+            dayCell.textContent = day;
+            weekRow.append(dayCell);
+          }
+
+          calendarTable.append(weekRow);
+        }
+      }
+
+
+
+      createCalendar(document.body, 2023, 4);
+
+    </script>
+  </body>
+  </html>
