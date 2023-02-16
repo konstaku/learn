@@ -1,20 +1,16 @@
 'use strict'
-const makeObservable = function(target) {
-  target.observe = function(func) {
-    console.log('function observe triggered');
-  //  func();
+function digPow(n, p){
+  let numberArray = n.toString().split('').map(Number);
+  let result = 0;
+  
+  for (let i = 0; i < numberArray.length; i++) {
+    result += numberArray[i] ** (p+i);
   }
+  
+  let k = result / n;
 
-  return new Proxy(target, {
-    set(target, property, value) {
-    //  target.observe(property, value);
-    }
-  })
+  console.log(Number.isInteger(k));
+  console.log(`n: ${n}, p: ${p}, result: ${result}, k: ${k}`);
 }
 
-let user = {};
-user = makeObservable(user);
-
-user.observe((key, value) => { console.log(`SET ${key} = ${value}`); });
-
-//user.name = 'Konsta';
+digPow(92, 1);
