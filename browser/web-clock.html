@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style type="text/css">
+      #clock-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 20%;
+      }
+      #clock {
+        font-family: sans-serif;
+        font-weight: 100;
+        font-size: 200px;
+        text-align: center;
+        color: darkgray;
+        margin: auto;
+      }
+      #clock-control {
+        text-align: center;
+      }
+      .startClock, .stopClock {
+        font-family: sans-serif;
+        font-weight: 100;
+        font-size: 20px;
+        color: darkgray;
+        padding-inline: 30px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border: none;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="clock-wrapper">
+      <div id="clock">
+        <span class="hours">00</span>:<span class="minutes">00</span>:<span class=seconds>00</span></div>
+      </div>
+      <div id="clock-control">
+        <input type="button" class="startClock" value="Start">
+        <input type="button" class="stopClock" value="Stop">
+      </div>
+    </div>
+    <script>
+      'use strict'
+      function updateClock() {
+        const clock = document.getElementById('clock');
+        const date = new Date();
+
+        clock.children[0].textContent = date.getHours()   < 10 ? '0' + date.getHours()   : date.getHours();
+        clock.children[1].textContent = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+        clock.children[2].textContent = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+      }
+
+      let timerID;
+      let startButton = document.querySelector('.startClock');
+      let stopButton = document.querySelector('.stopClock');
+
+      startButton.onclick = function startClock() {
+        timerID = setInterval(() => updateClock(), 1000);
+        updateClock();
+      }
+
+      stopButton.onclick =function stopClock() {
+        clearInterval(timerID);
+        timerID = null;
+      }
+
+    </script>
+  </body>
+  </html>

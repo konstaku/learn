@@ -45,11 +45,11 @@
     <script>
       'use strict'
       function createCalendar(elem, year, month) {
-        const header = document.createElement('h1');
-
         // Adjusting for human month input (1-12 instead of 0-11)
         month = month - 1;
 
+        // Display month in header
+        const header = document.createElement('h1');
         header.textContent = new Intl.DateTimeFormat('en-UK', { month: 'long', year: 'numeric' }).format(new Date(year, month));
         document.body.append(header);
 
@@ -64,7 +64,7 @@
 
         // Declare an array of weekdays
         const weekDays = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
-
+        // Initialize a 2d array of values for each week
         let weeks = [[]];
         // Define last day in month to determine how much says to display
         const lastDay = new Date(year, month + 1, 0).getDate();
@@ -75,6 +75,7 @@
 
         let curWeek = 0;
 
+        // Fill in week days names
         const weekRow = document.createElement('tr');
 
         weekDays.forEach(day => {
@@ -92,7 +93,6 @@
 
         // Add empty elements if the first day is not Monday
         weeks[curWeek] = [];
-
         for (let i = 0; i < weekDay - 1; i++) {
           weeks[curWeek].push('');
         }
@@ -115,6 +115,7 @@
           }
         }
 
+        // Filling in the calendar
         for (let i = 0; i < weeks.length; i++) {
           const weekRow = document.createElement('tr');
 
