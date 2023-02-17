@@ -2,42 +2,34 @@
 <html>
   <head>
     <title>
-      What about hedgehogs?
+      WIP
     </title>
+    <style type="text/css">
+      #field {
+        width: 200px;
+        border: 10px groove black;
+        background-color: #00FF00;
+        position: relative;
+      }
+      #ball {
+        position: absolute;
+      }
+    </style>
   </head>
   <body>
-    
-
+      <div id="field">
+      <img src="https://en.js.cx/clipart/ball.svg" id="ball"> . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    </div>
     <script>
-      
       'use strict'
-      let i, j;
-      let table = document.createElement('table');
-      let tbody = document.createElement('tbody');
-      for (let i = 1; i <= 25; i ++) {
-        let row = document.createElement('tr');
-
-        for (let j = 1; j <= 25; j ++) {
-          let cell = document.createElement('td');
-          let content = document.createTextNode(`${i}:${j}`);
-          cell.appendChild(content);
-          row.appendChild(cell)
-          cell.style = 'border: 1px solid';
-
-          if (i == j) {
-            cell.style = 'background-color: red; border: 1px solid';
-          }
-
-        }
-
-        tbody.appendChild(row);
-      }
-
-      table.style = 'border-collapse: collapse';
-      table.appendChild(tbody);
-      document.body.appendChild(table);
+      console.dir(getComputedStyle(ball));
+      console.log(getComputedStyle(ball).blockSize)
+      ball.style.cssText = ` 
+        margin-left: ${field.clientWidth / 2}px;
+        margin-top: ${field.clientHeight / 2}px;
+      `;
+      
 
     </script>
-
   </body>
   </html>
