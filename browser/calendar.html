@@ -63,7 +63,7 @@
         elem.append(calendarTable);
 
         // Declare an array of weekdays
-        const weekDays = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
+        const weekDays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
         let weeks = [[]];
         // Define last day in month to determine how much says to display
@@ -81,7 +81,7 @@
           const dayCell = document.createElement('th');
           dayCell.textContent = day;
 
-          if (dayCell.textContent == 'su') {
+          if (dayCell.textContent == 'sun') {
             dayCell.className = 'sunday';
           }
 
@@ -128,7 +128,7 @@
         }
       }
 
-      createCalendar(document.body, 2023, 3);
+      createCalendar(document.body, 2023, 2);
 
     </script>
   </body>
