@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style>
+      #field {
+        position: relative;
+        width: 200px;
+        height: 150px;
+        border: 10px solid black;
+        background-color: #00FF00;
+        overflow: hidden;
+      }
+      #ball {
+        position: absolute;
+        transition: 1s;
+      }
+    </style>
+  </head>
+  <body style="height:2000px">
+    <div id="field">
+      <img src="https://ru.js.cx/clipart/ball.svg" id="ball"> . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    </div>
+    <script>
+    'use strict'
+    const field = document.getElementById('field');
+    const ball  = document.getElementById('ball');
+    
+    let ballRadius;
+
+    const fieldBorder = field.clientTop;
+    const fieldTop    = field.offsetTop + field.clientTop;
+    const fieldBottom = fieldTop + field.clientHeight;
+    const fieldLeft   = field.offsetLeft + fieldBorder;
+    const fieldRight  = fieldLeft + field.clientWidth;
+
+    // Wait for the document to load to get the ball radius and position the ball in the top left corner 
+    // so the ball has its initial coordinates and the first animation goes smoothly;
+    window.addEventListener('load', () => {
+      ballRadius      = +getComputedStyle(ball).height.slice(0, -2) / 2;
+      ball.style.left = fieldBorder + field.offsetLeft + 'px';
+      ball.style.top  = fieldBorder + field.offsetTop + 'px';
+    });
+
+    field.onclick = moveBall;
+
+    function moveBall(event) {
+      let ballX = event.clientX; 
+      let ballY = event.clientY;
+
+      // Checks needed to prevent the ball from falling outside of field border
+      if (event.clientX < fieldLeft + ballRadius) {
+        ballX = fieldLeft + ballRadius;
+      }
+      if (event.clientX > fieldRight - ballRadius) {
+        ballX = fieldRight - ballRadius;
+      }
+      if (event.clientY < fieldTop + ballRadius - window.pageYOffset) {
+        ballY = fieldTop + ballRadius - window.pageYOffset;
+      }
+      if (event.clientY > fieldBottom - ballRadius - window.pageYOffset) {
+        ballY = fieldBottom - ballRadius - window.pageYOffset;
+      }
+
+      ball.style.left = ballX - ballRadius + 'px';
+      ball.style.top  = ballY - ballRadius + window.pageYOffset + 'px';
+    }
+
+    </script>
+  </body>
+  </html>
