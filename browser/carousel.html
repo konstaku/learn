@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+
+    <style>
+      #carousel {
+        position: absolute;
+        display: inline-block;
+        background-color: lightgrey;
+        border-color: gray;
+        border-radius: 10px;
+        padding: 10px;
+      }
+      #carouselitems {
+      }
+      .arrowwrapper {
+        position: relative;
+/*        border: 1px solid;*/
+        bottom: 60px;
+      }
+      .arrow {
+        padding: 0;
+        background: #ddd;
+        border-radius: 15px;
+        border: 1px solid gray;
+        font-size: 24px;
+        line-height: 24px;
+        color: #444;
+      }
+      .arrow:focus {
+        outline: none;
+      }
+      .arrow:hover {
+        background: #ccc;
+        cursor: pointer;
+      }
+      ul {
+        height: 130px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: 0;
+        display: inline-block;
+      }
+      ul img {
+        width: 130px;
+        height: 130px;
+        display: block;
+        transition: 1s;
+         /* removing empty spaces between images */
+/*        border: 1px solid;*/
+      }
+      ul li {
+        display: inline-block; /* removing empty space between list items */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="carousel">
+      
+
+      <div id="carouselitems">
+        <span class="arrowwrapper">
+          <button class="arrow" id="arrowleft">⇦</button>
+        </span>
+
+        <ul>
+          <li><img src="https://ru.js.cx/carousel/1.png"></li>
+          <li><img src="https://ru.js.cx/carousel/2.png"></li>
+          <li><img src="https://ru.js.cx/carousel/3.png"></li>
+          <li><img src="https://ru.js.cx/carousel/4.png"></li>
+          <li><img src="https://ru.js.cx/carousel/5.png"></li>
+          <li><img src="https://ru.js.cx/carousel/6.png"></li>
+          <li><img src="https://ru.js.cx/carousel/7.png"></li>
+          <li><img src="https://ru.js.cx/carousel/8.png"></li>
+          <li><img src="https://ru.js.cx/carousel/9.png"></li>
+          <li><img src="https://ru.js.cx/carousel/10.png"></li>
+        </ul>
+
+        <span class="arrowwrapper">
+          <button class="arrow" id="arrowright">⇨</button>
+        </span>
+      </div> 
+
+    </div>
+  
+    <script>
+      'use strict'
+      // Aplpying class attributes for each image
+      let i = 1;
+      let images = document.querySelectorAll('li');
+      let index = 0; // Current first image of frame
+      let frame = 3; // number of images in the frame
+
+      let buttonRight = document.getElementById('arrowright');
+      let buttonLeft  = document.getElementById('arrowleft');
+      buttonRight.addEventListener('click', moveRight);
+      buttonLeft.addEventListener('click', moveLeft);
+
+      for(let li of images) {
+        li.style.position = 'relative';
+        li.insertAdjacentHTML('beforeend', `<span style="position:absolute;left:0;top:0">${i}</span>`);
+        i++;
+      }
+
+      // Hiding all images except for the first frame
+      for(let i = index + frame; i < images.length; i++) {
+          images[i].style.display = 'none';
+        }
+
+      function moveRight() {
+        // Check if there is enogh images to fit into new frame. 
+        // If not, current first index is set to total images - number of images in frame
+        if (index + frame > images.length - frame) {
+          index = images.length - frame;
+          console.log(`*** New frame won't fit, shifting index ***`);
+        } else {
+          index+= frame;
+        }
+
+        renderFrame(index, frame);
+      }
+
+      function moveLeft() {
+        if (index - frame < 0) {
+          index = 0;
+        } else {
+          index -= frame;
+        }
+
+        renderFrame(index, frame);
+      }
+
+      function renderFrame(index, frame) {
+        for (let i = 0; i < images.length; i++) {
+          images[i].style.display = 'none'; 
+        }
+
+        for (let i = index; i < index + frame; i++) {
+          console.log(`Filling image #${i} of ${images.length}`);
+          images[i].style.display = 'inline-block';
+        }
+      }
+
+
+    </script>
+  </body>
+  </html>
