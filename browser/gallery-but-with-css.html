@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+
+    <style>
+      body {
+        padding: 10px;
+      }
+
+      .arrow {
+        position: absolute;
+        display: block;
+        top: 60px;
+        padding: 0;
+        background: #ddd;
+        border-radius: 15px;
+        border: 1px solid gray;
+        /* font-size + line-height make the border around symbol round-shaped */
+        font-size: 24px;
+        line-height: 24px;
+        color: #444;
+      }
+
+      .arrow:focus {
+        outline: none;
+      }
+
+      .arrow:hover {
+        background: #ccc;
+        cursor: pointer;
+      }
+
+      #arrowleft {
+        left: 5px;
+      }
+
+      #arrowright {
+        right: 5px;
+      }
+
+      .carousel {
+        position: relative;
+        width: 400px;
+        border: 1px solid #ccc;
+        border-radius: 15px;
+        padding: 10px 40px;
+        background: #eee;
+      }
+
+      .carousel img {
+        width: 130px;
+        height: 130px;
+        display: block;
+      }
+
+      .carouselitems {
+        width: 390px;
+        overflow: hidden;
+      }
+
+      .carouselitems ul {
+        height: 130px;
+        width: 9999px;
+        margin: 0;
+        /*  padding: 0 removes empty space before image in my horizontal list */
+        padding: 0; 
+        /*  font-size: 0 is important, otherwise li in my horizontal list will have an invisible offset */
+        font-size: 0;
+        transition: 1s;
+      }
+
+      .carouselitems li {
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="carousel" class="carousel">
+
+      <div id="carouselitems" class="carouselitems">
+        
+        <button class="arrow" id="arrowleft">⇦</button>
+
+        <ul>
+          <li><img src="https://ru.js.cx/carousel/1.png"></li>
+          <li><img src="https://ru.js.cx/carousel/2.png"></li>
+          <li><img src="https://ru.js.cx/carousel/3.png"></li>
+          <li><img src="https://ru.js.cx/carousel/4.png"></li>
+          <li><img src="https://ru.js.cx/carousel/5.png"></li>
+          <li><img src="https://ru.js.cx/carousel/6.png"></li>
+          <li><img src="https://ru.js.cx/carousel/7.png"></li>
+          <li><img src="https://ru.js.cx/carousel/8.png"></li>
+          <li><img src="https://ru.js.cx/carousel/9.png"></li>
+          <li><img src="https://ru.js.cx/carousel/10.png"></li>
+        </ul>
+
+        <button class="arrow" id="arrowright">⇨</button>
+      
+      </div> 
+
+    </div>
+
+    <script>
+      'use strict'
+      const width = 130;
+      const frame = 3;
+
+      const list = document.querySelector('ul');
+      const images = document.querySelectorAll('li');
+
+      let position = 0;
+
+      document.querySelector('#arrowright').onclick = function() {
+        position -= width * frame;
+        position = Math.max(position, -width * (images.length - frame));
+        list.style.marginLeft = position + 'px';
+      }
+
+      document.querySelector('#arrowleft').onclick = function() {
+        position += width * frame;
+        position = Math.min(position, 0);
+        list.style.marginLeft = position + 'px';
+      }
+
+    </script>
+  </body>
+  </html>
