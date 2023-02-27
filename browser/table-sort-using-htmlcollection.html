@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style>
+      body * {
+        border: 1px solid blue;
+      } 
+      table {
+        border-collapse: collapse;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 4px;
+      }
+      th {
+        cursor: pointer;
+      }
+      th:hover {
+        background: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <table id="grid">
+      <thead>
+        <tr>
+          <th data-type="number">Возраст</th>
+          <th data-type="string">Имя</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>5</td>
+          <td>Вася</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Петя</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>Женя</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Маша</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Илья</td>
+        </tr>
+      </tbody>
+    </table>
+    <script>
+      'use strict';
+      const table = document.getElementById('grid');
+      const tbody = document.querySelector('#grid > tbody')
+      const tableArray = Array.from(tbody.rows);
+
+      table.addEventListener('click', event => {
+        const target = event.target;
+        // Getting a column number to sort the right column 
+        const column = target.cellIndex;
+
+        if (target.dataset.type == 'number') {
+          tableArray.sort((x, y) => x.cells[column].innerText - y.cells[column].innerText);
+          // *** IMPORTANT ***
+          // An essential thing is to spread an array before appending it to a document
+          tbody.append(...tableArray);
+        }
+
+        if (target.dataset.type == 'string') {
+          tableArray.sort((x, y) => x.cells[column].innerText.localeCompare(y.cells[column].innerText));
+          // *** IMPORTANT ***
+          // An essential thing is to spread an array before appending it to a document
+          tbody.append(...tableArray);
+        }
+      });
+
+    </script>
+  </body>
+  </html>
