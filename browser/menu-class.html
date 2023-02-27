@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style>
+      body * {
+        border: 1px solid blue;
+      } 
+    </style>
+  </head>
+  <body>
+    <div class="menu">
+      <button data-action="save">Save</button>
+      <button data-action="load">Load</button>
+      <button data-action="search">Search</button>
+    </div>
+
+    <script>
+      'use strict';
+      let menu = document.querySelector('.menu');
+
+      class Menu {
+        constructor(elem) {
+          this._elem = elem;
+          elem.onclick = this.onClick.bind(this);
+        }
+
+        save() {
+          console.log('Saving...');
+        }
+
+        load() {
+          console.log('Loading...');
+        }
+
+        search() {
+          console.log('Searching...');
+        }
+
+        onClick(event) {
+          let action = event.target.dataset.action;
+
+          if (action) {
+            this[action]();
+          }
+        }
+      }
+
+      new Menu(menu);
+
+    </script>
+  </body>
+  </html>

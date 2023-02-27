@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style>
+      .wrapper:hover {
+        cursor: pointer;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <ul class="tree" id="tree">
+      <li>Животные
+        <ul>
+          <li>Млекопитающие
+            <ul>
+              <li>Коровы</li>
+              <li>Ослы</li>
+              <li>Собаки</li>
+              <li>Тигры</li>
+            </ul>
+          </li>
+          <li>Другие
+            <ul>
+              <li>Змеи</li>
+              <li>Птицы</li>
+              <li>Ящерицы</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Рыбы
+        <ul>
+          <li>Аквариумные
+            <ul>
+              <li>Гуппи</li>
+              <li>Скалярии</li>
+            </ul>
+          </li>
+          <li>Морские
+            <ul>
+              <li>Морская форель</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <script>
+      'use strict';
+      const tree = document.getElementById('tree');
+      const items = document.querySelectorAll('li');
+
+      for (let item of items) {
+        // I need to wrap each text node of <li> with a span to limit click zone to text only
+        // 
+        // 1. Creating a span with a class of wrapper
+        const span = document.createElement('span');
+        span.classList.add('wrapper');
+        // 2. Inserting the span before <li> first child, i.e. before inner text
+        item.insertBefore(span, item.firstChild);
+        // 3. Appending the <li> inner text to a span instead of <li>. Using nextSibling here
+        //    because the span is now <li> firstChild
+        span.append(item.firstChild.nextSibling);
+      }
+
+      tree.addEventListener('click', event => {
+        const target = event.target; 
+
+        if (target.className == 'wrapper') {
+          // If there is no UL under my span, break 
+          if (!target.nextSibling) return;
+          // The next sibling of my span is always UL
+          const listItems = target.nextSibling;
+          // Toggle visibility
+          listItems.hidden = !listItems.hidden;
+        }
+      });
+
+    </script>
+  </body>
+  </html>
