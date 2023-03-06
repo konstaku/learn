@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style>
+      /* The border style highlights borders of all elements so I can figure out how it works */
+/*      body * {
+        border: 1px solid blue;
+      } */
+
+      .selected {
+        background: #0f0;
+      }
+
+      li {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HTML elements go here -->
+    <ul id="ul">
+      <li>Christopher Robin</li>
+      <li>Winnie Pooh</li>
+      <li>Tigra</li>
+      <li>Kenga</li>
+      <li>Rabbi</li>
+    </ul>
+    <script>
+      // Script goes here
+      const list = document.getElementById('ul');
+      const items = document.querySelectorAll('ul > li');
+
+      list.addEventListener('click', event => {
+        if (event.target.tagName == 'LI') {
+          if (!event.metaKey) {
+            items.forEach(el => el.classList.remove('selected'));
+          }
+          event.target.classList.add('selected');
+        }
+      });
+
+    </script>
+  </body>
+  </html>
