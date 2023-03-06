@@ -33,6 +33,10 @@
       const list = document.getElementById('ul');
       const items = document.querySelectorAll('ul > li');
 
+      for (const item of items) {
+        item.setAttribute('onmousedown', 'return false');
+      }
+
       list.addEventListener('click', event => {
         if (event.target.tagName == 'LI') {
           if (!event.metaKey) {
