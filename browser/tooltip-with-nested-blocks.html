@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style>
+      /* The border style highlights borders of all elements so I can figure out how it works */
+/*      body * {
+        border: 1px solid blue;
+      } */
+
+      body {
+        height: 2000px;
+      }
+
+      .tooltip {
+        position: fixed;
+        z-index: 100;
+
+        padding: 10px 20px;
+
+        border: 1px solid #b3c9ce;
+        border-radius: 4px;
+        text-align: center;
+        font: italic 14px/1.3 sans-serif;
+        color: #333;
+        background: #fff;
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
+      }
+
+      #house {
+        margin-top: 50px;
+        width: 400px;
+        border: 1px solid brown;
+      }
+
+      #roof {
+        width: 0;
+        height: 0;
+        border-left: 200px solid transparent;
+        border-right: 200px solid transparent;
+        border-bottom: 20px solid brown;
+        margin-top: -20px;
+      }
+
+      p {
+        text-align: justify;
+        margin: 10px 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HTML elements go here -->
+    <div data-tooltip="Здесь домашний интерьер" id="house">
+      <div data-tooltip="Здесь крыша" id="roof"></div>
+
+      <p>Жили-были на свете три поросенка. Три брата. Все одинакового роста, кругленькие, розовые, с одинаковыми веселыми хвостиками.</p>
+
+      <p>Даже имена у них были похожи. Звали поросят: Ниф-Ниф, Нуф-Нуф и Наф-Наф. Все лето они кувыркались в зеленой траве, грелись на солнышке, нежились в лужах.</p>
+
+      <p>Но вот наступила осень. Солнце уже не так сильно припекало, серые облака тянулись над пожелтевшим лесом.</p>
+
+      <p>- Пора нам подумать о зиме, - сказал как-то Наф-Наф. <a href="https://ru.wikipedia.org/wiki/%D0%A2%D1%80%D0%B8_%D0%BF%D0%BE%D1%80%D0%BE%D1%81%D1%91%D0%BD%D0%BA%D0%B0" data-tooltip="Читать далее…">Наведи курсор на меня</a></p>
+
+    </div>
+    <script>
+      // Script goes here
+      const house = document.getElementById('house');
+
+      // Creating a tooltip
+      const tooltip = document.createElement('div');
+      tooltip.classList.add('tooltip');
+      tooltip.hidden = true;
+      document.body.append(tooltip);
+
+      // Tracking mouse movements
+      house.onmouseover = event => {
+        let target = event.target;
+
+        // If one of target parents has data-tooltip, display it in the tooltip
+        //
+        // !!! The book solution is using:
+        // event.target.closest('[data-tooltip]'
+        //
+        while (target) {
+          if (target.hasAttribute('data-tooltip')) {
+            tooltip.innerText = target.dataset.tooltip;
+            tooltip.hidden = false;
+            positionTooltip(target, tooltip);
+            return;
+          }
+          // Cycle through parents until tooltip found
+          target = target.parentNode;
+        }
+      };
+
+      house.onmouseout = event => {
+        const target = event.target;
+
+        // Check if cursor moved outside of the house
+        if (!house.contains(event.relatedTarget)) {
+          tooltip.hidden = true;
+          prevElem = null;
+          return;
+        }
+      };
+      
+      function positionTooltip(elem, tooltip) {
+        // Get coordinates of the element for which the tooltip will be displayed 
+        // and position the tooltip
+        let elemRect = elem.getBoundingClientRect();
+        let tooltipLeft = elemRect.left + elemRect.width / 2 - tooltip.offsetWidth / 2;
+        let tooltipTop = elemRect.top - tooltip.clientHeight - 5;
+
+        if (tooltipLeft < 0) {
+          tooltipLeft = 0;
+        }
+
+        if (tooltip.offsetHeight > elemRect.top - window.pageYOffset) {
+          tooltipTop = elemRect.bottom + 5;
+        }
+
+        tooltip.style.left = tooltipLeft + 'px';
+        tooltip.style.top = tooltipTop + 'px';
+      }
+
+    </script>
+  </body>
+  </html>
