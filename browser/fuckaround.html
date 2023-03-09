@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		.train {
+			background-color: pink;
+			height: 400px;
+			width: 700px;
+		}
+		.coordx, .coordy, .speed, .color {
+/*			display: inline-block;*/
+			border: 5 px lightgrey;
+			font-family: sans-serif;
+			font-size: 50px;
+		}
+	</style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Coordinates</title>
+</head>
+<body>
+	<div class="train"></div>
+	<div class="coordx">mouseX: ***</div>
+	<div class="coordy">mouseY: ***</div>
+	<div class="speed">Speed: 12.5</div>
+	<div class="color">Color: </div>
+
+
+	<script>
+		const field = document.querySelector('.train');
+		const coordX = document.querySelector('.coordx');
+		const coordY = document.querySelector('.coordy');
+		const deltaSpeed = document.querySelector('.speed');
+		const color = document.querySelector('.color');
+		const div = document.querySelector('.train');
+		const divRect = div.getBoundingClientRect();
+		const divColorFirst = 0xff0;
+		const divColorLast = 0x07f;
+		
+		let lastX = 0;
+		let lastY = 0;
+
+		field.onmousemove = event => {
+			let delta = Math.floor(Math.sqrt((event.pageX - lastX) ** 2 + (event.pageY - lastY) ** 2));
+
+			coordX.innerText = `mouseX: ${ event.pageX }`;
+			coordY.innerText = `mouseY: ${ event.pageY }`;
+			
+			lastX = event.pageX;
+			lastY = event.pageY;
+
+			deltaSpeed.innerText = `Speed: ${ delta }, 0xspeed: ${ delta.toString(16) }`;
+
+			div.style.backgroundColor = 
+				`#${(divColorFirst + delta).toString(16)}${(divColorLast + delta).toString(16)}`;
+		}
+
+	</script>
+</body>
+</html>
