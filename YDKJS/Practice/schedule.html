@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	<script>
+		const dayStart = '07:30';
+		const dayEnd = '17:45';
+
+		function scheduleMeeting(startTime, durationMinutes) {
+			if(startTime.length < 5) {
+				startTime = '0' + startTime;
+			}
+
+			let workDayStart = new Date(`2000-01-01T${ dayStart }`);
+			let workDayEnd = new Date(`2000-01-01T${ dayEnd }`);
+			let suggestedStartTime = new Date(`2000-01-01T${ startTime }`);
+
+			// console.log(suggestedStartTime);
+			// console.log(suggestedStartTime.getTime() + durationMinutes * 60000);
+
+
+			if (suggestedStartTime >= workDayStart && suggestedStartTime.getTime() + durationMinutes * 60000 <= workDayEnd) {
+				return true;
+			}
+
+			return false;
+		}
+
+		console.log(scheduleMeeting('7:00', 15));
+		console.log(scheduleMeeting('07:15', 30));
+		console.log(scheduleMeeting('7:30', 30));
+		console.log(scheduleMeeting('11:30', 60));
+		console.log(scheduleMeeting('17:00', 45));
+		console.log(scheduleMeeting('17:30', 30));
+		console.log(scheduleMeeting('18:00', 15));
+
+
+
+	</script>
+</body>
+</html>
