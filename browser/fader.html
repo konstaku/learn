@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style>
+      /* The border style highlights borders of all elements so I can figure out how it works */
+/*      body * {
+        border: 1px solid blue;
+      } */
+      .slider {
+        position: absolute;
+        padding: 20px;
+      }
+
+      #stem {
+        position: absolute;
+        width: 300px;
+        height: 4px;
+        border-radius: 2px;
+        background-color: darkgray;
+      }
+
+      #fader {
+        margin-top: -10px;
+        position: relative;
+        height: 24px;
+        width: 16px;
+        border-radius: 4px;
+        background-color: darkblue;
+        cursor: pointer;
+      }
+
+    </style>
+  </head>
+  <body>
+    <!-- HTML elements go here -->
+    <div class="slider">
+      <div id="stem"></div>
+      <div id="fader"></div>
+    </div>
+    <script>
+      // Script goes here
+      'use strict';
+      const stem = document.getElementById('stem');
+      const fader = document.getElementById('fader');
+
+      const faderMin = stem.getBoundingClientRect().left;
+      const faderMax = stem.getBoundingClientRect().right - fader.clientWidth;
+      const faderWidth = fader.getBoundingClientRect().width;
+      let faderShift = 0;
+
+      fader.addEventListener('mousedown', event => {
+        // Calculating fader shift - diffenece betweel left and click location
+        faderShift = event.pageX - fader.getBoundingClientRect().left;
+        // On mouse move, call move function. I make it a separate function so I can 
+        // easily remove listener on mouse up.
+        document.addEventListener('mousemove', move);
+      });
+
+      // Stop moving fader when mouse up
+      document.addEventListener('mouseup', event => {
+        document.removeEventListener('mousemove', move);
+      });
+
+      // Check cases for both ends of the stem, and move
+      function moveFader(x) {
+        if (x < faderMin) {
+          fader.style.left = faderMin - faderWidth / 2 + 'px';
+          return;
+        } 
+
+        if (x - faderShift - faderWidth / 2 > faderMax) {
+          fader.style.left = faderMax + faderWidth / 2 + 'px';
+          return;
+        }
+
+        fader.style.left = x - faderShift + 'px';
+      }
+
+      // I need separate function so events in enclosed functions are not mixed up
+      function move(event) {
+        moveFader(event.x);
+      }
+
+    </script>
+  </body>
+  </html>
