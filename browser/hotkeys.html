@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style>
+      /* The border style highlights borders of all elements so I can figure out how it works */
+/*      body * {
+        border: 1px solid blue;
+      } */
+
+    </style>
+  </head>
+  <body>
+    <!-- HTML elements go here -->
+
+    </div>
+    <script>
+      // Script goes here
+      'use strict';
+      function runOnKeys(func, ...args) {
+        // My logic: I create a set of keys requires to be pressed simultaneously
+        // On key press I delete the pressed key from set and check if its size == 0 callback executed
+        // On key up the key is added to set (if it was in the args, otherwise ignored)
+        const keys = new Set(args);
+        console.log(keys);
+
+        document.addEventListener('keydown', removeKey);
+        document.addEventListener('keyup', addKey);
+
+        function removeKey(event) {
+          keys.delete(event.code);
+          console.log(keys);
+          if (keys.size === 0) func();
+        }
+
+        function addKey(event) {
+          if (args.includes(event.code)) {
+            keys.add(event.code);
+          }
+        }
+      }
+
+      runOnKeys(() => console.log('Done!'), 'KeyS', 'KeyD', 'KeyZ');
+
+    </script>
+  </body>
+  </html>
