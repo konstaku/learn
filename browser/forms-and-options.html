@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+
+    <style>
+      body * {
+        border: 1px solid blue;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HTML goes here -->
+    <select id="genres">
+      <option value="rock">Rock</option>
+      <option value="blues">Blues</option>
+    </select>
+
+
+    <script>
+      "use strict";
+      const genres = document.getElementById('genres');
+      console.log(
+        Array.from(genres.options)
+          .filter(el => el.selected)
+          .map(el => el.value)
+      );
+
+      const classic = new Option('Classic', 'classic');
+      classic.selected = true;
+      genres.append(classic);
+
+
+    </script>
+  </body>
+  </html>
