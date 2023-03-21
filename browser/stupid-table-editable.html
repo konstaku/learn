@@ -6,8 +6,7 @@
     </title>
     <style>
       body * {
-        border: 1px solid blue;
-        margin: 10px;
+/*        border: 1px solid blue;*/
         font-family: sans-serif;
       } 
 
@@ -18,9 +17,23 @@
         text-align: center;
       }
 
-      .highlight {
-        background-color: red !important;
+      .textarea {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 150px;
+        resize: none;
+        border: none;
       }
+
+      .textarea:focus {
+        outline: none;
+      }
+
+      .button {
+        position: absolute;
+      }
+
     </style>
   </head>
   <body>
@@ -87,6 +100,8 @@
 
       let table = document.querySelector('.bagua');
 
+      let editMode = false;
+
       table.addEventListener('click', event => {
         if (event.target.tagName != 'TD') {
           return;
@@ -96,11 +111,53 @@
       });
 
       function edit(target) {
+        if (editMode) return;
+
         const textarea = document.createElement('textarea');
-        textarea.style.height = target.clientHeight;
-        textarea.style.width = target.clientWidth;
-        target.innerHTML = '';
-        target.append(textarea);
+        
+        const ok = document.createElement('button');
+        ok.classList.add('button');
+        ok.innerText = 'OK';
+
+        const cancel = document.createElement('button');
+        cancel.classList.add('button');
+        cancel.innerText = 'Cancel';
+
+        textarea.classList.add('textarea');
+        textarea.value = target.innerHTML;
+        target.after(textarea);
+
+        textarea.after(ok);
+        ok.style.top = target.getBoundingClientRect().bottom + 'px';
+        ok.style.left = target.getBoundingClientRect().left + 'px';
+
+        ok.after(cancel);
+        cancel.style.top = ok.getBoundingClientRect().top + 'px';
+        cancel.style.left = ok.getBoundingClientRect().right + 'px';
+
+        textarea.focus();
+        editMode = true;
+
+        target.hidden = true;
+
+        ok.onmousedown = function() {
+          target.innerHTML = textarea.value;
+          textarea.after(target);
+          target.hidden = false;
+          editMode = false;
+          textarea.remove();
+          ok.remove();
+          cancel.remove();
+        };
+
+        cancel.onmousedown = function() {
+          textarea.after(target);
+          target.hidden = false;
+          editMode = false;
+          textarea.remove();
+          ok.remove();
+          cancel.remove();
+        };
       }
 
     </script>
