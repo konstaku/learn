@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+
+    <style>
+/*      body * {
+        outline: 1px solid blue;
+      }*/
+
+      #div {
+        background-color: lightslategrey;
+        width: 250px;
+        height: 100px;
+        padding: 8px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <!-- HTML goes here -->
+    <div id="div"></div>
+
+    <script>
+      "use strict";
+      const div = document.getElementById('div');
+      const text = document.createElement('textArea');
+      text.hidden = true;
+
+      div.onclick = function() {        
+
+        if (div.innerHTML) {
+          text.value = div.innerHTML;
+        }
+
+        text.hidden = false;
+        text.style.height = this.clientHeight + 'px';
+        text.style.width = div.clientWidth + 'px';
+        text.style.backgroundColor = div.style.backgroundColor;
+        this.hidden = true;
+        div.parentNode.append(text);
+        text.focus();
+
+        text.onblur = swapDiv;
+        text.onkeydown = event => { if (event.code === 'Enter') swapDiv() };
+
+        function swapDiv() {
+          div.hidden = false;
+          div.innerHTML = text.value;
+          text.hidden = true;
+        }
+      };
+
+      
+    </script>
+  </body>
+  </html>
