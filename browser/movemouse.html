@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+
+    <style>
+/*      body * {
+        outline: 1px solid blue;
+      }*/
+
+      #mouse {
+        position: fixed;
+        display: inline-block;
+        cursor: pointer;
+        margin: 0;
+      }
+
+      #mouse:focus {
+        border: 1px dotted black;
+        outline: none;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <!-- HTML goes here -->
+    <pre id="mouse">
+ _   _
+(q\_/p)
+ /. .\
+=\_t_/=   __
+ /   \   (
+((   ))   )
+/\) (/\  /
+\  Y  /-'
+ nn^nn
+    </pre>
+
+    <script>
+      const mouse = document.getElementById('mouse');
+      mouse.tabIndex = '1';
+
+      mouse.onfocus = function(event) {
+        this.addEventListener('keydown', moveMouse);
+      };
+
+      function moveMouse(event) {
+        switch (event.code) {
+        case 'ArrowUp':
+          mouse.style.top = mouse.getBoundingClientRect().top - mouse.clientHeight + 'px';
+          break;
+        case 'ArrowDown':
+          mouse.style.top = mouse.getBoundingClientRect().bottom + 'px';
+          break;
+        case 'ArrowLeft':
+          mouse.style.left = mouse.getBoundingClientRect().left - mouse.clientWidth + 'px';
+          break;
+        case 'ArrowRight':
+          mouse.style.left = mouse.getBoundingClientRect().right + 'px';
+          break;
+        default:
+          return;
+        }
+      }
+
+      
+    </script>
+  </body>
+  </html>
