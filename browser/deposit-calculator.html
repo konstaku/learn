@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+
+    <style>
+/*    body * {
+      outline: 1px solid blue;
+    }*/
+
+    #was, #will {
+      position: absolute;
+      width: 50px;
+      bottom: 0px;
+    }
+
+    #was {
+      background-color: red;
+    }
+
+    #will {
+      background-color: green;
+    }
+
+    #outputs .chart {
+      position: relative;
+      width: 120px;
+      height: 250px;
+    }
+
+    #outputs {
+      margin-top: 20px;
+    }
+    </style>
+  </head>
+  <body>
+    <!-- HTML goes here -->
+    <h1>APR calculator</h1>
+    <table id="inputs">
+      <tbody>
+        <tr>
+          <td>Initial deposit: </td>
+          <td><input type="number" id="deposit" value="1000"></td>
+        </tr>
+        <tr>
+          <td>Duration: </td>
+          <td><select id="duration">
+            <option value="3">3 months</option>
+            <option value="6">6 months</option>
+            <option value="9">9 months</option>
+            <option value="12" selected="true">1 year</option>
+            <option value="24">2 years</option>
+            <option value="36">3 years</option>
+            <option value="60">5 years</option>
+            <option value="120">10 years</option>
+          </select>
+        </td>
+        <tr>
+          <td>APR:</td>
+          <td><input type="number" id="apr" value="10"></td>
+        </tr>
+        </tr>
+      </tbody>
+    </table>
+    <span id="result"></span>
+
+    <table id="outputs">
+      <tbody>
+        <tr>
+          <td>Was:</td>
+          <td>Will have:</td>
+        </tr>
+        <tr>
+          <td id="youhad"></td>
+          <td id="youhave"></td>
+        </tr>
+        <tr>
+          <td class="chart">
+            <div id="was"></div>
+          </td>
+          <td class="chart">
+            <div id="will"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <script>
+    const deposit = document.getElementById('deposit');
+    const duration = document.getElementById('duration');
+    const apr = document.getElementById('apr');
+    const result = document.getElementById('result');
+
+    const resultWas = document.getElementById('youhad');
+    const resultWill = document.getElementById('youhave');
+    const inputs = document.getElementById('inputs');
+    const outputs = document.getElementById('outputs');
+
+    const was = document.getElementById('was');
+    const will = document.getElementById('will');    
+
+    outputs.style.width = inputs.getBoundingClientRect().width + 'px';
+    will.style.height = '250px';
+
+    // Run the function once the page is loaded
+    calculate();
+
+    // On each field change, update chart
+    deposit.oninput = apr.oninput = duration.onchange = calculate;
+
+    function calculate() {
+      const earnings = +deposit.value + deposit.value * (apr.value / 100) * (duration.value / 12);
+      resultWas.innerHTML = deposit.value;
+      resultWill.innerHTML = earnings;
+      // Updating the "was" height, as the "will" is always max height, so I need to re-calculate "was"
+      was.style.height = will.getBoundingClientRect().height * (+deposit.value / earnings) + 'px';
+    }
+      
+    </script>
+  </body>
+  </html>
