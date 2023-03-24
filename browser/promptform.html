@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+
+    <style>
+/*    body * {
+      outline: 1px solid blue;
+    }*/
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    #prompt-form {
+      z-index: 1000;
+      display: inline-block;
+      padding: 5px 5px 5px 70px;
+      width: 200px;
+      border: 1px solid black;
+      background: #fff url(https://en.js.cx/clipart/prompt.png) no-repeat left 5px;
+      vertical-align: middle;
+      opacity: 1;
+    }
+
+    #prompt-form-container {
+      background-color: rgba(0, 0, 0, 0.5);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 999;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+    }
+
+    #prompt-form-container:before {
+      display: inline-block;
+      height: 100%;
+      content: '';
+      vertical-align: middle;
+    }
+
+    #prompt-form input[name="text"] {
+      display: block;
+      margin: 5px;
+      width: 180px;
+    }
+
+    </style>
+  </head>
+  <body>
+    <!-- HTML goes here -->
+    <h1>Hey, press the button below</h1>
+    <input type="submit" id="button" value="Click me!">
+
+    <div id="prompt-form-container">
+
+        <form id="prompt-form">
+          <div id="prompt-message">Введите что-нибудь...
+            <br>Пожалуйста..</div>
+          <input name="text" type="text">
+          <input type="submit" value="Ok">
+          <input type="button" name="cancel" value="Отмена">
+        </form>        
+
+    </div>
+
+    <script>
+      const promptMessage = document.getElementById('prompt-message');
+      const button = document.getElementById('button');
+      const form = document.getElementById('prompt-form-container');
+      const promptForm = document.getElementById('prompt-form');
+      form.hidden = true;
+
+      button.onclick = wrapper('aaa', value => { alert(value) });
+
+      function wrapper(text, cb) {
+
+        return function(event) {
+          promptMessage.innerHTML = text;
+          form.hidden = false;
+          promptForm.text.focus();
+
+          promptForm.addEventListener('submit', () => {
+            cb(promptForm.text.value);
+            return false;
+          });
+
+          promptForm.cancel.addEventListener('click', () => {
+            cb(null);
+            promptForm.submit();
+          });
+        }
+      }
+
+      
+
+
+
+      // console.dir(promptForm.elements)
+
+    </script>
+  </body>
+  </html>
