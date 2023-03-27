@@ -78,7 +78,13 @@
       const promptForm = document.getElementById('prompt-form');
       form.hidden = true;
 
-      button.onclick = wrapper('aaa', value => { alert(value) });
+      // On click I call the wrapper function with a custom text and a callback function.
+      // The wrapper function is returning an another function, which takes event and uses the parameters 
+      // that I've sent into the wrapper function.
+      //
+      // This way I am able to control the behavior of onclick event using additional arguments and even functions. 
+
+      button.onclick = wrapper('Custom text', value => alert(value));
 
       function wrapper(text, cb) {
 
@@ -98,12 +104,6 @@
           });
         }
       }
-
-      
-
-
-
-      // console.dir(promptForm.elements)
 
     </script>
   </body>
