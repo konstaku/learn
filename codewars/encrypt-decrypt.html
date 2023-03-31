@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+
+    <style>
+/*    body * {
+      outline: 1px solid blue;
+    }*/
+
+    </style>
+  </head>
+  <body>
+    <!-- HTML goes here -->
+
+
+    <script>
+      function encrypt(text, n) {
+        
+        if (n < 1) return text;
+        
+        let result = [];
+        
+        while (n) {
+          for (let i = 0; i < text.length; i++) {
+            if (i % 2) {
+              result.push(text[i]);
+            }
+          }
+
+          for (let i = 0; i < text.length; i++) {
+            if (!(i % 2)) {
+              result.push(text[i]);
+            }
+          }
+          
+          text = result.join('');
+          result = [];
+          n--;
+        }
+        
+        return text;
+      }
+
+
+
+      function decrypt(encryptedText, n) {
+        
+        if (n < 1) return encryptedText;
+        
+        let tempText = encryptedText;
+        let result = [];
+        const half = Math.ceil(tempText.length / 2);
+
+        while (n) {
+
+          console.log(`String length: ${tempText.length}`)
+
+          if (tempText.length % 2) {
+            result.push(tempText[half - 1]);
+            
+            for (let i = 0; i < half - 1; i++) {
+              
+              result.push(tempText[i]);
+              result.push(tempText[i + half]);  
+              
+            }
+          }
+
+          if (!(tempText.length % 2)) {
+
+            result.push(tempText[half]);
+            
+            for (let i = 0; i < half; i++) {
+              
+              result.push(tempText[i]);
+              result.push(tempText[i + half + 1]);  
+              
+            }
+          }
+
+          tempText = result.join('');
+          result = [];
+
+          // console.log(`n = ${n}, string = ${tempText}`);
+
+          n--;
+        }
+
+        return tempText;
+      }
+
+
+      console.log(decrypt('hsi  etTi sats!', 1));
+      console.log(decrypt('hskt svr neetn!Ti aai eyitrsig', 1));
+
+
+    </script>
+
+  </body>
+  </html>
