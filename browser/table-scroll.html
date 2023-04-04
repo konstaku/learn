@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style>
+      /* The border style highlights borders of all elements so I can figure out how it works */
+/*      body * {
+        border: 1px solid blue;
+      } 
+*/
+      body {
+        height: 1000px;
+      }
+
+      table {
+        text-align: center;
+        margin: auto;
+      }
+
+      #arrow {
+        font-size: 20px;
+        position: fixed;
+        margin: 20px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HTML elements go here -->
+    <div id="arrow">∆</div>
+    <script>
+      // Script goes here
+      'use strict';
+      const table = document.createElement('table');
+      const tbody = document.createElement('tbody');
+      const arrow = document.getElementById('arrow');
+
+      table.append(tbody);
+      document.body.append(table);
+
+      let index = 1;
+      arrow.hidden = true;
+      arrow.onclick = () => { window.scroll({ top: 0, right: 0, behavior: 'smooth' }) } // window.scrollTo(0, 0);
+
+      for (let i = 0; i < 80; i++) {
+        const trow = document.createElement('tr');
+        for (let j = 0; j < 20; j++) {
+          const td = document.createElement('td');
+          td.innerText = index++;
+          trow.append(td);
+        }
+        tbody.append(trow);
+      }
+
+      document.addEventListener('scroll', () => {
+        if (document.documentElement.getBoundingClientRect().top < -document.documentElement.clientHeight) {
+          arrow.hidden = false;
+        } else {
+          arrow.hidden = true;
+        }
+      });
+
+
+    </script>
+  </body>
+  </html>

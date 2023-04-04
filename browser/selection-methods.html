@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      WIP
+    </title>
+    <style>
+      /* The border style highlights borders of all elements so I can figure out how it works */
+/*      body * {
+        border: 1px solid blue;
+      } 
+*/
+
+    </style>
+  </head>
+  <body>
+    <!-- HTML elements go here -->
+    <p id="p">Example: <i>italic</i> and <b>bold</b></p>
+
+    <p id="result"></p>
+
+    <script>
+      // Script goes here
+      const p = document.getElementById('p');
+      const result = document.getElementById('result');
+
+      const range = new Range();
+
+      const methods = {
+        deleteContents() {
+          range.deleteContents()
+        },
+        extractContents() {
+          const content = range.extractContents();
+          result.innerHTML = '';
+          result.append('Extracted: ', content);
+        },
+        cloneContents() {
+          const content = range.cloneContents();
+          result.innerHTML = '';
+          result.append('Cloned: ', content);
+        },
+        insertNode() {
+          const newNode = document.createElement('u');
+          newNode.innerHTML = 'New node';
+          range.insertNode(newNode);
+        },
+        surroundContents() {
+          const newNode = document.createElement('u');
+          try {
+            range.surroundContents(newNode);
+          } catch (e) { console.log(e) }
+        },
+        resetExample() {
+          p.innerHTML = `Example: <i>italic</i> and <b>bold</b>`;
+          result.innerHTML = '';
+
+          range.setStart(p.firstChild, 2);
+          range.setEnd(p.querySelector('b').firstChild, 3);
+
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+        }
+      };
+
+      for (const method in methods) {
+        document.write(`<div><button onclick="methods.${method}()">${method}</button></div>`);
+      }
+
+      methods.resetExample();
+
+
+    </script>
+  </body>
+  </html>
