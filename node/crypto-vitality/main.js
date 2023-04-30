@@ -1,10 +1,5 @@
-const uniPoolListOptimism = require ('./data/weth_pools_uni_v3_optimism.json');
-const uniPoolListArbitrum = require ('./data/weth_pools_uni_v3_arbitrum.json');
-
 const uniPoolsAndFeesOptimism = require ('./data/uni_v3_optimism_pools_and_fees.json');
 const uniPoolsAndFeesPolygon = require ('./data/uni_v3_polygon_pools_and_fees.json');
-
-const DUNE_API_KEY = 'o0T6Pl9KPv2fjRgqnhDegftHX5RSbg2z';
 
 // The query limit is max of 30 pools at once, so the function forms batches 
 // of 30 addresses (or a remaining amount of addresses), and calls the loadBatch 
@@ -73,11 +68,17 @@ async function loadBatch(chunk, base, network) {
     .catch(e => console.log('Error:', e));
 }
 
-fetchHotPools(uniPoolsAndFeesPolygon, 'polygon')
+fetchHotPools(uniPoolsAndFeesOptimism, 'optimism')
   .then(results => {
-    console.log('10 hottest polygon pools:');
+    console.log(`
+      ============ 10 hottest optimism pools: ============
+    `);
 
     for (let i = 0; i < 10; i++) {
-      console.log(`Pool: ${results[i].pair}  TVL: ${results[i].tvl}   vitality: ${results[i].vitality}  Address: ${results[i].address}`);
+      console.log(`
+      Pool:     ${results[i].pair}
+      TVL:      ${results[i].tvl}
+      Vitality: ${results[i].vitality}
+      Address:  ${results[i].address}`);
     }
   });
