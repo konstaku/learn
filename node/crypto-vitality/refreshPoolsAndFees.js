@@ -1,8 +1,11 @@
 const fs = require('fs');
-
 const DUNE_API_KEY = 'o0T6Pl9KPv2fjRgqnhDegftHX5RSbg2z';
 
 const poolList = [
+    {
+        network: 'ethereum',
+        url: 'https://api.dune.com/api/v1/query/2428409/results?api_key=',
+    },
     {
         network: 'optimism',
         url: 'https://api.dune.com/api/v1/query/2427486/results?api_key=',
@@ -10,7 +13,15 @@ const poolList = [
     {
         network: 'polygon',
         url: 'https://api.dune.com/api/v1/query/2428000/results?api_key=',
-    }
+    },
+    {
+        network: 'arbitrum',
+        url: 'https://api.dune.com/api/v1/query/2428398/results?api_key=',
+    },
+    {
+        network: 'bsc',
+        url: 'https://api.dune.com/api/v1/query/2428404/results?api_key=',
+    },
 ];
 
 async function refreshPoolsAndFeesData(pools) {
