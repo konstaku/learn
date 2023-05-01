@@ -26,6 +26,7 @@ const poolList = [
 
 async function refreshPoolsAndFeesData(pools) {
     for (const pool of pools) {
+        console.log(`Fetching data for ${pool.network} pools...`);
         const response = await fetch(pool.url + DUNE_API_KEY);
         const data = await response.json();
         fs.writeFile(`./data/uni_v3_${pool.network}_pools_and_fees.json`, JSON.stringify(data, null, 4), error => {
@@ -34,6 +35,8 @@ async function refreshPoolsAndFeesData(pools) {
             }
         })
     }
+
+    console.log('Download successful');
 }
 
 refreshPoolsAndFeesData(poolList);

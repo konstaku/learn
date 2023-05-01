@@ -1,5 +1,76 @@
-const uniPoolsAndFeesOptimism = require ('./data/uni_v3_optimism_pools_and_fees.json');
-const uniPoolsAndFeesPolygon = require ('./data/uni_v3_polygon_pools_and_fees.json');
+const fs = require('fs');
+
+const networks = [
+  'ethereum',
+  'arbitrum',
+  'optimism',
+  'polygon',
+  'bsc',
+];
+
+function getFreshPools(chainlist, callback) {
+
+  console.log('function getFreshPools started');
+
+  for (let i = 0; i < chainlist.length; i++) {
+    fs.readFile(`./data/uni_v3_${chainlist[i]}_pools_and_fees.json`, 'utf-8', (err, data) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        console.log('Read file successful, saving to file...');
+        callback(null, data, chainlist[i]);
+      }
+    });
+  }
+
+  console.log('function getFreshPools finished');
+
+}
+
+function fetchPoolData(err, data, chain) {
+  if (err) {
+    console.log('Error', err);
+  } else {
+    const parsedData = JSON.parse(data);
+
+    const poolInfo = {};
+
+    poolInfo.chain = chain;
+    poolInfo.pools = [];
+
+    for (const pool of parsedData.result.rows) {
+      poolInfo.pools.push({
+        address: pool.address,
+        fee: pool.fees / 10000,
+      });
+    }
+
+    console.log(poolInfo.pools);
+
+  }
+}
+
+function saveToFile(err, data, chain) {
+  if (err) {
+    console.log(err);
+  } else {
+    fs.writeFile(`./data/results/${chain}.txt`, data, err => {
+      if (err) {
+        console.log('Error!' + err);
+      } else {
+        console.log('Data saved successfully');
+      }
+    });
+  }
+}
+
+getFreshPools(networks, fetchPoolData);
+
+
+
+
+
+
 
 // The query limit is max of 30 pools at once, so the function forms batches 
 // of 30 addresses (or a remaining amount of addresses), and calls the loadBatch 
@@ -68,17 +139,17 @@ async function loadBatch(chunk, base, network) {
     .catch(e => console.log('Error:', e));
 }
 
-fetchHotPools(uniPoolsAndFeesOptimism, 'optimism')
-  .then(results => {
-    console.log(`
-      ============ 10 hottest optimism pools: ============
-    `);
+// fetchHotPools(uniPoolsAndFeesOptimism, 'optimism')
+//   .then(results => {
+//     console.log(`
+//       ============ 10 hottest optimism pools: ============
+//     `);
 
-    for (let i = 0; i < 10; i++) {
-      console.log(`
-      Pool:     ${results[i].pair}
-      TVL:      ${results[i].tvl}
-      Vitality: ${results[i].vitality}
-      Address:  ${results[i].address}`);
-    }
-  });
+//     for (let i = 0; i < 10; i++) {
+//       console.log(`
+//       Pool:     ${results[i].pair}
+//       TVL:      ${results[i].tvl}
+//       Vitality: ${results[i].vitality}
+//       Address:  ${results[i].address}`);
+//     }
+//   });
