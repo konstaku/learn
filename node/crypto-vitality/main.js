@@ -8,63 +8,44 @@ const networks = [
   'bsc',
 ];
 
-function getFreshPools(chainlist, callback) {
+async function prepareFetchData(chains) {
+  const promises = chains.map(chain => readPools(chain));
+  // Using Promise.all instead a for loop, so I have all the data filled before moving next
+  const poolData = await Promise.all(promises);
 
-  console.log('function getFreshPools started');
-
-  for (let i = 0; i < chainlist.length; i++) {
-    fs.readFile(`./data/uni_v3_${chainlist[i]}_pools_and_fees.json`, 'utf-8', (err, data) => {
-      if (err) {
-        callback(err, null);
-      } else {
-        console.log('Read file successful, saving to file...');
-        callback(null, data, chainlist[i]);
-      }
-    });
-  }
-
-  console.log('function getFreshPools finished');
-
-}
-
-function fetchPoolData(err, data, chain) {
-  if (err) {
-    console.log('Error', err);
-  } else {
-    const parsedData = JSON.parse(data);
-
+  const preparedData = chains.map((chain, index) => {
     const poolInfo = {};
-
     poolInfo.chain = chain;
-    poolInfo.pools = [];
+    poolInfo.pools = poolData[index];
+    // Normalize fees (3000 = 0.3)
+    poolInfo.pools.forEach(el => el.fees /= 10000);
+    return poolInfo;
+  });
 
-    for (const pool of parsedData.result.rows) {
-      poolInfo.pools.push({
-        address: pool.address,
-        fee: pool.fees / 10000,
-      });
-    }
-
-    console.log(poolInfo.pools);
-
-  }
+  return preparedData;
 }
 
-function saveToFile(err, data, chain) {
-  if (err) {
-    console.log(err);
-  } else {
-    fs.writeFile(`./data/results/${chain}.txt`, data, err => {
+function readPools(chain) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(`./data/uni_v3_${chain}_pools_and_fees.json`, 'utf-8', (err, data) => {
       if (err) {
-        console.log('Error!' + err);
+        reject(err);
       } else {
-        console.log('Data saved successfully');
+        console.log(`Data from ${chain} pool read successfully`);
+        const poolsAndFees = JSON.parse(data).result.rows;
+        
+        resolve(poolsAndFees);
       }
-    });
-  }
+    })
+  });
 }
 
-getFreshPools(networks, fetchPoolData);
+prepareFetchData(networks)
+  .then(result => console.log(result))
+  .catch(e => console.log(e));
+
+
+
 
 
 
