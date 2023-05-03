@@ -1,14 +1,45 @@
-const fs = require('fs');
+const array = [];
 
-async function fetchAndSave(url) {
-    const poolData = await fetch(url);
-    
-    fs.writeFile('./poolData.json', JSON.stringify(await poolData.json()), err => {
-        if (err) {
-            console.log(err);
-        }
-    });
+for (let i = 0; i < 72; i++) {
+    array.push(i);
 }
 
-fetchAndSave('https://api.dexscreener.com/latest/dex/pairs/arbitrum/0x03ee19d4b16da09982c5248d597448f6910cbd11');
+function makeBatches(input, batchSize) {
+    const result = [];
+    result.push([]);
+    let count = 0;
+    let index = 0;
+
+    for (let i = 0; i < input.length; i++) {
+        if (count < batchSize) {
+            result[index].push(input[i]);
+            count++;
+        } else {
+            count = 0;
+            i--;
+            result[++index] = [];
+            continue;
+        }
+    }
+
+    return result;
+}
+
+let batchIndex = 0;
+
+const batchedArray = (makeBatches(array, 30));
+
+const interval = setInterval(displayBatches, 1000, batchedArray);
+
+function displayBatches(array) {
+    console.log(array[batchIndex]);
+    batchIndex++;
+
+    if (batchIndex >= batchedArray.length) {
+        clearInterval(interval);
+        console.log('all batches displayed!');
+    }
+}
+
+
 
