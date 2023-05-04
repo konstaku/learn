@@ -41,32 +41,30 @@ async function readPoolsFromDisk(chain) {
 }
 
 async function fetchPoolData(ChainsAndPools) {
-	// Index of the pool I'm currently reading. Done if == ChainsAndPools.length
-	let poolsRead = 0;
+	let result = [];
 
-	let result = await fetchPoolsForChain(ChainsAndPools[1]);
-	console.log('Result:', result);
+	for (let i = 0; i < ChainsAndPools.length; i++) {
+		result[i] = await fetchPoolsForChain(ChainsAndPools[i]);
+	}
 
 	return result;
 }
 
 async function fetchPoolsForChain(poolList) {
+	const MILLISECONDS_IN_MINUTE = 60000;
+	const MINUTE_FETCH_LIMIT = 300;
 	const batchSize = 30;
+	const cooldown = MILLISECONDS_IN_MINUTE / MINUTE_FETCH_LIMIT * batchSize;
+	
+	const result = [];
+	const chain = poolList.chain;
+	const pools = poolList.pools;
   
 	if (poolList.pools.length == 0) {
 	  throw new Error('Unable to make batches, pool list empty');
 	}
   
-	const MINUTE_FETCH_LIMIT = 300;
-	const MILLISECONDS_IN_MINUTE = 60000;
-  
-	const result = [];
-	const cooldown = MILLISECONDS_IN_MINUTE / MINUTE_FETCH_LIMIT * batchSize;
-  
 	let currentPool = 0;
-  
-	const chain = poolList.chain;
-	const pools = poolList.pools;
   
 	while (currentPool < pools.length) {
 	  const batch = pools.slice(currentPool, currentPool + batchSize);
@@ -84,10 +82,23 @@ async function fetchPoolsForChain(poolList) {
 	  await new Promise(resolve => setTimeout(resolve, cooldown));
 	}
   
-	console.log(`Done fetching ${currentPool} pools for ${chain}`);
+	console.log(`Done fetching ${pools.length} pools for ${chain}`);
 	return result;
-  }
+}
+
+async function writeDataToDisk(data) {
+	console.log('Saving data to disk...');
+
+	fs.writeFile(`./data/results/result.txt`, JSON.stringify(data), (err) => {
+		if (err) {
+			console.log('Error writing file', err);
+		} else {
+			console.log('Data saved!');
+		}
+	});
+}
 
 prepareFetchData(networks)
 	.then(result => fetchPoolData(result))
+	.then(data => writeDataToDisk(data))
 	.catch(e => console.log(e));
