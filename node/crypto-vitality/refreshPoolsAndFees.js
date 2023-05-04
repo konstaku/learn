@@ -1,4 +1,5 @@
-const fs = require('fs');
+import { writeFile } from 'fs';
+
 const DUNE_API_KEY = 'o0T6Pl9KPv2fjRgqnhDegftHX5RSbg2z';
 
 const poolList = [
@@ -29,7 +30,7 @@ async function refreshPoolsAndFeesData(pools) {
         console.log(`Fetching data for ${pool.network} pools...`);
         const response = await fetch(pool.url + DUNE_API_KEY);
         const data = await response.json();
-        fs.writeFile(`./data/uni_v3_${pool.network}_pools_and_fees.json`, JSON.stringify(data, null, 4), error => {
+        writeFile(`./data/uni_v3_${pool.network}_pools_and_fees.json`, JSON.stringify(data, null, 4), error => {
             if(error) {
                 console.log('Error writing data:', error);
             }

@@ -1,4 +1,4 @@
-const fs = require('fs');
+import { readFile, writeFile } from 'fs';
 
 const networks = [
 	'ethereum',
@@ -27,7 +27,7 @@ async function prepareFetchData(chains) {
 
 async function readPoolsFromDisk(chain) {
 	return new Promise((resolve, reject) => {
-		fs.readFile(`./data/uni_v3_${chain}_pools_and_fees.json`, 'utf-8', (err, data) => {
+		readFile(`./data/uni_v3_${chain}_pools_and_fees.json`, 'utf-8', (err, data) => {
 		if (err) {
 			reject(err);
 		} else {
@@ -41,19 +41,16 @@ async function readPoolsFromDisk(chain) {
 }
 
 async function fetchPoolData(chainsAndPools) {
-	// let result = [];
+	const result = [];
 
 	for (let i = 0; i < chainsAndPools.length; i++) {
 		await fetchPoolsForChain(chainsAndPools[i]);
 		sortPoolsByVitality(chainsAndPools[i]);
+		selectTop20Pools(chainsAndPools[i]);
+		result.push(makeTable(chainsAndPools[i]));
 	}
 
-	// for (let i = 0; i < chainsAndPools.length; i++) {
-	// 	sortPoolsByVitality(chainsAndPools[i]);
-	// }
-
-	 return chainsAndPools;
-	// return result;
+	return result;
 }
 
 async function fetchPoolsForChain(poolList) {
@@ -101,7 +98,7 @@ async function fetchPoolsForChain(poolList) {
 
 		pool.tvl = entry.liquidity.usd || null;
 		pool.volume = entry.volume.h24;
-		pool.vitality = pool.volume / pool.tvl * pool.fees || null;
+		pool.vitality = Math.round(pool.volume / pool.tvl * pool.fees * 100) / 100 || null;
 		pool.name = `${entry.baseToken.symbol}/${entry.quoteToken.symbol}`;
 	}
 
@@ -110,19 +107,41 @@ async function fetchPoolsForChain(poolList) {
 
 function sortPoolsByVitality(poolList) {
 	poolList.pools = poolList.pools.sort((a, b) => b.vitality - a.vitality);
-	return poolList;
+}
+
+function selectTop20Pools(poolList) {
+	poolList.pools = poolList.pools.filter(el => (el.vitality != null && el.tvl >= 1000));
+	poolList.pools = poolList.pools.slice(0, 20);
 }
 
 async function writeDataToDisk(data) {
 	console.log('Saving data to disk...');
 
-	fs.writeFile(`./data/results/result.txt`, JSON.stringify(data), (err) => {
+	let textFile = '';
+
+	for (const entry of data) {
+		textFile += entry;
+	}
+
+	writeFile(`./data/results/result.txt`, textFile, (err) => {
 		if (err) {
 			console.log('Error writing file', err);
 		} else {
 			console.log('Data saved!');
 		}
 	});
+	
+}
+
+function makeTable(poollist) {
+	let result = `****************** TOP ${poollist.pools.length} POOLS FOR ${poollist.chain.toUpperCase()} ******************` + '\n';
+	
+	for (const pool of poollist.pools) {
+		result += `Pair: ${pool.name}	TVL: ${pool.tvl}	24h vol: ${pool.volume}	Vitality: ${pool.vitality}` + '\n';
+	}
+
+	result += '\n';
+	return result;
 }
 
 prepareFetchData(networks)
