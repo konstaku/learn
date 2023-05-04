@@ -40,14 +40,20 @@ async function readPoolsFromDisk(chain) {
 	});
 }
 
-async function fetchPoolData(ChainsAndPools) {
-	let result = [];
+async function fetchPoolData(chainsAndPools) {
+	// let result = [];
 
-	for (let i = 0; i < ChainsAndPools.length; i++) {
-		result[i] = await fetchPoolsForChain(ChainsAndPools[i]);
+	for (let i = 0; i < chainsAndPools.length; i++) {
+		await fetchPoolsForChain(chainsAndPools[i]);
+		sortPoolsByVitality(chainsAndPools[i]);
 	}
 
-	return result;
+	// for (let i = 0; i < chainsAndPools.length; i++) {
+	// 	sortPoolsByVitality(chainsAndPools[i]);
+	// }
+
+	 return chainsAndPools;
+	// return result;
 }
 
 async function fetchPoolsForChain(poolList) {
@@ -61,29 +67,50 @@ async function fetchPoolsForChain(poolList) {
 	const pools = poolList.pools;
   
 	if (poolList.pools.length == 0) {
-	  throw new Error('Unable to make batches, pool list empty');
+		throw new Error('Unable to make batches, pool list empty');
 	}
   
 	let currentPool = 0;
   
 	while (currentPool < pools.length) {
-	  const batch = pools.slice(currentPool, currentPool + batchSize);
-	  const promises = batch.map(pool => {
-		return fetch(`https://api.dexscreener.com/latest/dex/pairs/${chain}/${pool.address}`);
-	  });
-  
-	  const responses = await Promise.all(promises);
-	  const data = await Promise.all(responses.map(el => el.json()));
-	  result.push(...data);
-  
-	  console.log(`Fetching ${currentPool + batch.length}/${pools.length} ${chain} pools`);
-  
-	  currentPool += batchSize;
-	  await new Promise(resolve => setTimeout(resolve, cooldown));
+		const batch = pools.slice(currentPool, currentPool + batchSize);
+		const promises = batch.map(pool => {
+			return fetch(`https://api.dexscreener.com/latest/dex/pairs/${chain}/${pool.address}`);
+		});
+	
+		const responses = await Promise.all(promises);
+		const data = await Promise.all(responses.map(el => el.json()));
+		result.push(...data);
+	
+		console.log(`Fetching ${currentPool + 1}-${currentPool + batch.length} of ${pools.length} ${chain} pools`);
+	
+		currentPool += batchSize;
+		await new Promise(resolve => setTimeout(resolve, cooldown));
 	}
   
-	console.log(`Done fetching ${pools.length} pools for ${chain}`);
-	return result;
+	console.log(`Done fetching ${pools.length} ${chain} pools`);
+
+	for (let i = 0; i < poolList.pools.length; i++) {
+		const pool = poolList.pools[i];
+		const entry = result[i].pairs[0];
+
+		if (!entry || !entry.liquidity) {
+			console.log(`No liquidity info for pool ${entry.baseToken.symbol}/${entry.quoteToken.symbol}!`);
+			continue;
+		}
+
+		pool.tvl = entry.liquidity.usd || null;
+		pool.volume = entry.volume.h24;
+		pool.vitality = pool.volume / pool.tvl * pool.fees || null;
+		pool.name = `${entry.baseToken.symbol}/${entry.quoteToken.symbol}`;
+	}
+
+	return poolList;
+}
+
+function sortPoolsByVitality(poolList) {
+	poolList.pools = poolList.pools.sort((a, b) => b.vitality - a.vitality);
+	return poolList;
 }
 
 async function writeDataToDisk(data) {
