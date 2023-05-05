@@ -9,6 +9,7 @@ const networks = [
 ];
 
 async function prepareFetchData(chains) {
+	console.log('Reading blockchain data...');
 	const promises = chains.map(chain => readPoolsFromDisk(chain));
 	// Using Promise.all instead a for loop, so I have all the data filled before moving next
 	const poolData = await Promise.all(promises);
@@ -31,7 +32,7 @@ async function readPoolsFromDisk(chain) {
 		if (err) {
 			reject(err);
 		} else {
-			console.log(`Data from ${chain} pool read successfully`);
+			console.log(`${chain} pools data ready`);
 			const poolsAndFees = JSON.parse(data).result.rows;
 			
 			resolve(poolsAndFees);
@@ -96,8 +97,8 @@ async function fetchPoolsForChain(poolList) {
 			continue;
 		}
 
-		pool.tvl = entry.liquidity.usd || null;
-		pool.volume = entry.volume.h24;
+		pool.tvl = Math.round(entry.liquidity.usd) || null;
+		pool.volume = Math.round(entry.volume.h24);
 		pool.vitality = Math.round(pool.volume / pool.tvl * pool.fees * 100) / 100 || null;
 		pool.name = `${entry.baseToken.symbol}/${entry.quoteToken.symbol}`;
 	}
@@ -110,7 +111,7 @@ function sortPoolsByVitality(poolList) {
 }
 
 function selectTop20Pools(poolList) {
-	poolList.pools = poolList.pools.filter(el => (el.vitality != null && el.tvl >= 1000));
+	poolList.pools = poolList.pools.filter(el => (el.vitality != null && (el.tvl >= 1000 && el.volume >= 1000)));
 	poolList.pools = poolList.pools.slice(0, 20);
 }
 
@@ -134,10 +135,10 @@ async function writeDataToDisk(data) {
 }
 
 function makeTable(poollist) {
-	let result = `****************** TOP ${poollist.pools.length} POOLS FOR ${poollist.chain.toUpperCase()} ******************` + '\n';
+	let result = `************************** TOP ${poollist.pools.length} POOLS FOR ${poollist.chain.toUpperCase()} **************************` + '\n';
 	
 	for (const pool of poollist.pools) {
-		result += `Pair: ${pool.name}	TVL: ${pool.tvl}	24h vol: ${pool.volume}	Vitality: ${pool.vitality}` + '\n';
+		result += `Pair:\t${pool.name.length >= 8 ? pool.name : pool.name + '\t'}\t | TVL:\t${pool.tvl}\t | 24h vol:\t${pool.volume >= 10000000 ? pool.volume : pool.volume + '\t'}\t | Vitality:\t${pool.vitality}\t | Address:\t${pool.address}` + '\n';
 	}
 
 	result += '\n';
