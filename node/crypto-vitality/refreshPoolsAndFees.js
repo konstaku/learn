@@ -2,7 +2,7 @@ import { writeFile } from 'fs';
 
 const DUNE_API_KEY = 'o0T6Pl9KPv2fjRgqnhDegftHX5RSbg2z';
 
-const poolList = [
+export const poolList = [
     {
         network: 'ethereum',
         url: 'https://api.dune.com/api/v1/query/2428409/results?api_key=',
@@ -25,7 +25,7 @@ const poolList = [
     },
 ];
 
-async function refreshPoolsAndFeesData(pools) {
+export async function refreshPoolsAndFeesData(pools) {
     for (const pool of pools) {
         console.log(`Fetching data for ${pool.network} pools...`);
         const response = await fetch(pool.url + DUNE_API_KEY);
@@ -38,6 +38,5 @@ async function refreshPoolsAndFeesData(pools) {
     }
 
     console.log('Download successful');
+    return pools;
 }
-
-refreshPoolsAndFeesData(poolList);

@@ -1,12 +1,5 @@
 import { readFile, writeFile } from 'fs';
-
-const networks = [
-	'ethereum',
-	'arbitrum',
-	'optimism',
-	'polygon',
-	'bsc',
-];
+import { poolList, refreshPoolsAndFeesData } from './refreshPoolsAndFees.js';
 
 async function prepareFetchData(chains) {
 	console.log('Reading blockchain data...');
@@ -107,11 +100,11 @@ async function fetchPoolsForChain(poolList) {
 }
 
 function sortPoolsByVitality(poolList) {
+	poolList.pools = poolList.pools.filter(el => ((el.vitality != null && el.tvl != null) && (el.tvl >= 1000 && el.volume >= 1000)));
 	poolList.pools = poolList.pools.sort((a, b) => b.vitality - a.vitality);
 }
 
 function selectTop20Pools(poolList) {
-	poolList.pools = poolList.pools.filter(el => (el.vitality != null && (el.tvl >= 1000 && el.volume >= 1000)));
 	poolList.pools = poolList.pools.slice(0, 20);
 }
 
@@ -131,13 +124,22 @@ async function writeDataToDisk(data) {
 			console.log('Data saved!');
 		}
 	});
-	
 }
 
-function makeTable(poollist) {
-	let result = `************************** TOP ${poollist.pools.length} POOLS FOR ${poollist.chain.toUpperCase()} **************************` + '\n';
+// async function writeLog(rawData) {
+// 	const date = new Date();
+
+// 	writeFile(`./data/results/logs/${date.getFullYear()}-${date.getMonth()}-${date.getDate()}_${date.getHours()}-${date.getMinutes()}`, JSON.stringify(rawData), err => {
+// 		if (err) {
+// 			console.log('Error saving log!');
+// 		}
+// 	});
+// }
+
+function makeTable(poolList) {
+	let result = `************************** TOP ${poolList.pools.length} POOLS FOR ${poolList.chain.toUpperCase()} **************************` + '\n';
 	
-	for (const pool of poollist.pools) {
+	for (const pool of poolList.pools) {
 		result += `Pair:\t${pool.name.length >= 8 ? pool.name : pool.name + '\t'}\t | TVL:\t${pool.tvl}\t | 24h vol:\t${pool.volume >= 10000000 ? pool.volume : pool.volume + '\t'}\t | Vitality:\t${pool.vitality}\t | Address:\t${pool.address}` + '\n';
 	}
 
@@ -145,7 +147,8 @@ function makeTable(poollist) {
 	return result;
 }
 
-prepareFetchData(networks)
+refreshPoolsAndFeesData(poolList)
+	.then(pools => prepareFetchData(pools.map(el => el.network)))
 	.then(result => fetchPoolData(result))
 	.then(data => writeDataToDisk(data))
 	.catch(e => console.log(e));
