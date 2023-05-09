@@ -1,9 +1,15 @@
-function getSomeData(url) {
-  ajax(url, function onResponse(resp){
+var homework = {
+  study() {
     console.log(`
-      Response from ${ url }: ${ resp }
+      Please, study ${ this.topic }.
     `);
-  });
-}
+  },
+};
 
-getSomeData('https://jsonplaceholder.typicode.com/posts');
+var jsHomework = Object.create(homework);
+jsHomework.topic = 'JS';
+jsHomework.study();
+
+var mathHomework = Object.create(homework);
+mathHomework.topic = 'Math';
+mathHomework.study();

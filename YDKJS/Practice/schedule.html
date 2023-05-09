@@ -11,23 +11,19 @@
 		const dayEnd = '17:45';
 
 		function scheduleMeeting(startTime, durationMinutes) {
+			// Add leading zero where missed
 			if(startTime.length < 5) {
 				startTime = '0' + startTime;
 			}
 
+			// Creating a virtual day in which meeting is going to be arranged
 			let workDayStart = new Date(`2000-01-01T${ dayStart }`);
 			let workDayEnd = new Date(`2000-01-01T${ dayEnd }`);
 			let suggestedStartTime = new Date(`2000-01-01T${ startTime }`);
 
-			// console.log(suggestedStartTime);
-			// console.log(suggestedStartTime.getTime() + durationMinutes * 60000);
-
-
-			if (suggestedStartTime >= workDayStart && suggestedStartTime.getTime() + durationMinutes * 60000 <= workDayEnd) {
-				return true;
-			}
-
-			return false;
+			// True if the meeting fits
+			return (suggestedStartTime >= workDayStart && 
+					suggestedStartTime.getTime() + durationMinutes * 60000 <= workDayEnd);
 		}
 
 		console.log(scheduleMeeting('7:00', 15));
@@ -37,8 +33,6 @@
 		console.log(scheduleMeeting('17:00', 45));
 		console.log(scheduleMeeting('17:30', 30));
 		console.log(scheduleMeeting('18:00', 15));
-
-
 
 	</script>
 </body>

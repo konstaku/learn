@@ -4,32 +4,28 @@
     <title>
       WIP
     </title>
-    <style type="text/css">
-      #field {
-        width: 200px;
-        border: 10px groove black;
-        background-color: #00FF00;
-        position: relative;
-      }
-      #ball {
-        position: absolute;
-      }
+    <style>
+      /* The border style highlights borders of all elements so I can figure out how it works */
+/*      body * {
+        border: 1px solid blue;
+      } 
+*/
+
     </style>
   </head>
   <body>
-      <div id="field">
-      <img src="https://en.js.cx/clipart/ball.svg" id="ball"> . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    </div>
+    <!-- HTML elements go here -->
+
     <script>
-      'use strict'
-      console.dir(getComputedStyle(ball));
-      console.log(getComputedStyle(ball).blockSize)
-      ball.style.cssText = ` 
-        margin-left: ${field.clientWidth / 2}px;
-        margin-top: ${field.clientHeight / 2}px;
-      `;
-      
+      // Script goes here
+      setTimeout(() => console.log('timeout'));
+
+      Promise.resolve()
+        .then(() => console.log('promise'));
+
+      console.log('console log')
 
     </script>
   </body>
   </html>
+
