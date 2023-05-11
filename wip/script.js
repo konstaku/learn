@@ -1,18 +1,13 @@
-const firstAddress = '0x03ee19d4b16da09982c5248d597448f6910cbd11';
-const secondAddress = '0x3b7e1cd87cf5cdc539eb8aad5111ea902460b059';
+'use strict';
+import express from 'express';
 
-const addresses = [firstAddress, secondAddress];
-const fetches = addresses.map(el => fetch(`https://api.dexscreener.com/latest/dex/pairs/arbitrum/${el}`));
+const app = express();
+const PORT = process.env.PORT || 3030;
 
-const result = [];
+const server = app.listen(PORT, () =>
+    console.log(`Server started on port ${PORT}`)
+);
 
-Promise.all(fetches)
-  .then(responses => {
-    responses.forEach(el => {
-      let poolInfo = el.json();
-      result.push(poolInfo);
-    });
-    return result;
-  })
-  .then(data => Promise.all(data))
-  .then(result => result.forEach(el => console.log(el.pair.pairAddress)));
+console.log('running some code...');
+
+server.close(() => console.log('Server shut down'));
