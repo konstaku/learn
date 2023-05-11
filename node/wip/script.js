@@ -1,69 +1,13 @@
 'use strict';
+import express from 'express';
 
-async function getData(queryId) {
-    const header = {
-        'x-dune-api-key': 'o0T6Pl9KPv2fjRgqnhDegftHX5RSbg2z',
-    };
-    
-    // Sending an execution request
-    const request = await fetch(
-        `https://api.dune.com/api/v1/query/${queryId}/execute`,
-        {
-            method: 'POST',
-            headers: header,
-        }
-    );
+const app = express();
+const PORT = process.env.PORT || 3030;
 
-    const requestData = await request.json();
-    const executionId = requestData.execution_id;
+const server = app.listen(PORT, () =>
+    console.log(`Server started on port ${PORT}`)
+);
 
-    // Polling Dune for query status
-    while (true) {
-        const response = await fetch(
-            `https://api.dune.com/api/v1/execution/${executionId}/status`,
-            {
-                method: 'GET',
-                headers: header,
-            }
-        );
-        const responseData = await response.json();
+console.log('running some code...');
 
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        switch (responseData.state) {
-            case 'QUERY_STATE_COMPLETED':
-                console.log('Query completed');
-                break;
-            case 'QUERY_STATE_EXECUTING':
-                console.log('Query executing...');
-                continue;
-            case 'QUERY_STATE_PENDING':
-                console.log('Query pending...');
-                continue;
-            case 'QUERY_STATE_FAILED':
-                throw new Error('Error: query state failed');
-            case 'QUERY_STATE_CANCELLED':
-                throw new Error('Error: query state cancelled');
-            case 'QUERY_STATE_EXPIRED':
-                throw new Error('Error: query state expired');
-        }
-
-        break;
-    }
-
-    // Fetching results
-    const result = await fetch(
-        `https://api.dune.com/api/v1/execution/${executionId}/results`,
-        {
-            method: 'GET',
-            headers: header,
-        }
-    );
-    const data = await result.json();
-
-    return data;
-}
-
-getData('2453036')
-    .then(result => console.log('Query results:', result))
-    .catch(e => console.log(e));
+server.close(() => console.log('Server shut down'));
