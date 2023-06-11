@@ -1,15 +1,15 @@
 function selectionSort(array) {
     let alreadySortedIndex = 0;
     let currentMinimumIndex = 0;
-    let sorted = false;
 
-    while (!sorted) {
+    for (let i = 0; i < array.length - 1; i++) {
         console.log(`Iteration #${alreadySortedIndex}`);
+        currentMinimumIndex = alreadySortedIndex;
 
-        for (let i = alreadySortedIndex; i < array.length; i++) {
+        for (let j = alreadySortedIndex; j < array.length; j++) {
             // Iterating through an array and saving current minimum
-            if (array[i] < array[currentMinimumIndex]) {
-                currentMinimumIndex = i;
+            if (array[j] < array[currentMinimumIndex]) {
+                currentMinimumIndex = j;
             }
         }
 
@@ -19,9 +19,7 @@ function selectionSort(array) {
             let temp = array[currentMinimumIndex];
             array[currentMinimumIndex] = array[alreadySortedIndex];
             array[alreadySortedIndex] = temp;
-        } else {
-            sorted = true;
-        }
+        } 
 
         alreadySortedIndex++;
     }
@@ -29,5 +27,5 @@ function selectionSort(array) {
     return array;
 }
 
-const arr = [9, 8, 7, 6, 11, 5, 4, 3, 2, 1];
+const arr = [3, 2, 1, 15, 4, 42, 100, 99, 1001, 8];
 console.log(selectionSort(arr));
