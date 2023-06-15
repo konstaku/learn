@@ -28,16 +28,14 @@ function insertionSort(array) {
         console.log(`Iteration ${i}, array: ${array}`);
 
         const temp = array[i];
-        array[i] = null;
+        let position = i;
 
-        for (let j = i; j > 0; j--) {
-            if (array[j-1] > temp) {
-                array[j] = array[j-1];
-                array[j-1] = null;
-            } 
+        while (position > 0 || array[position-1] > temp) {
+            array[position] = array[position-1];
+            position--;
         }
 
-        array[array.indexOf(null)] = temp;
+        array[position] = temp;
     }
 
     return array;
