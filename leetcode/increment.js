@@ -7,7 +7,7 @@ function inc(arr) {
 
         function move(array, index) {
                 array[index] = 0;
-                if (array[index-1] > 0 && array[index-1] < 9) {
+                if (array[index-1] >= 0 && array[index-1] < 9) {
                         array[index-1]++;
                 } else if (array[index-1] === 9) {
                         move(array, index-1);
