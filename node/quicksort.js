@@ -1,39 +1,61 @@
-function quickSort(array) {
-    let pivot = array.length-1;
-    let leftPointer = 0;
-    let rightPointer = array.length-2;
-    let temp;
+function sortableArray(array) {
+    const start = 0;
+    const end = array.length - 1;
+    let iterations = 0;
 
-    console.log('******** INPUT array:', array);
+    quickSort (start, end);
 
-    do {
-        while (array[leftPointer] < array[pivot]) {
-            console.log(`leftPointer = ${leftPointer}, leftPointer++, array[leftpointer] =`, array[leftPointer]);
-            leftPointer++;
+    function quickSort(start, end) {
+        if (end - start <= 0) {
+            return;
         }
-        console.log(`leftPointer = ${leftPointer}, cycle stopped, array[leftpointer] =`, array[leftPointer]);
-    
-        while (array[rightPointer] > array[pivot] && rightPointer > leftPointer) {
-            console.log(`rightPointer = ${rightPointer}, rightPointer--, array[rightPointer] =`, array[rightPointer]);
-            rightPointer--;
+
+        const pivotPosition = partition(start, end);
+
+        quickSort (start, pivotPosition - 1);
+        quickSort (pivotPosition + 1, end);
+    }
+
+    function partition(start, end) {
+        let leftPointer = start;
+        let pivotPointer = end;
+        let rightPointer = pivotPointer - 1;
+
+        const pivot = array[pivotPointer];
+
+        console.log(`Array: \t[${array}]\nleftPointer: ${leftPointer}\nrightPointer: ${rightPointer}\npivotPointer: ${pivotPointer}\n`);
+
+        while (true) {
+            while (array[leftPointer] < pivot) {
+                leftPointer++;
+            }
+
+            while (array[rightPointer] > pivot) {
+                rightPointer--;
+            }
+
+            if (leftPointer >= rightPointer) {
+                break;
+            }
+
+            swap (leftPointer, rightPointer);
         }
-        console.log(`rightPointer = ${rightPointer}, cycle stopped, array[rightPointer] =`, array[rightPointer]);
-        
-        temp = array[leftPointer];
-        array[leftPointer] = array[rightPointer];
-        array[rightPointer] = temp;
-        console.log(`swapping left (${array[leftPointer]}) and right(${array[rightPointer]}): `, array);
 
-    } while 
-        (leftPointer < rightPointer);
+        swap(leftPointer, pivotPointer);
+        iterations++;
 
-    temp = array[pivot];
-    array[pivot] = array[leftPointer];
-    array[leftPointer] = temp;
-    console.log(`leftPointer = ${leftPointer}, rightPointer = ${rightPointer}, swapping pivot and left`, array);
+        return leftPointer;
+    }
 
-    console.log('******** OUTPUT array:', array);
-    return array;
+    function swap(a, b) {
+        console.log(`Swapping ${array[a]} and ${array[b]}...\n`);
+        const tempValue = array[a];
+        array[a] = array[b];
+        array[b] = tempValue;
+    }
+
+    console.log(`Sorting done in ${iterations} iterations.`);
 }
 
-console.log(quickSort([0, 5, 2, 1, 6, 3]));
+const myArray = [76, 12, 50, 46, 71, 94, 48, 28, 23, 55, 65, 10, 39, 26, 34, 1, 99, 89, 72, 32, 77];
+sortableArray(myArray);

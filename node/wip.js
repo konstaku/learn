@@ -1,39 +1,19 @@
-function quickSort(array) {
-    let pivot = array.length-1;
-    let leftPointer = 0;
-    let rightPointer = array.length-2;
-    let temp;
+function isPalindrome(string) {
+    const stack = [];
 
-    console.log('******** INPUT array:', array);
+    for (let i = 0; i < Math.floor(string.length / 2); i++) {
+        stack.push(string[i]);
+    }
 
-    do {
-        while (array[leftPointer] < array[pivot]) {
-            console.log(`leftPointer = ${leftPointer}, leftPointer++, array[leftpointer] =`, array[leftPointer]);
-            leftPointer++;
+    for (let i = Math.ceil(string.length / 2); i < string.length; i++) {
+        if (string[i] === stack[stack.length-1]) {
+            stack.pop();
+        } else {
+            return false;
         }
-        console.log(`leftPointer = ${leftPointer}, cycle stopped, array[leftpointer] =`, array[leftPointer]);
-    
-        while (array[rightPointer] > array[pivot] && rightPointer > leftPointer) {
-            console.log(`rightPointer = ${rightPointer}, rightPointer--, array[rightPointer] =`, array[rightPointer]);
-            rightPointer--;
-        }
-        console.log(`rightPointer = ${rightPointer}, cycle stopped, array[rightPointer] =`, array[rightPointer]);
-        
-        temp = array[leftPointer];
-        array[leftPointer] = array[rightPointer];
-        array[rightPointer] = temp;
-        console.log(`swapping left (${array[leftPointer]}) and right(${array[rightPointer]}): `, array);
+    }
 
-    } while 
-        (leftPointer < rightPointer);
-
-    temp = array[pivot];
-    array[pivot] = array[leftPointer];
-    array[leftPointer] = temp;
-    console.log(`leftPointer = ${leftPointer}, rightPointer = ${rightPointer}, swapping pivot and left`, array);
-
-    console.log('******** OUTPUT array:', array);
-    return array;
+    return true;
 }
 
-console.log(quickSort([0, 5, 2, 1, 6, 3]));
+console.log(isPalindrome('abccba'));
