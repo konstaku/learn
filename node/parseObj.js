@@ -1,31 +1,30 @@
+const myString = "user.name.firstname=Bob&user.name.lastname=Smith&user.favoritecolor=Light%20Blue&experiments.theme=dark";
 
-const inData = "user.name.firstname=Bob&user.name.lastname=Smith&user.favoritecolor=Light%20Blue&experiments.theme=dark";
-const expressions = inData.split('&');
+function stringToObject(string) {
+    const result = {};
 
-const result = {};
+    // Split string into statements
+    const statements = string.split('&');
 
-for (const expression of expressions) {
-    const splittedExpression = expression.split('=');
-    const key = splittedExpression[0];
-    const value = splittedExpression[1].split('%20').join(' ');
-    // key: user.name.firstname
-    // value: Bob
+    for (const statement of statements) {
+        let [keys, value] = statement.split('=');
+        let current = result;
 
-    const keys = key.split('.');
-    // keys: ['user', 'name', 'firstName']
+        keys = keys.split('.');
+        value = value.split('%20').join(' ');
 
-    let current = result;
+        for (let i = 0; i < keys.length; i++) {
+            if (i === keys.length - 1) {
+                current[keys[i]] = value;
+                break;
+            }
 
-    for (let i = 0; i < keys.length; i++) {
-        if (i < keys.length - 1) {
             current[keys[i]] = current[keys[i]] || {};
             current = current[keys[i]];
-        } else {
-           current[keys[i]] = value;
-           current = result;
         }
     }
 
+    return result;
 }
 
-console.log('Result:', result);
+console.log(stringToObject(myString));
