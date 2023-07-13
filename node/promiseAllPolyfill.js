@@ -24,4 +24,6 @@ function promiseAll(promises) {
 }
 
 promiseAll(promises)
-    .then(result => console.log('result:', result));
+    // .then(responses => promiseAll(responses.map(el => el.json())))
+    .then(result => console.log('result:', result))
+    .catch(console.error);

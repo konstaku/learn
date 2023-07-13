@@ -7,8 +7,5 @@
   },
   "author": "Konstantin Kupriyanov",
   "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "flocli": "^1.2.5"
-  }
+  "description": ""
 }
