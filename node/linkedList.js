@@ -12,7 +12,14 @@ class Node {
 }
 
 class LinkedList {
-    
+    constructor(node) {
+        this.startNode = node;
+    }
+
+    append(node) {
+        const newNode = new Node(node);
+        
+    }
 }
 
 const node1 = new Node('Once');
