@@ -1,21 +1,15 @@
 'use strict';
-const header = document.getElementById('header');
-const myDiv = document.createElement('div');
+import { inflatableDiv } from '/inflatableBall.js';
 
-myDiv.style.fontSize = 24 + 'px';
+const divs = [];
 
-header.append(myDiv);
+document.addEventListener('mousedown', (event) => {
+    if (event.button === 0) {
+        divs.push(new inflatableDiv(event, divs.length));
+    }
+});
 
-document.addEventListener('click', leaveMark);
-
-function leaveMark(event) {
-    const div = document.createElement('div');
-    div.style.backgroundColor = 'black';
-    div.style.position = 'absolute';
-    div.style.left = event.x - 50 + 'px';
-    div.style.top = event.y - 50 + 'px';
-    div.style.borderRadius = 50 + 'px';
-    div.style.height = 100 + 'px';
-    div.style.width = 100 + 'px';
-    document.body.append(div);
-}
+document.addEventListener('mouseup', (event) => {
+    const div = divs[divs.length - 1];
+    div.stopInflating();
+});
