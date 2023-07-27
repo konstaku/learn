@@ -8,5 +8,8 @@ root.insert('A');
 root.insert('Time');
 root.insert('Yankee');
 
-log(root);
+log('tree before deletion:', root);
 
+root.delete('Z');
+
+log('tree after deletion:', root);
