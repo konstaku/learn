@@ -1,20 +1,9 @@
-export class BinaryTree {
-    constructor(values) {
-        const root = new BinaryNode(values[0]);
-
-        for (let i = 1; i < values.length; i++) {
-            values[i] = root.insertNode(values[i]);
-        }
-
-        return root;
-    }
-}
-
-export class BinaryNode {
+class BinaryNode {
     constructor(value, left = null, right = null) {1
         this.value = value;
         this.left = left;
         this.right = right;
+        this.indent = '';
     }
 
     insertNode(value, node = this) {
@@ -99,6 +88,26 @@ export class BinaryNode {
         }
     }
 
+    traverseAndPrint(node = this) {
+        if (node === null) {
+            return;
+        }
+
+        if (node.left !== null) {
+            this.indent += '-';
+            this.traverseAndPrint(node.left);
+            this.indent = this.indent.slice(0, -1);
+        }
+
+        console.log(this.indent + node.value);
+
+        if (node.right !== null) {
+            this.indent += '-';
+            this.traverseAndPrint(node.right);
+            this.indent = this.indent.slice(0, -1);
+        }
+    }
+
     // Function is called in case when the deleted node has both childs
     // Its purpose is to find leftmost value of all childs and put it on top
     liftNode(node, nodeToDelete) {
@@ -115,5 +124,17 @@ export class BinaryNode {
             nodeToDelete.value = node.value;
             return node.right;
         }
+    }
+}
+
+export class BinaryTree extends BinaryNode {
+    constructor(values) {
+        const root = super(values[0]);
+
+        for (let i = 1; i < values.length; i++) {
+            values[i] = root.insertNode(values[i]);
+        }
+
+        return root;
     }
 }
