@@ -1,22 +1,17 @@
-import { BinaryTree } from './BinaryTree.js';
+import { City } from './Graph.js';
 
-// Create an array of 1000 numbers
-const numbersArray = new Array(100);
-for (let i = 0; i < 100; i++) {
-    numbersArray[i] = i;
-}
+const atlanta = new City('Atlanta');
+const boston = new City('Boston');
+const chicago = new City('Chicago');
+const denver = new City('Denver');
+const elPaso = new City('El Paso');
 
-// Shuffle an array
-for (let i = 0; i < 1000; i++) {
-    const x = Math.floor(Math.random() * 100);
-    const y = Math.floor(Math.random() * 100);
+atlanta.addRoute(boston, 100)
+atlanta.addRoute(denver, 160)
+boston.addRoute(chicago, 120)
+boston.addRoute(denver, 180)
+chicago.addRoute(elPaso, 80)
+denver.addRoute(chicago, 40)
+denver.addRoute(elPaso, 140)
 
-    const temp = numbersArray[x];
-    numbersArray[x] = numbersArray[y];
-    numbersArray[y] = temp;
-}
-
-const tree = new BinaryTree(numbersArray);
-
-//console.log(tree.searchNode(numbersArray[0]));
-tree.traverseAndPrint();
+console.log(atlanta.dijkstra(atlanta, [boston, chicago, denver, elPaso]));
