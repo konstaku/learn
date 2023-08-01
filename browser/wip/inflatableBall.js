@@ -6,8 +6,10 @@ export class inflatableDiv {
         this.div = document.createElement('div');
         this.div.style.backgroundColor = this.getRandomHexNumber();
         this.div.style.position = 'absolute';
-        this.div.style.left = this.centerCoordinates.x - this.diameter / 2 + 'px';
-        this.div.style.top = this.centerCoordinates.y - this.diameter / 2 + 'px';
+        this.div.style.left =
+            this.centerCoordinates.x - this.diameter / 2 + 'px';
+        this.div.style.top =
+            this.centerCoordinates.y - this.diameter / 2 + 'px';
         this.div.style.width = this.diameter + 'px';
         this.div.style.height = this.diameter + 'px';
         this.div.style.borderRadius = this.diameter + 'px';
@@ -22,9 +24,11 @@ export class inflatableDiv {
             this.div.style.width = this.diameter + 'px';
             this.div.style.height = this.diameter + 'px';
             this.div.style.borderRadius = this.diameter + 'px';
-            this.div.style.left = this.centerCoordinates.x - this.diameter / 2 + 'px';
-            this.div.style.top = this.centerCoordinates.y - this.diameter / 2 + 'px';   
-        }, 100);
+            this.div.style.left =
+                this.centerCoordinates.x - this.diameter / 2 + 'px';
+            this.div.style.top =
+                this.centerCoordinates.y - this.diameter / 2 + 'px';
+        }, 1);
     }
 
     stopInflating() {

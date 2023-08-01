@@ -1,5 +1,6 @@
 {
   "name": "node-projects",
+  "type": "module",
   "version": "1.0.0",
   "main": "wip.js",
   "scripts": {

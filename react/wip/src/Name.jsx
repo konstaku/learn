@@ -1,7 +1,3 @@
-export function Name({ name, age = 100 }) {
-  return(
-      <div>
-        { name } { age }
-      </div>
-    ); 
+export function Name({ children }) {
+  return <div>{children}</div>;
 }
