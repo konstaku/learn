@@ -1,15 +1,8 @@
-import React from 'react';
-import { Name } from './Name';
-import { TodoListItem } from './TodoListItem';
+import { useState } from 'react';
+import { Counter } from './Counter';
 
 function App() {
-  return (
-    <div>
-      <TodoListItem isComplete={true}>Wake up</TodoListItem>
-      <TodoListItem isComplete={false}>Watch TV</TodoListItem>
-      <TodoListItem isComplete={false}>Be a dick</TodoListItem>
-    </div>
-  );
+  return <Counter></Counter>;
 }
 
 export default App;
