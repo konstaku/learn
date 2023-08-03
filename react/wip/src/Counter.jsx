@@ -11,5 +11,7 @@ export function Counter() {
 
   function increment() {
     setCount((currentCount) => currentCount + 1);
+    setCount((currentCount) => currentCount + 1);
+    setCount((currentCount) => currentCount + 1);
   }
 }

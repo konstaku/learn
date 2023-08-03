@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import { Counter } from './Counter';
+import { Name } from './Name';
 
 function App() {
-  return <Counter></Counter>;
+  return <Name />;
 }
 
 export default App;
