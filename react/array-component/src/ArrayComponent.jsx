@@ -3,10 +3,11 @@ import { RemoveCustomIndex } from './RemoveCustomIndex';
 
 export function ArrayComponent() {
   const [array, setArray] = useState(setupArray);
+  const [inputValue, setInputValue] = useState('');
 
   return (
     <div>
-      <h1>[{displayArray()}]</h1>
+      <h1>[{array.join(', ')}]</h1>
       <input
         type="button"
         value="Remove first element"
@@ -49,7 +50,12 @@ export function ArrayComponent() {
       />
       <br />
       <br />
-      <input type="text" onKeyDown={addInputValueToTheBeginningOfAnArray} />
+      <input
+        value={inputValue}
+        type="text"
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={(e) => addInputValueToTheBeginningOfAnArray(e)}
+      />
       <br />
       <br />
       <input
@@ -64,24 +70,21 @@ export function ArrayComponent() {
     return ['A', 'B', 'C'];
   }
 
-  function displayArray() {
-    let string = '';
-    array.forEach((el) => (string += el + ', '));
-    return string.slice(0, string.length - 2);
-  }
-
   function removeFirstElement() {
-    array.shift();
-    setArray([...array]);
+    setArray((currentArray) => {
+      return currentArray.slice(1);
+    });
   }
 
   function removeCustomElement(e) {
     const removeIndex = +e.target.dataset.index;
 
     if (removeIndex) {
-      console.log('remove index:', removeIndex);
-      array.splice(removeIndex, 1);
-      setArray([...array]);
+      setArray((currentArray) => {
+        const result = [...currentArray];
+        result.splice(removeIndex, 1);
+        return result;
+      });
     } else {
       removeFirstElement();
     }
@@ -91,8 +94,9 @@ export function ArrayComponent() {
     const value = prompt('Enter a new value', 0);
 
     if (value) {
-      array.unshift(value);
-      setArray([...array]);
+      setArray((currentArray) => {
+        return [value, ...currentArray];
+      });
     }
   }
 
@@ -100,44 +104,56 @@ export function ArrayComponent() {
     const value = prompt('Enter a new value', 0);
 
     if (value) {
-      array.push(value);
-      setArray([...array]);
+      setArray((currentArray) => {
+        return [...currentArray, value];
+      });
     }
   }
 
   function clearArray() {
-    setArray([]);
+    setArray(() => []);
   }
 
   function resetToInitial() {
-    const resetArray = setupArray();
-    setArray(resetArray);
+    setArray(setupArray);
   }
 
   function updateAllAtoH() {
-    for (let i = 0; i < array.length; i++) {
-      if (array[i] === 'A') {
-        array[i] = 'H';
-      }
-    }
-
-    setArray([...array]);
+    setArray((currentArray) => {
+      return currentArray.map((element) => (element === 'A' ? 'H' : element));
+    });
   }
 
   function addInputValueToTheBeginningOfAnArray(e) {
     if (e.code === 'Enter') {
-      array.unshift(e.target.value);
-      setArray([...array]);
+      setArray((currentArray) => {
+        return [e.target.value, ...currentArray];
+      });
     }
   }
 
   function addElementToCustomIndex() {
     const index = prompt('Select an index to add new element', 0);
+
+    if (typeof +index !== 'number') {
+      alert("That's not a number!");
+      return;
+    }
+
     const value = prompt('Select a value to add', 'Scooter');
 
     if (value) {
-      array[index] = value;
-      setArray([...array]);
+      setArray((currentArray) => {
+        return [
+          ...currentArray.slice(0, index),
+          value,
+          ...currentArray.slice(index),
+        ];
+
+        const result = [...currentArray];
+        result[index] = value;
+        return result;
+      });
     }
   }
 }
