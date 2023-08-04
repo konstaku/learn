@@ -149,10 +149,6 @@ export function ArrayComponent() {
           value,
           ...currentArray.slice(index),
         ];
-
-        const result = [...currentArray];
-        result[index] = value;
-        return result;
       });
     }
   }
