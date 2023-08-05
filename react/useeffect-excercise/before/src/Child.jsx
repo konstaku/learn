@@ -4,28 +4,30 @@ export function Child() {
   const [age, setAge] = useState(0);
   const [name, setName] = useState('');
 
-  useEffect(() => console.log('**Render**'));
+  // useEffect(() => console.log('Render'));
+
+  console.log('Body');
 
   useEffect(() => {
-    console.log('**Hi**');
-    return () => console.log('**Bye!**');
+    console.log('Mounted');
+    return () => console.log('Unmounted');
   }, []);
 
-  useEffect(() => {
-    console.log(`**My name is ${name} and I am ${age} years old**`);
-  }, [name, age]);
+  // useEffect(() => {
+  //   console.log(`**My name is ${name} and I am ${age} years old**`);
+  // }, [name, age]);
 
-  useEffect(() => {
-    document.title = name;
+  // useEffect(() => {
+  //   document.title = name;
 
-    const timeout = setTimeout(() => {
-      console.log(`**My name is ${name}**`);
-    }, 1000);
+  //   const timeout = setTimeout(() => {
+  //     console.log(`**My name is ${name}**`);
+  //   }, 1000);
 
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [name]);
+  //   return () => {
+  //     clearTimeout(timeout);
+  //   };
+  // }, [name]);
 
   return (
     <div>
