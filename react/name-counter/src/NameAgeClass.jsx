@@ -22,27 +22,31 @@ export class NameAgeClass extends React.Component {
         />
         <br />
         <br />
-        <span onClick={this.changeAge.bind(this)}>
-          <input type="button" value="-" />
-          {this.state.age}
-          <input type="button" value="+" />
-        </span>
+        <input
+          type="button"
+          value="-"
+          onClick={() =>
+            this.setState((currentState) => {
+              return { age: currentState.age - 1 };
+            })
+          }
+        />
+        {this.state.age}
+
+        <input
+          type="button"
+          value="+"
+          onClick={() =>
+            this.setState((currentState) => {
+              return { age: currentState.age + 1 };
+            })
+          }
+        />
       </div>
     );
   }
 
   changeName(event) {
     this.setState({ name: event.target.value });
-  }
-
-  changeAge(event) {
-    switch (event.target.value) {
-      case '+':
-        this.setState({ age: this.state.age + 1 });
-        break;
-      case '-':
-        this.setState({ age: this.state.age - 1 });
-        break;
-    }
   }
 }

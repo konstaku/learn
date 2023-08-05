@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 export function NameAge() {
-  const [name, setName] = useState('Konsta');
+  const [name, setName] = useState('');
   const [age, setAge] = useState(38);
 
   return (
@@ -9,7 +9,11 @@ export function NameAge() {
       <h1>
         Hi, my name is {name} and I am {age} years old
       </h1>
-      <input type="text" defaultValue={name} onChange={changeName} />
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <br />
       <br />
       <span onClick={changeAge}>
@@ -19,10 +23,6 @@ export function NameAge() {
       </span>
     </div>
   );
-
-  function changeName(event) {
-    setName((currentName) => (currentName = event.target.value));
-  }
 
   function changeAge(event) {
     switch (event.target.value) {
