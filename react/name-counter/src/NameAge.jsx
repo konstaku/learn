@@ -1,14 +1,16 @@
 import { useState } from 'react';
+import { DisplayString } from './DisplayString.jsx';
 
-export function NameAge() {
+export function NameAge({ favouriteNumber }) {
   const [name, setName] = useState('');
   const [age, setAge] = useState(38);
 
   return (
     <div>
-      <h1>
-        Hi, my name is {name} and I am {age} years old
-      </h1>
+      <DisplayString name={name} age={age} />
+      {favouriteNumber != null && (
+        <h2>My favourite number is {favouriteNumber}</h2>
+      )}
       <input
         type="text"
         value={name}

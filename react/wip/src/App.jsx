@@ -1,8 +1,7 @@
-import { Name } from './Name';
-// https://jsonplaceholder.typicode.com/users
+import { HashList } from './HashList';
 
 function App() {
-  return <Name />;
+  return <HashList />;
 }
 
 export default App;

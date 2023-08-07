@@ -39,7 +39,7 @@ function App() {
 
   let jsx;
 
-  if (loading) {
+  if (loading || data === undefined) {
     jsx = <h2>Loading...</h2>;
   } else if (error != null) {
     jsx = <h2>Error!</h2>;

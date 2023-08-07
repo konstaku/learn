@@ -1,4 +1,5 @@
 import React from 'react';
+import { DisplayString } from './DisplayString.jsx';
 
 export class NameAgeClass extends React.Component {
   constructor(props) {
@@ -12,9 +13,7 @@ export class NameAgeClass extends React.Component {
   render() {
     return (
       <div>
-        <h1>
-          Hi, my name is {this.state.name} and I am {this.state.age} years old
-        </h1>
+        <DisplayString name={this.state.name} age={this.state.age} />
         <input
           type="text"
           defaultValue={this.state.name}
