@@ -1,4 +1,4 @@
-export function TodoItem({ id, text, done, deleteTodo, setList, list }) {
+export function TodoItem({ id, text, done, deleteTodo, setList }) {
   return (
     <>
       <li className="list-item">

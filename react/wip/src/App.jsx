@@ -1,7 +1,12 @@
-import { HashList } from './HashList';
+import { useEffect, useRef, useState } from 'react';
+import { DarkMillion } from './DarkMillion';
 
 function App() {
-  return <HashList />;
+  return (
+    <>
+      <DarkMillion />
+    </>
+  );
 }
 
 export default App;
