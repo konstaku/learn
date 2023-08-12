@@ -1,0 +1,9 @@
+
+div {
+    color: blue;
+    border: 1px solid black;
+}
+
+p {
+    border: inherit
+}
