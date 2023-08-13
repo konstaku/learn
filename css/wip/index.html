@@ -1,12 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link href="styles.css" rel="stylesheet" href="">
-</head>
-<body>
-    <div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-        <p>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-    </div>
-</body>
+  <head>
+    <style>
+      .button {
+        display: inline-block;
+        border: none;
+        background-color: hsl(120, 70%, 60%);
+        color: white;
+        box-sizing: border-box;
+        padding: 10px 20px;
+        font-size: 2rem;
+        font-family: Helvetica;
+        border-radius: 10px;
+        margin: 20px;
+      }
+
+      .button:hover {
+        background-color: hsl(120, 70%, 40%);
+        animation: ease-in-out 1s;
+      }
+
+      .button:focus {
+        background-color: hsl(120, 40%, 40%);
+      }
+    </style>
+  </head>
+  <body>
+    <button class="button">Start</button>
+  </body>
 </html>
