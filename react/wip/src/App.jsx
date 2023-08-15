@@ -1,27 +1,26 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useToggle } from './useToggle';
-import { useInputValue } from './useInputValue';
+import { useRef } from 'react';
 
 function App() {
-  const nameInput = useInputValue('');
-  const [darkMode, toggleDarkMode] = useToggle(false);
-
+  const nameRef = useRef();
+  
   return (
-    <div
-      style={{
-        backgroundColor: darkMode ? '#333' : '#fff',
-        color: darkMode ? '#fff' : '#333',
-        width: '100%',
-        padding: '30px',
-      }}
-    >
-      name:
-      <input type="text" {...nameInput} />
-      <br />
-      <br />
-      <button onClick={toggleDarkMode}>Set dark</button>
-    </div>
+    <>
+      <form onSubmit={submitForm}>
+        <label htmlFor="name-form">Name:</label>
+        <br />
+        <input type="text" id="name-form" ref={nameRef} />
+        <br />
+        <button>Alert name</button>
+      </form>
+    </>
   );
+
+  function submitForm(event) {
+    event.preventDefault();
+    const name = nameRef.current.value;
+    if (name === '') return;
+    alert(name);
+  }
 }
 
 export default App;

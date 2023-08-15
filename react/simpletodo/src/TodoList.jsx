@@ -21,23 +21,25 @@ export function TodoList() {
         })}
       </ul>
 
-      <div id="new-todo-form">
+      <form id="new-todo-form" onSubmit={addTodo}>
         <label htmlFor="todo-input">New Todo</label>
         <input
           type="text"
           id="todo-input"
           value={newTodoName}
           onChange={(e) => setNewTodoName(() => e.target.value)}
-          onKeyDown={(e) => e.code === 'Enter' && addTodo(newTodoName)}
+          // onKeyDown={(e) => e.code === 'Enter' && addTodo(newTodoName)}
         />
-        <button onClick={() => addTodo(newTodoName)}>Add Todo</button>
-      </div>
+        <button>Add Todo</button>
+      </form>
     </>
   );
 
   // Todo can be added via enter or pressing a button, so I abstracted it in a separate function
-  function addTodo(name) {
-    if (name === '') {
+  function addTodo(event) {
+    event.preventDefault();
+
+    if (newTodoName1 === '') {
       return;
     }
 
@@ -46,7 +48,7 @@ export function TodoList() {
         ...currentList,
         {
           id: crypto.randomUUID(),
-          text: name,
+          text: newTodoName1,
           done: false,
         },
       ];
