@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+}
+
+input {
+  padding: 5px;
+  margin: 5px;
+  border: 1px solid hsl(100, 0%, 70%);
+  border-radius: 3px;
+  font-size: inherit;
+}
+
+input:focus {
+  border: 1px solid hsl(200, 100%, 60%);
+  outline: none;
+  box-shadow: 0 0 10px 0 hsl(200, 100%, 60%);
+}
+
+input.success {
+  border-color: hsl(100, 100%, 30%);
+}
+
+input.success:focus {
+  box-shadow: 0 0 10px 0 hsl(100, 100%, 50%);
+}
+
+input.error {
+  border-color: hsl(0, 100%, 40%);
+}
+
+input.error:focus {
+  box-shadow: 0 0 10px 0 hsl(0, 100%, 60%);
+}
+
+input.large {
+  font-size: 1.2rem;
+}
+input.small {
+  font-size: 0.8rem;
+}
+
+input:disabled {
+  background-color: rgb(222, 222, 222);
+}
