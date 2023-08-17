@@ -1,31 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <style>
-      .button {
-        display: inline-block;
-        border: none;
-        background-color: hsl(120, 70%, 60%);
-        color: white;
-        box-sizing: border-box;
-        padding: 10px 20px;
-        font-size: 2rem;
-        font-family: Helvetica;
-        border-radius: 10px;
-        margin: 20px;
-      }
 
-      .button:hover {
-        background-color: hsl(120, 70%, 40%);
-        animation: ease-in-out 1s;
-      }
+<head>
+  <style>
+    .container {
+      display: flex;
+      background-color: bisque;
+    }
 
-      .button:focus {
-        background-color: hsl(120, 40%, 40%);
-      }
-    </style>
-  </head>
-  <body>
-    <button class="button">Start</button>
-  </body>
+    .item {
+      background-color: gray;
+      border: 1px solid #333;
+      width: 75px;
+      margin: 10px;
+      color: yellow;
+    }
+
+    .item1 {
+      flex: 1 0 auto;
+      min-height: 50px;
+      align-self: flex-start;
+      order: 3;
+    }
+
+    .item2 {
+      min-height: 100px;
+      align-self: center;
+      order: 1;
+    }
+
+    .item3 {
+      min-height: 150px;
+      order: 2;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="item item1">1</div>
+    <div class="item item2">2</div>
+    <div class="item item3">3</div>
+  </div>
+</body>
+
 </html>
