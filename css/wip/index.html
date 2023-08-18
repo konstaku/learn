@@ -4,43 +4,44 @@
 <head>
   <style>
     .container {
-      display: flex;
-      background-color: bisque;
+      display: grid;
+      grid-auto-flow: row dense;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: minmax(50px auto) 100px;
+      gap: 15px;
+      justify-content: start;
+      align-items: start;
     }
 
     .item {
       background-color: gray;
       border: 1px solid #333;
-      width: 75px;
-      margin: 10px;
       color: yellow;
     }
 
     .item1 {
-      flex: 1 0 auto;
-      min-height: 50px;
-      align-self: flex-start;
-      order: 3;
+      grid-column: span 2;
     }
 
     .item2 {
-      min-height: 100px;
-      align-self: center;
-      order: 1;
+
+      grid-column: span 2;
     }
 
-    .item3 {
-      min-height: 150px;
-      order: 2;
-    }
+    .item6 {}
   </style>
 </head>
 
 <body>
   <div class="container">
-    <div class="item item1">1</div>
+    <div class="item item1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, dicta.</div>
     <div class="item item2">2</div>
     <div class="item item3">3</div>
+    <div class="item item4">4</div>
+    <div class="item item5">5</div>
+    <div class="item item6">6</div>
+    <div class="item item7">7</div>
+    <div class="item item8">8</div>
   </div>
 </body>
 
