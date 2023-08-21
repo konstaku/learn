@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  font-family: Cambria, serif;
+  font-family: Helvetica;
   color: #1b2522;
 }
 
@@ -164,6 +164,7 @@ body {
   padding: 0.5em;
   color: inherit;
   font-family: inherit;
+  font-size: inherit;
 }
 
 .form textarea {
