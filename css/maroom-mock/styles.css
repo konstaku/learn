@@ -18,11 +18,17 @@ h2 {
   font-weight: 600;
 }
 
+h3 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
 .flex-container {
   /* margin: 0 min(96px, 15%); */
   margin: 0 auto;
   min-width: 800px;
-  width: 1000px;
+  width: 900px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -44,6 +50,7 @@ h2 {
 .header {
   height: 100vh;
   min-height: 700px;
+  max-height: 1000px;
   display: flex;
   padding-bottom: 2rem;
   flex-direction: column;
@@ -81,11 +88,15 @@ h2 {
 }
 
 .btn {
-  background-color: #fceae2;
-  color: #ed713c;
+  background-color: hsl(18, 81%, 94%);
+  color: hsl(18, 83%, 58%);
   border-radius: 1000px;
   padding: 0.5em 1em;
   text-decoration: none;
+}
+
+.btn:hover {
+  background-color: hsl(18, 81%, 84%);
 }
 
 .main-btn,
@@ -96,8 +107,12 @@ h2 {
 }
 
 .btn.main-btn {
-  background-color: #ed713c;
+  background-color: hsl(18, 83%, 58%);
   color: white;
+}
+
+.btn.main-btn:hover {
+  background-color: hsl(18, 83%, 48%);
 }
 
 .hero-container {
@@ -107,7 +122,6 @@ h2 {
   width: 100%;
   height: 100%;
   gap: 1.5rem;
-  /* padding-bottom: 2rem; */
 }
 
 .hero-left {
@@ -198,6 +212,7 @@ h2 {
 
 .hero-description {
   display: flex;
+  justify-content: space-between;
   align-items: end;
   background-color: white;
   margin: auto 1rem 1rem 1rem;
@@ -223,8 +238,9 @@ h2 {
 }
 
 .grid-container {
-  grid-template-rows: auto 4;
-  grid-template-columns: auto 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
 }
 
 .btn.btn-show-more {
@@ -237,7 +253,7 @@ h2 {
 }
 
 .propositions {
-  padding-top: 3.5rem;
+  padding: 3.5rem 0rem;
 }
 
 .section-header {
@@ -251,11 +267,17 @@ h2 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 290px;
+  min-width: 280px;
+  width: 100%;
   height: 370px;
   background-color: #fff;
   border: 1px solid #eaecef;
   border-radius: 14px;
+}
+
+.apartment-card:hover {
+  box-shadow: 0 10px 20px 0 hsla(0, 0%, 0%, 0.1);
+  cursor: pointer;
 }
 
 .apartment-card hr {
@@ -276,10 +298,29 @@ h2 {
 }
 
 .apartment-image {
-  background-image: url('./img/apartments/photos/apartment-1.jpg');
   background-size: cover;
   height: 196px;
   border-radius: 13px 13px 0 0;
+}
+
+#apartment-image-1 {
+  background-image: url('./img/apartments/photos/apartment-1.png');
+}
+
+#apartment-image-2 {
+  background-image: url('./img/apartments/photos/apartment-2.png');
+}
+
+#apartment-image-3 {
+  background-image: url('./img/apartments/photos/apartment-3.png');
+}
+
+#apartment-image-4 {
+  background-image: url('./img/apartments/photos/apartment-4.png');
+}
+
+#apartment-image-5 {
+  background-image: url('./img/apartments/photos/apartment-5.png');
 }
 
 .apartment-image img {
@@ -333,6 +374,7 @@ h2 {
 }
 
 .room-size-floor {
+  margin-top: 0.5rem;
   display: flex;
   gap: 24px;
   align-items: center;
@@ -357,4 +399,172 @@ h2 {
   font-weight: 600;
   line-height: 1.5rem;
   margin-top: 1rem;
+}
+
+.apartment-card.more-apartment-options {
+  background-color: #fceae2;
+  border: none;
+}
+
+.more-apartment-previews {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(2, auto);
+  padding: 1rem;
+  gap: 6px;
+}
+
+.small-apartment-preview {
+  height: 100%;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  background-size: cover;
+}
+
+.small-apartment-preview#preview1 {
+  background-image: url(img/apartments/photos/apartment-1.png);
+}
+.small-apartment-preview#preview2 {
+  background-image: url(img/apartments/photos/apartment-2.png);
+}
+.small-apartment-preview#preview3 {
+  background-image: url(img/apartments/photos/apartment-3.png);
+}
+.small-apartment-preview#preview4 {
+  background-image: url(img/apartments/photos/apartment-4.png);
+}
+
+.more-apartments-description {
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.more-apartments-description-header {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 27px;
+}
+
+.more-apartments-description-subline {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+}
+
+.more-apartments-description img {
+  height: 12px;
+  width: 14px;
+}
+
+.apartment-status {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  padding: 0.25rem 0.5rem;
+  position: relative;
+  left: 0.75rem;
+  top: 0.75rem;
+  border-radius: 1000px;
+}
+
+.apartment-status.first-rent {
+  background-color: #fceae2;
+  color: #ed713c;
+}
+
+.apartment-status.soon-free {
+  background-color: #eafcf7;
+  color: #27ae60;
+}
+
+.apartment-status.soon-free img {
+  height: 1rem;
+  width: 1rem;
+}
+
+/* Rented apartments */
+.rented-apartments {
+  padding: 2rem 0;
+}
+
+.rented-apartments .hero {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  min-height: 640px;
+  width: 100%;
+  background-image: url(./img/apartments/photos/rented-interior.png);
+  border-radius: 1rem;
+  background-size: cover;
+}
+
+.rented-apartments-top-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rented-apartments-stats {
+  width: 400px;
+  background-color: white;
+  border-radius: 0.5rem;
+  margin: 40px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 10px 25px 0 hsla(0, 0%, 0%, 10%);
+}
+
+.rented-apartments-stats-bottom {
+  padding-top: 2rem;
+}
+
+.rented-apartments p {
+  margin-top: 0.5rem;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #7f8285;
+}
+
+.rented-apartments .apartment-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 27px;
+}
+
+.apartment-price .apartment-status {
+  position: static;
+}
+.rented-apartments-arrow {
+  display: inline-block;
+  position: relative;
+  top: 0.25rem;
+  border: 1px solid #f1f2f4;
+  height: 2rem;
+  width: 2rem;
+}
+
+.rented-apartments-arrow.left {
+  border-radius: 1000px 0 0 1000px;
+  background-image: url(./img/apartments/photos/Chevron\ Left.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.rented-apartments-arrow.right {
+  border-radius: 0 1000px 1000px 0;
+  background-image: url(./img/apartments/photos/Chevron\ Right.svg);
+  background-position: center;
+  background-repeat: no-repeat;
 }
