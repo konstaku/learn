@@ -4,27 +4,37 @@
 <head>
   <link rel="stylesheet" href="styles.css">
   <style>
-    @font-face {
-      font-family: Lobster;
-      src: url("fonts/Lobster-Regular.ttf");
+    .div {
+      background-color: red;
+      height: 100px;
+      width: 100px;
+      color: white;
+      animation: custom 1s linear .1s forwards alternate infinite;
     }
 
-    body {
-      font-family: Lobster;
+    .div:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes custom {
+      from {
+        transform: translateX(0) scale(1.5);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
     }
   </style>
 </head>
 
 <body>
-
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus asperiores laboriosam ut sunt vero beatae quis
-  officiis laborum exercitationem molestiae a labore modi officia dolorum, sapiente iure ad illo, ullam voluptatem, qui
-  ipsum! Voluptatem odio doloribus labore dolorum obcaecati maiores facilis reiciendis tempora provident nemo quos amet
-  rem dolorem nobis aut recusandae, quidem libero esse non corrupti! Nemo modi minima debitis facilis autem, odit ullam
-  id! Rerum aut, harum voluptatibus voluptatem officiis deserunt impedit quasi fugit facere maiores molestias iure rem
-  aspernatur amet esse consectetur atque eveniet laudantium perferendis, quis cum? Quo officia architecto debitis
-  voluptates dolorum dolore laudantium accusamus.
-
+  <div class="div">Div</div>
+  <div>Div</div>
+  <div>Div</div>
+  <div>Div</div>
+  <div>Div</div>
+  <div>Div</div>
 </body>
 
 </html>

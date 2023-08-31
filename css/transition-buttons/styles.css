@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 2rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  background-color: #0af;
+  border: none;
+  border-radius: 0.3rem;
+  color: white;
+  transition: all 0.3s linear;
+  outline: none;
+  cursor: pointer;
+}
+
+.btn.hide-me {
+  opacity: 0.6;
+}
+
+.btn.hide-me:hover {
+  opacity: inherit;
+}
+
+.btn.hide-me:focus {
+  opacity: 0;
+}
+
+.btn.change-color:focus {
+  color: #333;
+  background-color: orange;
+  transition-property: color, background-color;
+}

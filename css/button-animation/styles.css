@@ -1,0 +1,66 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+.btn {
+  color: white;
+  background-color: hsl(200, 100%, 50%);
+  border: none;
+  outline: none;
+  padding: 0.5em 1em;
+  border-radius: 0.3em;
+  cursor: pointer;
+}
+
+.btn:hover {
+  animation: blink 500ms ease-in-out infinite, grow 1s ease-in-out infinite;
+}
+
+.btn:focus {
+  animation: fly-away 500ms ease-in-out forwards;
+}
+
+@keyframes blink {
+  from {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.75;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes fly-away {
+  33% {
+    transform: translate(100px, 50px) rotate(30deg) scale(1.1);
+  }
+  66% {
+    transform: translate(0px, 25px) rotate(90deg) scale(0.75);
+  }
+  to {
+    transform: translate(-100px, -75px) rotate(200deg) scale(0.25);
+  }
+}
