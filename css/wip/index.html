@@ -4,37 +4,33 @@
 <head>
   <link rel="stylesheet" href="styles.css">
   <style>
-    .div {
+    body {
+      display: flex;
+      flex-wrap: wrap;
+      perspective: 200px;
+      perspective-origin: top right;
+    }
+
+    div {
       background-color: red;
-      height: 100px;
-      width: 100px;
-      color: white;
-      animation: custom 1s linear .1s forwards alternate infinite;
-    }
+      height: 50px;
+      width: 50px;
+      margin: 10px;
 
-    .div:hover {
-      animation-play-state: paused;
-    }
-
-    @keyframes custom {
-      from {
-        transform: translateX(0) scale(1.5);
-      }
-
-      to {
-        transform: translateX(100%);
-      }
+      transform: rotateX(45deg);
     }
   </style>
 </head>
 
 <body>
-  <div class="div">Div</div>
-  <div>Div</div>
-  <div>Div</div>
-  <div>Div</div>
-  <div>Div</div>
-  <div>Div</div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
 </body>
 
 </html>

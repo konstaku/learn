@@ -17,13 +17,23 @@ body {
 [data-tooltip-top]::after {
   --tooltip-color: #333;
   --arrow-size: 0.5rem;
+  --scale: 0;
 
   position: absolute;
   left: 50%;
-  transform: translate(-50%, var(--translate-y));
+  transform: translate(-50%, var(--translate-y)) scale(var(--scale));
+
+  transition: transform 100ms;
+  transition-timing-function: linear;
 }
 
-[data-tooltip-top]:hover::before {
+[data-tooltip-top]:hover::before,
+[data-tooltip-top]:hover::after {
+  --scale: 1;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.73, 1.81);
+}
+
+[data-tooltip-top]::before {
   --translate-y: calc(-100% - var(--arrow-size));
 
   content: attr(data-tooltip-top);
@@ -34,14 +44,18 @@ body {
   width: max-content;
   max-width: 100%;
   text-align: center;
+
+  transform-origin: bottom center;
 }
 
-[data-tooltip-top]:hover::after {
+[data-tooltip-top]::after {
   --translate-y: calc(-1 * var(--arrow-size));
 
   content: '';
   border: var(--arrow-size) solid transparent;
   border-top-color: var(--tooltip-color);
+
+  transform-origin: top center;
 }
 
 [data-tooltip-right] {
