@@ -1,0 +1,21 @@
+.header {
+  text-align: center;
+}
+
+.list-header {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.green-list {
+  background-color: green;
+  color: white;
+}
+
+ul :first-child,
+ol :first-child {
+  color: cyan;
+}
+
+.white-list ol :last-child {
+  text-decoration: line-through;
+}

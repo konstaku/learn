@@ -1,0 +1,83 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin-top: 100px;
+  margin-left: 100px;
+}
+
+[data-tooltip-top] {
+  position: relative;
+}
+
+[data-tooltip-top]::before,
+[data-tooltip-top]::after {
+  --tooltip-color: #333;
+  --arrow-size: 0.5rem;
+  --scale: 0;
+
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, var(--translate-y)) scale(var(--scale));
+
+  transition: transform 100ms;
+  transition-timing-function: linear;
+}
+
+[data-tooltip-top]:hover::before,
+[data-tooltip-top]:hover::after {
+  --scale: 1;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.73, 1.81);
+}
+
+[data-tooltip-top]::before {
+  --translate-y: calc(-100% - var(--arrow-size));
+
+  content: attr(data-tooltip-top);
+  background-color: var(--tooltip-color);
+  color: white;
+  padding: var(--arrow-size);
+  border-radius: 0.3em;
+  width: max-content;
+  max-width: 100%;
+  text-align: center;
+
+  transform-origin: bottom center;
+}
+
+[data-tooltip-top]::after {
+  --translate-y: calc(-1 * var(--arrow-size));
+
+  content: '';
+  border: var(--arrow-size) solid transparent;
+  border-top-color: var(--tooltip-color);
+
+  transform-origin: top center;
+}
+
+[data-tooltip-right] {
+  position: relative;
+}
+
+[data-tooltip-right]:hover::before {
+  content: attr(data-tooltip-right);
+  position: absolute;
+  left: 100%;
+  transform: translate(1em, -0.5em);
+  width: max-content;
+  max-width: 100%;
+  padding: 0.5em;
+  border-radius: 0.3em;
+  background-color: #333;
+  color: white;
+}
+
+[data-tooltip-right]:hover::after {
+  content: '';
+  position: absolute;
+  border: 0.5em solid transparent;
+  border-right-color: #333;
+}
