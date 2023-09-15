@@ -2,35 +2,37 @@
 <html lang="en">
 
 <head>
-  <link rel="stylesheet" href="styles.css">
   <style>
-    body {
-      display: flex;
-      flex-wrap: wrap;
-      perspective: 200px;
-      perspective-origin: top right;
+    .visibility-hidden {
+      visibility: hidden;
+      background-color: blue;
     }
 
-    div {
-      background-color: red;
-      height: 50px;
-      width: 50px;
-      margin: 10px;
+    .visibility-hidden::before {
+      content: 'Hey from visibility-hidden';
+      background-color: blue;
+      display: block;
+      height: 100px;
+      width: 100px;
+    }
 
-      transform: rotateX(45deg);
+    .display {
+      background-color: red;
+    }
+
+    .display-none::before {
+      content: 'Hey from display-none';
+      background-color: blue;
+      display: block;
+      height: 100px;
+      width: 100px;
     }
   </style>
 </head>
 
 <body>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
+  <div class="visibility-hidden">Hey</div>
+  <div class="display">Hi</div>
 </body>
 
 </html>
