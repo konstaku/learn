@@ -24,6 +24,18 @@ body {
   padding: 0.5rem 1rem;
 }
 
+.btn:hover {
+  background-color: #e5e5e5;
+}
+
 .btn:focus {
   background-color: #fff;
+  outline: 1px solid #ddd;
+}
+
+.input {
+  margin: auto;
+  padding: 0.5em;
+  font-size: inherit;
+  font-family: inherit;
 }
