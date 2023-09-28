@@ -1,15 +1,23 @@
-const lengths = []
-
-for (let i = 0; i < 100; i++) {
-    const arr = new Array(100).fill(0);
-    const filledArr = arr.map(() => Math.floor(Math.random() * 100));
-    const mySet = new Set();
-
-    for (const el of filledArr) {
-        mySet.add(el);
+class Me {
+    constructor() {
+        this.name = 'Konsta'
     }
 
-    lengths.push(mySet.size);
+    sayHello() {
+        console.log(`Hello from ${this.name}`)
+    }
+
+    sayHelloArrow = () => console.log(`Hello from ${this.name}`)
 }
 
-console.log(lengths.reduce((acc, cur) => acc += cur) / lengths.length);
+
+const konsta = new Me;
+
+konsta.sayHello()
+konsta.sayHelloArrow()
+
+const foo = konsta.sayHello
+const bar = konsta.sayHelloArrow
+
+//foo()
+bar()

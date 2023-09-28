@@ -1,25 +1,22 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import './style.css';
 
 function App() {
-  const nameProps = useInputValue('Konsta');
-  const surnameProps = useInputValue('Ku');
+  const nameRef = useRef();
 
   return (
     <>
       First name:
-      <input className="input" type="text" {...nameProps} />
+      <input className="input" type="text" ref={nameRef} />
       <br />
-      Second name:
-      <input className="input" type="text" {...surnameProps} />
+      <button
+        className="btn"
+        onClick={() => alert('Name:', nameRef.current.value)}
+      >
+        Show name
+      </button>
     </>
   );
-}
-
-function useInputValue(initialValue) {
-  const [value, setValue] = useState(initialValue);
-
-  return { value, onChange: (e) => setValue(() => e.target.value) };
 }
 
 export default App;

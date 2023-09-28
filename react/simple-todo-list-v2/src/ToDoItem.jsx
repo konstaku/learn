@@ -13,7 +13,7 @@ export function ToDoItem({ id, name, checked, deleteTodo, toggleChecked }) {
         <span data-list-item-text>{name}</span>
       </label>
 
-      <button data-button-delete onClick={() => deleteTodo(id)}>
+      <button type="button" data-button-delete onClick={() => deleteTodo(id)}>
         Delete
       </button>
     </li>

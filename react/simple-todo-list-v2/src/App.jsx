@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ToDoItem } from './ToDoItem';
-import { NewToDo } from './NewToDo';
 
 import './styles.css';
 
@@ -10,9 +9,18 @@ function App() {
 
 function ToDoList() {
   const [todos, setTodos] = useState([]);
+  const [value, setValue] = useState('');
 
   return (
-    <>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        console.log('in on submit, value:', value);
+        console.log('todos:', todos);
+        addTodo(value);
+        setValue(() => '');
+      }}
+    >
       <ul id="list">
         {todos.map((todo) => (
           <ToDoItem
@@ -23,15 +31,28 @@ function ToDoList() {
           />
         ))}
       </ul>
-      <NewToDo addTodo={addTodo} />
-    </>
+      <div id="new-todo-form">
+        <label htmlFor="todo-input">New Todo</label>
+        <input
+          type="text"
+          id="todo-input"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <button>Add Todo</button>
+      </div>
+    </form>
   );
 
   function addTodo(text) {
-    setTodos((currentTodos) => [
-      ...currentTodos,
-      { id: crypto.randomUUID(), name: text, checked: false },
-    ]);
+    console.log('in add todo');
+    setTodos((currentTodos) => {
+      console.log('in set todos, current todos', currentTodos);
+      return [
+        ...currentTodos,
+        { id: crypto.randomUUID(), name: text, checked: false },
+      ];
+    });
   }
 
   function deleteTodo(id) {
