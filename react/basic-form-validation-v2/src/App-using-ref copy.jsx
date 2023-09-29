@@ -1,16 +1,32 @@
 import { useEffect, useRef, useState } from 'react';
 
 function App() {
-  const [emailValue, setEmailValue] = useState('test@test.com');
-  const [passwordValue, setPasswordValue] = useState('password123');
   const [emailErrorMessage, setEmailErrorMessage] = useState(null);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState(null);
-  const [submittedWithError, setSubmittedWithError] = useState(false);
+
+  const emailRef = useRef();
+  const passwordRef = useRef();
+
+  useValidateWhileTyping({
+    ref: emailRef,
+    error: emailErrorMessage,
+    validator: validateEmail,
+  });
+  useValidateWhileTyping({
+    ref: passwordRef,
+    error: passwordErrorMessage,
+    validator: validatePassword,
+  });
 
   return (
     <form
       className="form"
-      onSubmit={(e) => validateBeforeSubmit(e, [emailValue, passwordValue])}
+      onSubmit={(e) =>
+        validateBeforeSubmit(e, [
+          emailRef.current.value,
+          passwordRef.current.value,
+        ])
+      }
     >
       <div className={emailErrorMessage ? 'form-group error' : 'form-group'}>
         <label className="label" htmlFor="email">
@@ -20,15 +36,8 @@ function App() {
           className="input"
           type="email"
           id="email"
-          value={emailValue}
-          onChange={(e) =>
-            validateWhileTyping({
-              value: e.target.value,
-              setter: setEmailValue,
-              validator: validateEmail,
-              isError: submittedWithError,
-            })
-          }
+          defaultValue="test@test.com"
+          ref={emailRef}
         />
         <div className="msg" hidden={!emailErrorMessage}>
           {emailErrorMessage}
@@ -40,15 +49,8 @@ function App() {
         </label>
         <input
           className="input"
-          value={passwordValue}
-          onChange={(e) =>
-            validateWhileTyping({
-              value: e.target.value,
-              setter: setPasswordValue,
-              validator: validatePassword,
-              isError: submittedWithError,
-            })
-          }
+          defaultValue="password123"
+          ref={passwordRef}
           type="password"
           id="password"
         />
@@ -69,10 +71,8 @@ function App() {
     const passwordOk = validatePassword(password);
 
     if (emailOk && passwordOk) {
-      return alert('TUTTO BENE!');
+      alert('TUTTO BENE!');
     }
-
-    setSubmittedWithError(true);
   }
 
   function validateEmail(currentEmail) {
@@ -108,14 +108,24 @@ function App() {
 
     return false;
   }
+}
 
-  function validateWhileTyping({ value, setter, validator, isError }) {
-    const currentValue = value;
-    setter(currentValue);
-    if (isError) {
-      validator(currentValue);
+function useValidateWhileTyping({ ref, error, validator }) {
+  useEffect(() => {
+    const validationField = ref.current;
+
+    if (error) {
+      validationField.addEventListener('keyup', (e) =>
+        validator(validationField.value)
+      );
     }
-  }
+
+    return () => {
+      validationField.removeEventListener('keyup', (e) =>
+        validator(validationField.value)
+      );
+    };
+  }, [error]);
 }
 
 export default App;
