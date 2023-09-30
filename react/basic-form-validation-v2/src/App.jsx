@@ -1,18 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 function App() {
-  const [emailValue, setEmailValue] = useState('test@test.com');
-  const [passwordValue, setPasswordValue] = useState('password123');
-  const [emailErrorMessage, setEmailErrorMessage] = useState(null);
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState(null);
-  const [submittedWithError, setSubmittedWithError] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: 'test@test.co.uk',
+      password: 'password123',
+    },
+  });
+
+  function onSubmit(data) {
+    alert('TUTTO BENE!');
+  }
 
   return (
-    <form
-      className="form"
-      onSubmit={(e) => validateBeforeSubmit(e, [emailValue, passwordValue])}
-    >
-      <div className={emailErrorMessage ? 'form-group error' : 'form-group'}>
+    <form className="form" onSubmit={handleSubmit(onSubmit)}>
+      <div
+        className={errors?.email?.message ? 'form-group error' : 'form-group'}
+      >
         <label className="label" htmlFor="email">
           Email
         </label>
@@ -20,40 +29,50 @@ function App() {
           className="input"
           type="email"
           id="email"
-          value={emailValue}
-          onChange={(e) =>
-            validateWhileTyping({
-              value: e.target.value,
-              setter: setEmailValue,
-              validator: validateEmail,
-              isError: submittedWithError,
-            })
-          }
+          {...register('email', {
+            required: { value: true, message: 'Required' },
+            validate: (value) =>
+              value.endsWith('@gmail.com') ? null : 'Must end with @gmail.com',
+          })}
         />
-        <div className="msg" hidden={!emailErrorMessage}>
-          {emailErrorMessage}
+        <div className="msg" hidden={!errors?.email?.message}>
+          {errors?.email?.message}
         </div>
       </div>
-      <div className={passwordErrorMessage ? 'form-group error' : 'form-group'}>
+      <div
+        className={
+          errors?.password?.message ? 'form-group error' : 'form-group'
+        }
+      >
         <label className="label" htmlFor="password">
           Password
         </label>
         <input
           className="input"
-          value={passwordValue}
-          onChange={(e) =>
-            validateWhileTyping({
-              value: e.target.value,
-              setter: setPasswordValue,
-              validator: validatePassword,
-              isError: submittedWithError,
-            })
-          }
           type="password"
           id="password"
+          {...register('password', {
+            required: { value: true, message: 'Required' },
+            minLength: {
+              value: 10,
+              message: 'The password should be at least 10 characters long',
+            },
+            validate: {
+              hasLowercase: (value) =>
+                value.toUpperCase() === value
+                  ? 'Must have at least one lowercase character'
+                  : null,
+              hasUppercase: (value) =>
+                value.toLowerCase() === value
+                  ? 'Must have at least one uppercase character'
+                  : null,
+              hasNumber: (value) =>
+                !value.match(/[0-9]/) ? 'Must have at least one number' : null,
+            },
+          })}
         />
-        <div className="msg" hidden={!passwordErrorMessage}>
-          {passwordErrorMessage}
+        <div className="msg" hidden={!errors?.password?.message}>
+          {errors?.password?.message}
         </div>
       </div>
       <button className="btn" type="submit">
@@ -61,61 +80,6 @@ function App() {
       </button>
     </form>
   );
-
-  function validateBeforeSubmit(e, [email, password]) {
-    e.preventDefault();
-
-    const emailOk = validateEmail(email);
-    const passwordOk = validatePassword(password);
-
-    if (emailOk && passwordOk) {
-      return alert('TUTTO BENE!');
-    }
-
-    setSubmittedWithError(true);
-  }
-
-  function validateEmail(currentEmail) {
-    if (!currentEmail) {
-      setEmailErrorMessage(() => 'Please enter your email');
-    } else if (!currentEmail.endsWith('@webdevsimplified.com')) {
-      setEmailErrorMessage(() => 'Email should end in @webdevsimplified.com!');
-    } else {
-      setEmailErrorMessage(() => null);
-      return true;
-    }
-
-    return false;
-  }
-
-  function validatePassword(currentPassword) {
-    if (!currentPassword) {
-      setPasswordErrorMessage(() => 'Password required (Cannot be blank)');
-    } else if (currentPassword.length < 10) {
-      setPasswordErrorMessage(() => 'Password must Be 10 characters or longer');
-    } else if (currentPassword.toUpperCase() === currentPassword) {
-      setPasswordErrorMessage(() => 'Password must include a lowercase letter');
-    } else if (currentPassword.toLowerCase() === currentPassword) {
-      setPasswordErrorMessage(
-        () => 'Password must include an uppercase letter'
-      );
-    } else if (!currentPassword.match(/\d/)) {
-      setPasswordErrorMessage(() => 'Password must include a number');
-    } else {
-      setPasswordErrorMessage(() => null);
-      return true;
-    }
-
-    return false;
-  }
-
-  function validateWhileTyping({ value, setter, validator, isError }) {
-    const currentValue = value;
-    setter(currentValue);
-    if (isError) {
-      validator(currentValue);
-    }
-  }
 }
 
 export default App;
