@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useRef } from 'react';
+import { useController, useForm } from 'react-hook-form';
+import Select from 'react-select';
 
 function App() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -13,8 +15,30 @@ function App() {
     },
   });
 
+  const { field: countryField } = useController({
+    name: 'country',
+    control,
+    rules: { required: { value: true, message: 'Required' } },
+  });
+
+  const countryOptions = [
+    {
+      value: 'IT',
+      label: '🇮🇹 Italy',
+    },
+    {
+      value: 'UA',
+      label: '🇺🇦 Ukraine',
+    },
+    {
+      value: 'FR',
+      label: '🇫🇷 France',
+    },
+  ];
+
   function onSubmit(data) {
     alert('TUTTO BENE!');
+    console.log(data);
   }
 
   return (
@@ -73,6 +97,12 @@ function App() {
         />
         <div className="msg" hidden={!errors?.password?.message}>
           {errors?.password?.message}
+        </div>
+      </div>
+      <div className={`form-group ${errors?.password?.message ? 'error' : ''}`}>
+        <Select options={countryOptions} {...countryField} />
+        <div className="msg" hidden={!errors?.country?.message}>
+          {errors?.country?.message}
         </div>
       </div>
       <button className="btn" type="submit">
