@@ -1,15 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 
-export function useFetch(url, options) {
-  const [data, setData] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(null);
+const ACTIONS = {
+  FETCH_START: 'FETCH_START',
+  FETCH_SUCCESS: 'FETCH_SUCCESS',
+  FETCH_ERROR: 'FETCH_ERROR',
+};
+
+function fetchReducer(state, { type, payload }) {
+  switch (type) {
+    case ACTIONS.FETCH_START: {
+      return {
+        isLoading: true,
+        isError: false,
+      };
+    }
+    case ACTIONS.FETCH_SUCCESS: {
+      return {
+        data: payload.value,
+        isLoading: false,
+        isError: false,
+      };
+    }
+    case ACTIONS.FETCH_ERROR: {
+      return {
+        isLoading: false,
+        isError: true,
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+}
+
+export function useFetch(url, options = {}) {
+  const [fetchData, dispatch] = useReducer(fetchReducer, {
+    isLoading: true,
+    isError: false,
+  });
 
   useEffect(() => {
-    setData(undefined);
-    setIsLoading(true);
-    setIsError(null);
-
+    dispatch({ type: ACTIONS.FETCH_START });
     const controller = new AbortController();
 
     fetch(url, { ...options, signal: controller.signal })
@@ -20,18 +51,14 @@ export function useFetch(url, options) {
           return Promise.reject(response);
         }
       })
-      .then(setData)
+      .then((result) =>
+        dispatch({ type: ACTIONS.FETCH_SUCCESS, payload: { value: result } })
+      )
       .catch((e) => {
         if (e.name === 'AbortError') {
           return;
         }
-        setIsError(e);
-      })
-      .finally(() => {
-        if (controller.signal.aborted) {
-          return;
-        }
-        setIsLoading(false);
+        dispatch({ type: ACTIONS.FETCH_ERROR });
       });
 
     return () => {
@@ -39,5 +66,5 @@ export function useFetch(url, options) {
     };
   }, [url]);
 
-  return { data, isLoading, isError };
+  return fetchData;
 }
