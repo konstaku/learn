@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { TodolistContext } from './TodolistContext';
-import { ACTIONS } from './TodolistContext';
+import { TodolistContext } from './context';
+import { ACTIONS } from './todoReducer';
 
 export function ToDoItem({ id, name, checked }) {
   if (!name) return;

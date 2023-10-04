@@ -1,8 +1,7 @@
-import { useContext, useReducer } from 'react';
 import { TodoList } from './TodoList';
-import { StatusBar } from './StatusBar';
+import { SearchBar } from './SearchBar';
 import { AddTodo } from './AddTodo';
-import { TodolistContextProvider } from './TodolistContext';
+import { TodolistContextProvider } from './context';
 import './styles.css';
 
 function App() {
@@ -13,7 +12,7 @@ function TodoApp() {
   return (
     <>
       <TodolistContextProvider>
-        <StatusBar />
+        <SearchBar />
         <hr />
         <TodoList />
         <AddTodo />

@@ -1,5 +1,3 @@
-import { createContext, useReducer } from 'react';
-
 export const ACTIONS = {
   TOGGLE_CHECKED: 'TOGGLE_CHECKED',
   DELETE_TODO: 'DELETE_TODO',
@@ -8,23 +6,7 @@ export const ACTIONS = {
   TOGGLE_HIDE_COMPLETED: 'TOGGLE_HIDE_COMPLETED',
 };
 
-export const TodolistContext = createContext();
-
-export function TodolistContextProvider({ children }) {
-  const [state, dispatch] = useReducer(todoReducer, {
-    todos: [{ id: crypto.randomUUID(), name: 'Test todo #1', checked: false }],
-    query: '',
-    hideCompleted: false,
-  });
-
-  return (
-    <TodolistContext.Provider value={{ state, dispatch }}>
-      {children}
-    </TodolistContext.Provider>
-  );
-}
-
-function todoReducer(state, { type, payload }) {
+export function todoReducer(state, { type, payload }) {
   switch (type) {
     case ACTIONS.TOGGLE_CHECKED: {
       return {
@@ -60,11 +42,13 @@ function todoReducer(state, { type, payload }) {
       };
     }
     case ACTIONS.TOGGLE_HIDE_COMPLETED: {
-      console.log('toggle gide completed');
       return {
         ...state,
         hideCompleted: payload.checked,
       };
+    }
+    default: {
+      return state;
     }
   }
 }

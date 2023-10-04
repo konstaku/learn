@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { ToDoItem } from './ToDoItem';
-import { TodolistContext } from './TodolistContext';
+import { TodolistContext } from './context';
 
 export function TodoList() {
   const { state } = useContext(TodolistContext);
@@ -12,7 +12,7 @@ export function TodoList() {
           if (state.hideCompleted && todo.checked) {
             return false;
           }
-          return todo.name.toLowerCase().includes(state.query.toLowerCase());
+          return todo.name.toLowerCase().includes(state.query?.toLowerCase());
         })
         .map((todo) => (
           <ToDoItem key={todo.id} {...todo} />

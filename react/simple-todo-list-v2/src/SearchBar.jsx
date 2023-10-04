@@ -1,9 +1,11 @@
-import { useContext, useState } from 'react';
-import { ACTIONS, TodolistContext } from './TodolistContext';
+import { useContext } from 'react';
+import { TodolistContext } from './context';
+import { ACTIONS } from './todoReducer';
 
-export function StatusBar() {
-  const [searchValue, setSearchValue] = useState('');
-  const { dispatch } = useContext(TodolistContext);
+export function SearchBar() {
+  //  const [searchValue, setSearchValue] = useState('');
+  const { state, dispatch } = useContext(TodolistContext);
+  const { query, hideCompleted } = state;
 
   return (
     <>
@@ -11,9 +13,8 @@ export function StatusBar() {
         Name:
         <input
           type="text"
-          value={searchValue}
+          value={query}
           onChange={(e) => {
-            setSearchValue(() => e.target.value);
             dispatch({
               type: ACTIONS.FILTER_TODOS,
               payload: { query: e.target.value },
@@ -24,6 +25,7 @@ export function StatusBar() {
       <label>
         <input
           type="checkbox"
+          checked={hideCompleted}
           onChange={(e) =>
             dispatch({
               type: ACTIONS.TOGGLE_HIDE_COMPLETED,

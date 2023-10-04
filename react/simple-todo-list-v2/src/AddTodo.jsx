@@ -1,5 +1,6 @@
-import { useContext, useRef, useState } from 'react';
-import { ACTIONS, TodolistContext } from './TodolistContext';
+import { useContext, useRef } from 'react';
+import { TodolistContext } from './context';
+import { ACTIONS } from './todoReducer';
 
 export function AddTodo() {
   const { dispatch } = useContext(TodolistContext);
@@ -9,6 +10,9 @@ export function AddTodo() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        if (newTodoRef.current.value === '') {
+          return;
+        }
         dispatch({
           type: ACTIONS.ADD_TODO,
           payload: { name: newTodoRef.current.value },
