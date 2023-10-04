@@ -1,5 +1,10 @@
-export function ToDoItem({ id, name, checked, deleteTodo, toggleChecked }) {
+import { useContext } from 'react';
+import { TodolistContext } from './TodolistContext';
+import { ACTIONS } from './TodolistContext';
+
+export function ToDoItem({ id, name, checked }) {
   if (!name) return;
+  const { dispatch } = useContext(TodolistContext);
 
   return (
     <li className="list-item">
@@ -8,12 +13,18 @@ export function ToDoItem({ id, name, checked, deleteTodo, toggleChecked }) {
           type="checkbox"
           data-list-item-checkbox
           checked={checked}
-          onChange={(e) => toggleChecked(id, e.target.checked)}
+          onChange={() =>
+            dispatch({ type: ACTIONS.TOGGLE_CHECKED, payload: { id, checked } })
+          }
         />
         <span data-list-item-text>{name}</span>
       </label>
 
-      <button type="button" data-button-delete onClick={() => deleteTodo(id)}>
+      <button
+        type="button"
+        data-button-delete
+        onClick={() => dispatch({ type: ACTIONS.DELETE_TODO, payload: { id } })}
+      >
         Delete
       </button>
     </li>

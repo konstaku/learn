@@ -1,18 +1,17 @@
 # Before Getting Started
 
-If you want you can open the `app.html` file in your browser to see what the final version of this application should look like. Your application should match the output exactly to what the `app.html` file renders.
+The starting code for this project is the exact same code as the ending of the simple todo list project we completed earlier in the course. The only change is I added an `app.html` file which shows what the final HTML/CSS for this project should look like. Also, the CSS file you used in the first project already contains all the styles needed for this updated version of the project so you do not need to add any additional styles.
 
-You may notice I included things like ids, data-attributes, class selectors, etc in the HTML. All these should be included in the final version of this project as the CSS uses them all. This is there to ensure you understand how to set HTML attributes in React.
-
-This project will also be one of the first projects where the instructions I give you will be very vague on implementation details. It is up to you to figure out the best way to implement each task. This will also more closely resemble working on projects in the real world.
+The goal of this project is to expand upon our simple todo list by adding more complex user interactions which will lead to more complex state management.
 
 # Instructions
 
-1. Add the ability to add todos with an input and a button which adds the todo when clicked. These todos should show up in a list above the input.
-    * You can use a form for this if you want, but there are some quirks with forms in React that we cover later in the course so it is probably best just to not use a form for now.
-2. Add the ability to mark a todo as complete by clicking on the checkbox or label for the todo.
-3. Add a delete button next to each todo item in the list which will remove the todo when clicked.
+1. The state for our todos should be stored in local storage so when we come back to the page at a later time all our data is still there
+2. Convert all the state in the application to use `useReducer` and `Context` to pass the state between components
+3. Add the ability to delete existing todos
+4. Add a form that lets you filter todos by their name and hide completed todos
 
 ## Bonus
 
-1. The easiest way to create this project is to just put all the HTML/data into one single component. This works fine for this project since it is so small, but with larger projects is not ideal. The bonus for this project is to break up your project so that each todo item in the list is rendered as a separate component from your `App.jsx` component.
+1. Add the ability to edit existing todos
+   - This is in the bonus section not because the editing portion is tricky, but because handling the proper UI state of swapping between text and an input is something we haven't really done before

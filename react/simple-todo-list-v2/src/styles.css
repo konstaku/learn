@@ -1,3 +1,7 @@
+body {
+  background-color: #f0dff0;
+}
+
 #new-todo-form {
   display: flex;
   flex-direction: column;
