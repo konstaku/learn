@@ -39,21 +39,18 @@ export function todoReducer(state, { type, payload }) {
             ),
           };
     }
-
     case ACTIONS.DELETE_TODO: {
       return {
         ...state,
         todos: state.todos.filter((todo) => todo.id !== payload.id),
       };
     }
-
     case ACTIONS.FILTER_TODOS: {
       return {
         ...state,
         query: payload.query,
       };
     }
-
     case ACTIONS.TOGGLE_CHECKED: {
       return {
         ...state,
@@ -62,14 +59,12 @@ export function todoReducer(state, { type, payload }) {
         ),
       };
     }
-
     case ACTIONS.TOGGLE_HIDE_COMPLETED: {
       return {
         ...state,
         hideCompleted: payload.checked,
       };
     }
-
     case ACTIONS.TOGGLE_EDIT: {
       return {
         ...state,
@@ -78,7 +73,6 @@ export function todoReducer(state, { type, payload }) {
         ),
       };
     }
-
     default: {
       return state;
     }

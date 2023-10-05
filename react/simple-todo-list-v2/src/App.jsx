@@ -2,6 +2,7 @@ import { TodoList } from './TodoList';
 import { SearchBar } from './SearchBar';
 import { AddTodo } from './AddTodo';
 import { TodolistContextProvider } from './context';
+import { ChakraProvider } from '@chakra-ui/react';
 import './styles.css';
 
 function App() {
@@ -10,13 +11,15 @@ function App() {
 
 function TodoApp() {
   return (
-    <>
-      <TodolistContextProvider>
-        <SearchBar />
-        <TodoList />
-        <AddTodo />
-      </TodolistContextProvider>
-    </>
+    <div className="main-container">
+      <ChakraProvider>
+        <TodolistContextProvider>
+          <SearchBar />
+          <TodoList />
+          <AddTodo />
+        </TodolistContextProvider>
+      </ChakraProvider>
+    </div>
   );
 }
 

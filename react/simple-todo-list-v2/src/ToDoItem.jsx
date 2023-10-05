@@ -1,6 +1,7 @@
 import { useContext, useRef } from 'react';
 import { TodolistContext } from './context';
 import { ACTIONS } from './todoReducer';
+import { Box, Button, Checkbox, Input, Text } from '@chakra-ui/react';
 
 export function ToDoItem({ id, name, checked, isEdit }) {
   const editRef = useRef();
@@ -9,9 +10,10 @@ export function ToDoItem({ id, name, checked, isEdit }) {
   if (!name) return;
 
   return (
-    <li className="list-item">
+    <Box className="list-item">
       {isEdit ? (
         <form
+          className="edit-wrapper"
           onSubmit={(e) => {
             e.preventDefault();
             dispatch({
@@ -20,15 +22,23 @@ export function ToDoItem({ id, name, checked, isEdit }) {
             });
           }}
         >
-          <input type="text" defaultValue={name} ref={editRef} />
-          <button>Save</button>
+          <Input
+            type="text"
+            defaultValue={name}
+            autoComplete="off"
+            className="input"
+            ref={editRef}
+          />
+          <Button type="submit">Save</Button>
         </form>
       ) : (
         <label className="list-item-label">
-          <input
-            type="checkbox"
+          <Checkbox
+            className="checkbox"
+            colorScheme="green"
             data-list-item-checkbox
-            checked={checked}
+            defaultChecked={checked}
+            size={'lg'}
             onChange={() =>
               dispatch({
                 type: ACTIONS.TOGGLE_CHECKED,
@@ -36,26 +46,33 @@ export function ToDoItem({ id, name, checked, isEdit }) {
               })
             }
           />
-          <span data-list-item-text>{name}</span>
+          <Text className="text" fontSize={'md'}>
+            {name}
+          </Text>
         </label>
       )}
-
-      <button
-        type="button"
-        data-button-edit
-        onClick={() =>
-          dispatch({ type: ACTIONS.TOGGLE_EDIT, payload: { id, isEdit } })
-        }
-      >
-        Edit
-      </button>
-      <button
-        type="button"
-        data-button-delete
-        onClick={() => dispatch({ type: ACTIONS.DELETE_TODO, payload: { id } })}
-      >
-        Delete
-      </button>
-    </li>
+      <div className="edit-delete">
+        <Button
+          type="button"
+          size={'sm'}
+          data-button-edit
+          onClick={() =>
+            dispatch({ type: ACTIONS.TOGGLE_EDIT, payload: { id, isEdit } })
+          }
+        >
+          Edit
+        </Button>
+        <Button
+          type="button"
+          size={'sm'}
+          data-button-delete
+          onClick={() =>
+            dispatch({ type: ACTIONS.DELETE_TODO, payload: { id } })
+          }
+        >
+          ❌
+        </Button>
+      </div>
+    </Box>
   );
 }

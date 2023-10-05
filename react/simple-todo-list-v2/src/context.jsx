@@ -3,14 +3,7 @@ import { todoReducer } from './todoReducer';
 
 export const TodolistContext = createContext();
 const INITIAL_STATE = {
-  todos: [
-    {
-      id: crypto.randomUUID(),
-      name: 'Test todo #1',
-      checked: false,
-      isEdit: false,
-    },
-  ],
+  todos: [],
   query: '',
   hideCompleted: false,
 };

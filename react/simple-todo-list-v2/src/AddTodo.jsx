@@ -1,6 +1,7 @@
 import { useContext, useRef } from 'react';
 import { TodolistContext } from './context';
 import { ACTIONS } from './todoReducer';
+import { Button, Input } from '@chakra-ui/react';
 
 export function AddTodo() {
   const { dispatch } = useContext(TodolistContext);
@@ -20,10 +21,20 @@ export function AddTodo() {
         newTodoRef.current.value = '';
       }}
     >
-      <div id="new-todo-form">
-        <label htmlFor="todo-input">New Todo</label>
-        <input type="text" id="todo-input" ref={newTodoRef} />
-        <button>Add Todo</button>
+      <div id="new-todo-form" className="new-todo">
+        <Input
+          type="text"
+          placeholder="New Todo"
+          autoFocus
+          autoComplete="off"
+          maxLength={40}
+          className="input new-todo"
+          id="todo-input"
+          ref={newTodoRef}
+        />
+        <Button className="new-todo" type="submit">
+          Add Todo
+        </Button>
       </div>
     </form>
   );

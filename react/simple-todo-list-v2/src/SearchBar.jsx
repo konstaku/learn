@@ -1,32 +1,21 @@
 import { useContext } from 'react';
 import { TodolistContext } from './context';
 import { ACTIONS } from './todoReducer';
+import { Checkbox, Input, Text } from '@chakra-ui/react';
 
 export function SearchBar() {
   const { state, dispatch } = useContext(TodolistContext);
-  const { query, hideCompleted } = state;
+  const { hideCompleted } = state;
 
   return (
-    <div className="filter-form">
-      <div className="filter-form-group">
-        <label>
-          Name:
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => {
-              dispatch({
-                type: ACTIONS.FILTER_TODOS,
-                payload: { query: e.target.value },
-              });
-            }}
-          />
-        </label>
-      </div>
-      <label>
-        <input
-          type="checkbox"
-          checked={hideCompleted}
+    <>
+      <div className="hide-completed-wrapper">
+        <Checkbox
+          className="checkbox"
+          colorScheme="gray"
+          size={'md'}
+          data-list-item-checkbox
+          defaultChecked={hideCompleted}
           onChange={(e) =>
             dispatch({
               type: ACTIONS.TOGGLE_HIDE_COMPLETED,
@@ -34,8 +23,21 @@ export function SearchBar() {
             })
           }
         />
-        Hide completed
-      </label>
-    </div>
+        <Text fontSize={'sm'}>Hide completed</Text>
+      </div>
+
+      <Input
+        type="text"
+        placeholder="Search"
+        variant={'flushed'}
+        id="search-field"
+        onChange={(e) => {
+          dispatch({
+            type: ACTIONS.FILTER_TODOS,
+            payload: { query: e.target.value },
+          });
+        }}
+      />
+    </>
   );
 }
