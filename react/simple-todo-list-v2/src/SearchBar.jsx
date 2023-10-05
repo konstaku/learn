@@ -5,7 +5,7 @@ import { Checkbox, Input, Text } from '@chakra-ui/react';
 
 export function SearchBar() {
   const { state, dispatch } = useContext(TodolistContext);
-  const { hideCompleted } = state;
+  const { query, hideCompleted } = state;
 
   return (
     <>
@@ -29,6 +29,7 @@ export function SearchBar() {
       <Input
         type="text"
         placeholder="Search"
+        defaultValue={query || null}
         variant={'flushed'}
         id="search-field"
         onChange={(e) => {
