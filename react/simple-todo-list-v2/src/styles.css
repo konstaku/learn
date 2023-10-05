@@ -1,8 +1,7 @@
 body {
   box-sizing: border-box;
   display: flex;
-  height: 100vh;
-
+  height: 100svh;
   flex-direction: column;
   justify-content: center;
 }
@@ -48,6 +47,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-height: 200px;
 }
 
 .list-item-label {
@@ -83,6 +83,7 @@ button {
 
 .edit-wrapper {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
 }
 
@@ -103,6 +104,30 @@ button {
   max-width: 250px;
   top: 1rem;
   right: 1rem;
+}
+
+.edit-delete {
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .main-container {
+    gap: 1rem;
+    width: 90%;
+    margin: auto;
+  }
+  .list-item {
+    height: 1rem;
+  }
+  #search-field {
+    max-width: 80%;
+    left: 1rem;
+    right: 1rem;
+    margin: auto;
+  }
+  .card-body {
+    max-height: 60svh;
+  }
 }
 
 /* .filter-form-group {

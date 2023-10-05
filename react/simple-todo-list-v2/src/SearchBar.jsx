@@ -14,6 +14,7 @@ export function SearchBar() {
           className="checkbox"
           colorScheme="gray"
           size={'md'}
+          id="hide-complete"
           data-list-item-checkbox
           defaultChecked={hideCompleted}
           onChange={(e) =>
@@ -23,7 +24,11 @@ export function SearchBar() {
             })
           }
         />
-        <Text fontSize={'sm'}>Hide completed</Text>
+        <label htmlFor="hide-complete">
+          <Text fontSize={'sm'} color={'grey'}>
+            Hide completed
+          </Text>
+        </label>
       </div>
 
       <Input

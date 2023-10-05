@@ -27,7 +27,6 @@ export function todoReducer(state, { type, payload }) {
         ],
       };
     }
-
     case ACTIONS.EDIT_TODO: {
       return payload.name === ''
         ? {
@@ -73,7 +72,9 @@ export function todoReducer(state, { type, payload }) {
       return {
         ...state,
         todos: state.todos.map((todo) =>
-          todo.id === payload.id ? { ...todo, isEdit: !payload.isEdit } : todo
+          todo.id === payload.id
+            ? { ...todo, isEdit: !payload.isEdit }
+            : { ...todo, isEdit: false }
         ),
       };
     }

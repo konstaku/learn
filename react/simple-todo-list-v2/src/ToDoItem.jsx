@@ -25,11 +25,22 @@ export function ToDoItem({ id, name, checked, isEdit }) {
           <Input
             type="text"
             defaultValue={name}
+            autoFocus
             autoComplete="off"
             className="input"
             ref={editRef}
+            onKeyUp={(e) => {
+              if (e.code === 'Escape') {
+                dispatch({
+                  type: ACTIONS.TOGGLE_EDIT,
+                  payload: { id, isEdit },
+                });
+              }
+            }}
           />
-          <Button type="submit">Save</Button>
+          <Button type="submit" size={'sm'}>
+            Save
+          </Button>
         </form>
       ) : (
         <label className="list-item-label">
