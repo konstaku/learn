@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 export const ACTIONS = {
   TOGGLE_CHECKED: 'TOGGLE_CHECKED',
   DELETE_TODO: 'DELETE_TODO',
@@ -16,14 +14,12 @@ export function todoReducer(state, { type, payload }) {
       return {
         ...state,
         todos: [
-          ...state.todos,
           {
-            //  id: crypto.randomUUID(),
-            // crypto.randomUUID() is unsupported in HTTP - I temporarily use substitute function
-            id: uuidv4(),
+            id: Date.now(),
             name: payload.name,
             checked: false,
           },
+          ...state.todos,
         ],
       };
     }
@@ -57,9 +53,13 @@ export function todoReducer(state, { type, payload }) {
     case ACTIONS.TOGGLE_CHECKED: {
       return {
         ...state,
-        todos: state.todos.map((todo) =>
-          todo.id === payload.id ? { ...todo, checked: !payload.checked } : todo
-        ),
+        todos: state.todos
+          .map((todo) =>
+            todo.id === payload.id
+              ? { ...todo, checked: !payload.checked }
+              : todo
+          )
+          .sort(sortTodos),
       };
     }
     case ACTIONS.TOGGLE_HIDE_COMPLETED: {
@@ -81,5 +81,27 @@ export function todoReducer(state, { type, payload }) {
     default: {
       return state;
     }
+  }
+}
+
+function sortTodos(a, b) {
+  if (a.checked === false && b.checked === false) {
+    return a.id - b.id;
+  }
+
+  if (a.checked === false && b.checked === true) {
+    return -1;
+  }
+
+  if (a.checked === true && b.checked === false) {
+    return 1;
+  }
+
+  if (a.checked === true && b.checked === true) {
+    return b.id - a.id;
+  }
+
+  {
+    return 0;
   }
 }
