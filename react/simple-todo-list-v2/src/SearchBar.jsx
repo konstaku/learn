@@ -3,25 +3,26 @@ import { TodolistContext } from './context';
 import { ACTIONS } from './todoReducer';
 
 export function SearchBar() {
-  //  const [searchValue, setSearchValue] = useState('');
   const { state, dispatch } = useContext(TodolistContext);
   const { query, hideCompleted } = state;
 
   return (
-    <>
-      <label>
-        Name:
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => {
-            dispatch({
-              type: ACTIONS.FILTER_TODOS,
-              payload: { query: e.target.value },
-            });
-          }}
-        />
-      </label>
+    <div className="filter-form">
+      <div className="filter-form-group">
+        <label>
+          Name:
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => {
+              dispatch({
+                type: ACTIONS.FILTER_TODOS,
+                payload: { query: e.target.value },
+              });
+            }}
+          />
+        </label>
+      </div>
       <label>
         <input
           type="checkbox"
@@ -32,9 +33,9 @@ export function SearchBar() {
               payload: { checked: e.target.checked },
             })
           }
-        />{' '}
+        />
         Hide completed
       </label>
-    </>
+    </div>
   );
 }

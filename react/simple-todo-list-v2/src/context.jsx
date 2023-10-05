@@ -2,19 +2,23 @@ import { createContext, useEffect, useReducer } from 'react';
 import { todoReducer } from './todoReducer';
 
 export const TodolistContext = createContext();
+const INITIAL_STATE = {
+  todos: [
+    {
+      id: crypto.randomUUID(),
+      name: 'Test todo #1',
+      checked: false,
+      isEdit: false,
+    },
+  ],
+  query: '',
+  hideCompleted: false,
+};
 
 export function TodolistContextProvider({ children }) {
   const [state, dispatch] = useReducer(todoReducer, undefined, () => {
-    if (localStorage.getItem('state')) {
-      return JSON.parse(localStorage.getItem('state'));
-    }
-    return {
-      todos: [
-        { id: crypto.randomUUID(), name: 'Test todo #1', checked: false },
-      ],
-      query: '',
-      hideCompleted: false,
-    };
+    const savedState = localStorage.getItem('state');
+    return savedState ? JSON.parse(savedState) : INITIAL_STATE;
   });
 
   useEffect(() => {

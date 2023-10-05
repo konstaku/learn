@@ -13,7 +13,6 @@ function TodoApp() {
     <>
       <TodolistContextProvider>
         <SearchBar />
-        <hr />
         <TodoList />
         <AddTodo />
       </TodolistContextProvider>
