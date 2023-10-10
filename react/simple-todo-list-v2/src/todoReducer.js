@@ -19,7 +19,7 @@ export function todoReducer(state, { type, payload }) {
             name: payload.name,
             checked: false,
           },
-          ...state.todos,
+          ...state?.todos,
         ],
       };
     }
@@ -86,7 +86,7 @@ export function todoReducer(state, { type, payload }) {
 
 function sortTodos(a, b) {
   if (a.checked === false && b.checked === false) {
-    return a.id - b.id;
+    return b.id - a.id;
   }
 
   if (a.checked === false && b.checked === true) {

@@ -1,23 +1,11 @@
-class Me {
-    constructor() {
-        this.name = 'Konsta'
-    }
+const a = 1;
 
-    sayHello() {
-        console.log(`Hello from ${this.name}`)
-    }
 
-    sayHelloArrow = () => console.log(`Hello from ${this.name}`)
+function foo() {
+    const func = () => console.log(a);
+
+    const a = 2;
+    setTimeout(func);
 }
 
-
-const konsta = new Me;
-
-konsta.sayHello()
-konsta.sayHelloArrow()
-
-const foo = konsta.sayHello
-const bar = konsta.sayHelloArrow
-
-//foo()
-bar()
+foo();
