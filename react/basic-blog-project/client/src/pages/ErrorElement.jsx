@@ -9,7 +9,13 @@ export default function ErrorElement() {
   return (
     <div>
       Unexpected error occured!
-      {environment === 'development' && <div>{error.message}</div>}
+      {environment === 'development' && (
+        <>
+          {' '}
+          <pre>{error.message}</pre>
+          <pre>{error.stack}</pre>
+        </>
+      )}
     </div>
   );
 }

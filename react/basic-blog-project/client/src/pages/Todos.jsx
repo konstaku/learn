@@ -1,11 +1,15 @@
-import { useLoaderData, useNavigation } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 
-export default function Todos() {
+export const todosRoute = {
+  loader,
+  element: <Todos />,
+};
+
+function Todos() {
   const todos = useLoaderData();
-  const { state } = useNavigation();
 
   return (
-    <div className={`container${state === 'loading' ? ' loading' : ''}`}>
+    <>
       <h1 className="page-title">Todos</h1>
       <ul>
         {todos.map((todo) => (
@@ -14,6 +18,10 @@ export default function Todos() {
           </li>
         ))}
       </ul>
-    </div>
+    </>
   );
+}
+
+function loader() {
+  return fetch('http://localhost:3000/todos');
 }

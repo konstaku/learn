@@ -1,16 +1,20 @@
-import { Link, useLoaderData, useNavigation } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 
-export default function Post() {
+export const postRoute = {
+  loader,
+  element: <Post />,
+};
+
+function Post() {
   const { post, author, comments } = useLoaderData();
-  const { state } = useNavigation();
 
   return (
-    <div className={`container${state === 'loading' ? ' loading' : ''}`}>
-      <h1 className="page-title">{post?.title}</h1>
+    <>
+      <h1 className="page-title">{post.title}</h1>
       <span className="page-subtitle">
-        By: <Link to={`/users/${author.id}`}>{author?.name}</Link>
+        By: <Link to={`/users/${author.id}`}>{author.name}</Link>
       </span>
-      <div>{post?.body}</div>
+      <div>{post.body}</div>
       <h3 className="mt-4 mb-2">Comments</h3>
       <div className="card-stack">
         {comments.map((comment) => (
@@ -22,6 +26,23 @@ export default function Post() {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
+}
+
+async function loader({ params, request: { signal } }) {
+  const post = await fetch(`http://localhost:3000/posts/${params.postId}`, {
+    signal,
+  }).then((res) => res.json());
+
+  const author = fetch(`http://localhost:3000/users/${post.userId}`, {
+    signal,
+  }).then((res) => res.json());
+
+  const comments = fetch(
+    `http://localhost:3000/posts/${params.postId}/comments`,
+    { signal }
+  ).then((res) => res.json());
+
+  return { post, author: await author, comments: await comments };
 }

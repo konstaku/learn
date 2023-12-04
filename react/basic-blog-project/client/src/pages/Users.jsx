@@ -1,11 +1,15 @@
-import { Link, useLoaderData, useNavigation } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 
-export default function Users() {
+export const usersRoute = {
+  loader,
+  element: <Users />,
+};
+
+function Users() {
   const users = useLoaderData();
-  const { state } = useNavigation();
 
   return (
-    <div className={`container${state === 'loading' ? ' loading' : ''}`}>
+    <>
       <h1 className="page-title">Users</h1>
       <div className="card-grid">
         {users.map((user) => {
@@ -26,6 +30,10 @@ export default function Users() {
           );
         })}
       </div>
-    </div>
+    </>
   );
+}
+
+function loader({ request: { signal } }) {
+  return fetch('http://localhost:3000/users', { signal });
 }

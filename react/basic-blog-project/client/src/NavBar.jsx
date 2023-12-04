@@ -1,4 +1,9 @@
-import { Link, Outlet, useNavigation } from 'react-router-dom';
+import {
+  Link,
+  Outlet,
+  ScrollRestoration,
+  useNavigation,
+} from 'react-router-dom';
 
 export default function NavBar() {
   const { state } = useNavigation();
@@ -19,8 +24,11 @@ export default function NavBar() {
           </li>
         </ul>
       </nav>
+      <ScrollRestoration />
       {state === 'loading' && <div className="loading-spinner" />}
-      <Outlet />
+      <div className={`container${state === 'loading' ? ' loading' : ''}`}>
+        <Outlet />
+      </div>
     </>
   );
 }
