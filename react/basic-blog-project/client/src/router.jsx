@@ -7,8 +7,10 @@ import { postRoute } from './pages/Post';
 import { usersRoute } from './pages/Users';
 import { userRoute } from './pages/User';
 import { todosRoute } from './pages/Todos';
+import { editpostRoute } from './pages/EditPost';
 
 import ErrorElement from './pages/ErrorElement';
+import { newPostRoute } from './pages/NewPost';
 
 export const router = createBrowserRouter([
   {
@@ -32,7 +34,20 @@ export const router = createBrowserRouter([
               },
               {
                 path: ':postId',
-                ...postRoute,
+                children: [
+                  {
+                    index: true,
+                    ...postRoute,
+                  },
+                  {
+                    path: 'edit',
+                    ...editpostRoute,
+                  },
+                ],
+              },
+              {
+                path: 'new',
+                ...newPostRoute,
               },
             ],
           },

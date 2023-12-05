@@ -1,4 +1,4 @@
-export const ACTIONS = {
+ export const ACTIONS = {
   TOGGLE_CHECKED: 'TOGGLE_CHECKED',
   DELETE_TODO: 'DELETE_TODO',
   ADD_TODO: 'ADD_TODO',
