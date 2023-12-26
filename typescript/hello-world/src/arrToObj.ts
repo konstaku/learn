@@ -1,15 +1,14 @@
-// let arrayElement: [string, number | boolean];
+type arrayElement = [string, number | boolean];
 
-// function arrayToObject<K, V>(array: (typeof arrayElement)[]) {
-//   let key: K = 1;
-//   let value: V = 10;
-//   console.log(array);
-// }
+const arr: arrayElement[] = [
+  ['keyOne', 1],
+  ['keyTwo', 12],
+  ['keyThree', true],
+];
 
-// const arr: (typeof arrayElement)[] = [
-//   ['keyOne', 1],
-//   ['keyTwo', 12],
-//   ['keyThree', true],
-// ];
+function arrayToObject<T extends arrayElement>(array: T[]) {
+  return array.map((el) => ({ [el[0]]: el[1] }));
+}
 
-// arrayToObject<number, number>(arr);
+const result = arrayToObject(arr);
+console.log(JSON.stringify(result));
