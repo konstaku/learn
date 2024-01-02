@@ -1,12 +1,13 @@
-type arrayElement = [string, number | boolean];
+// type arrayElement = [string, number | boolean];
+type ObjectElement = { [index: string]: number | boolean };
 
-const arr: arrayElement[] = [
+const arr = new Array<[string, number | boolean]>(
   ['keyOne', 1],
   ['keyTwo', 12],
-  ['keyThree', true],
-];
+  ['keyThree', true]
+);
 
-function arrayToObject<T extends arrayElement>(array: T[]) {
+function arrayToObject<T extends typeof arr>(array: T): ObjectElement[] {
   return array.map((el) => ({ [el[0]]: el[1] }));
 }
 
