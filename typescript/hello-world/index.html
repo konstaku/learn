@@ -1,17 +1,22 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vite + TS</title>
+  <title>Advanced Todo List</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="./src/main.ts" defer></script>
 </head>
 
 <body>
-  <div id="app"></div>
-  <script type="module" src="/src/main.ts"></script>
-  <input type="text" class="red-input" value="10"
-    style="background-color: darkred; color: white; width: 300px; padding: 1rem; border-radius: 2rem;"></input>
+  <ul id="list">
+
+  </ul>
+
+  <form id="new-todo-form">
+    <label for="todo-input">New Todo</label>
+    <input type="text" id="todo-input" />
+    <button type="submit">Add Todo</button>
+  </form>
 </body>
 
 </html>
