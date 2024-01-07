@@ -5,9 +5,9 @@ type Todo = {
 };
 type NewTodo = Partial<Todo>;
 
-const todoInput = document.getElementById('todo-input') as HTMLInputElement;
-const form = document.getElementById('new-todo-form') as HTMLFormElement;
-const list = document.getElementById('list') as HTMLUListElement;
+const todoInput = document.querySelector<HTMLInputElement>('#todo-input');
+const form = document.querySelector<HTMLFormElement>('#new-todo-form');
+const list = document.querySelector<HTMLUListElement>('#list');
 
 console.log('localStorage:', localStorage.getItem('todos'));
 
@@ -21,9 +21,13 @@ if (todos.length) {
   }
 }
 
-todoInput.addEventListener('keyup', saveOnChange);
-form.addEventListener('submit', onSubmit);
-list.addEventListener('click', handleTodoDelete);
+if (!todoInput || !form || !list) {
+  throw new Error('One of form elements is missing!');
+} else {
+  todoInput.addEventListener('keyup', saveOnChange);
+  form.addEventListener('submit', onSubmit);
+  list.addEventListener('click', handleTodoDelete);
+}
 
 function saveOnChange(e: KeyboardEvent): void {
   newTodoText.name = (e.target as HTMLInputElement).value;
