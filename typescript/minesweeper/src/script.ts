@@ -1,7 +1,7 @@
 // Display/UI
 
 import {
-  TILE_STATUSES,
+  TileStatus,
   createBoard,
   markTile,
   revealTile,
@@ -11,19 +11,18 @@ import {
   markedTilesCount,
 } from './minesweeper.ts';
 
-export type Tile = {
-  x: number;
-  y: number;
-  mine: boolean;
-  status: string;
-  adjacentMinesCount?: number;
-};
-export type Row = Tile[];
-export type Board = Row[];
 export type Position = {
   x: number;
   y: number;
 };
+
+export type Tile = Position & {
+  mine: boolean;
+  status: TileStatus;
+  adjacentMinesCount?: number;
+};
+
+export type Board = Tile[][];
 
 const BOARD_SIZE = 10;
 const NUMBER_OF_MINES = 10;
@@ -59,7 +58,9 @@ function tileToElement(tile: Tile) {
   element.dataset.status = tile.status;
   element.dataset.x = tile.x.toString();
   element.dataset.y = tile.y.toString();
-  element.textContent = tile.adjacentMinesCount?.toString() || '';
+  element.textContent = tile.adjacentMinesCount
+    ? tile.adjacentMinesCount.toString()
+    : '';
   return element;
 }
 
@@ -90,9 +91,7 @@ boardElement.style.setProperty('--size', BOARD_SIZE.toString());
 render();
 
 function listMinesLeft() {
-  minesLeftText.textContent = (
-    NUMBER_OF_MINES - markedTilesCount(board)
-  ).toString();
+  minesLeftText.textContent = `${NUMBER_OF_MINES - markedTilesCount(board)}`;
 }
 
 function checkGameEnd() {
@@ -111,7 +110,7 @@ function checkGameEnd() {
     messageText.textContent = 'You Lose';
     board.forEach((row) => {
       row.forEach((tile) => {
-        if (tile.status === TILE_STATUSES.MARKED) board = markTile(board, tile);
+        if (tile.status === 'marked') board = markTile(board, tile);
         if (tile.mine) board = revealTile(board, tile);
       });
     });
