@@ -1,35 +1,19 @@
 import { useState } from 'react';
+import type { CalendarEvent, EventColor } from './Calendar';
 
 type AddEventProps = {
   showAddEvent: Date;
   setShowAddEvent: (date: Date | null) => void;
+  events: CalendarEvent[];
+  setEvents: (events: CalendarEvent[]) => void;
 };
 
-type EventColor = 'green' | 'red' | 'blue';
+type AddEventHeaderProps = Pick<
+  AddEventProps,
+  'showAddEvent' | 'setShowAddEvent'
+>;
 
-// TODO: Make Events state in global file
-// Pass setEvents as props
-// Move event types to global
-
-type BaseEvent = {
-  date: Date;
-  name: string;
-  color: EventColor;
-};
-
-type FullDayEvent = BaseEvent & {
-  fullDay: true;
-};
-
-type PartDayEvent = BaseEvent & {
-  fullDay: false;
-  startTime: string;
-  endTime: string;
-};
-
-type CalendarEvent = FullDayEvent | PartDayEvent;
-
-type FormCalendarEvent = Partial<CalendarEvent>;
+// type FormCalendarEvent = Partial<CalendarEvent>;
 
 type FormErrors = {
   name?: string;
@@ -39,7 +23,11 @@ type FormErrors = {
 export default function AddEvent({
   setShowAddEvent,
   showAddEvent,
+  events,
+  setEvents,
 }: AddEventProps) {
+  console.log('events:', events);
+
   return (
     <div className="modal">
       <div className="overlay"></div>
@@ -51,6 +39,8 @@ export default function AddEvent({
         <AddEventBody
           showAddEvent={showAddEvent}
           setShowAddEvent={setShowAddEvent}
+          events={events}
+          setEvents={setEvents}
         />
       </div>
     </div>
@@ -60,7 +50,7 @@ export default function AddEvent({
 function AddEventHeader({
   showAddEvent: date,
   setShowAddEvent,
-}: AddEventProps) {
+}: AddEventHeaderProps) {
   return (
     <>
       <div className="modal-title">
@@ -78,7 +68,12 @@ function AddEventHeader({
   );
 }
 
-function AddEventBody({ setShowAddEvent, showAddEvent: date }: AddEventProps) {
+function AddEventBody({
+  setShowAddEvent,
+  showAddEvent: date,
+  events,
+  setEvents,
+}: AddEventProps) {
   const [name, setName] = useState('');
   const [allDay, setAllDay] = useState(false);
   const [startTime, setStartTime] = useState('');
@@ -86,7 +81,7 @@ function AddEventBody({ setShowAddEvent, showAddEvent: date }: AddEventProps) {
   const [color, setColor] = useState<EventColor>('blue');
   const [errors, setErrors] = useState<FormErrors>({});
 
-  const [NewEvent, setNewEvent] = useState<FormCalendarEvent>({});
+  // const [NewEvent, setNewEvent] = useState<FormCalendarEvent>({});
 
   return (
     <form
@@ -115,24 +110,36 @@ function AddEventBody({ setShowAddEvent, showAddEvent: date }: AddEventProps) {
         }
 
         if (allDay) {
-          setNewEvent({
-            date: date,
-            name: name,
-            fullDay: true,
-            color: color,
-          });
+          setEvents([
+            ...events,
+            {
+              date: date,
+              name: name,
+              fullDay: true,
+              color: color,
+            },
+          ]);
         }
 
         if (!allDay) {
-          setNewEvent({
-            date: date,
-            name: name,
-            fullDay: false,
-            startTime: startTime,
-            endTime: endTime,
-            color: color,
-          });
+          setEvents([
+            ...events,
+            {
+              date: date,
+              name: name,
+              fullDay: false,
+              startTime: startTime,
+              endTime: endTime,
+              color: color,
+            },
+          ]);
         }
+
+        if (errors) {
+          console.log('errors');
+        }
+
+        setShowAddEvent(null);
       }}
     >
       <div className="form-group">

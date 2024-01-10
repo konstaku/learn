@@ -6,9 +6,9 @@ type HeaderProps = {
   date: Date;
   setDate: (newDate: Date) => void;
 };
-type DayProps = { dayNumber: number };
 type DayGridProps = {
-  month: Month;
+  date: Date;
+  events: CalendarEvent[];
   setShowAddEvent: (date: Date | null) => void;
 };
 
@@ -17,84 +17,53 @@ type Day = {
   nonMonth: boolean;
   oldMonth: boolean;
   today?: boolean;
+  events?: CalendarEvent[];
 };
 type Month = Day[];
+
+export type EventColor = 'green' | 'red' | 'blue';
+type BaseEvent = {
+  date: Date;
+  name: string;
+  color: EventColor;
+};
+type FullDayEvent = BaseEvent & {
+  fullDay: true;
+};
+type PartDayEvent = BaseEvent & {
+  fullDay: false;
+  startTime: string;
+  endTime: string;
+};
+export type CalendarEvent = FullDayEvent | PartDayEvent;
 
 const DAYS_IN_WEEK = 7;
 
 export default function Calendar() {
   const [date, setDate] = useState(() => new Date());
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [showAddEvent, setShowAddEvent] = useState<Date | null>(null);
-  const month = fillMonth(date);
 
   return (
     <>
       <div className="calendar">
         <Header date={date} setDate={setDate} />
-        <DayGrid month={month} setShowAddEvent={setShowAddEvent} />
+        <DayGrid
+          date={date}
+          events={events}
+          setShowAddEvent={setShowAddEvent}
+        />
         {showAddEvent && (
           <AddEvent
             showAddEvent={showAddEvent}
             setShowAddEvent={setShowAddEvent}
+            events={events}
+            setEvents={setEvents}
           />
         )}
       </div>
     </>
   );
-}
-
-function fillMonth(date: Date) {
-  const month: Month = [];
-
-  const firstDayNumber = getFirstDay(date);
-  const monthLength = getMonthLength(date);
-
-  const today = new Date();
-
-  // If first day is not Monday, add days to calendar
-  if (firstDayNumber > 0) {
-    for (let i = firstDayNumber - 1; i >= 0; i--) {
-      month.push({
-        currentDate: new Date(date.getFullYear(), date.getMonth(), 0 - i),
-        nonMonth: true,
-        oldMonth: true,
-      });
-    }
-  }
-
-  // Fill month with days
-  for (let i = 1; i <= monthLength; i++) {
-    const day: Day = {
-      currentDate: new Date(date.getFullYear(), date.getMonth(), i),
-      nonMonth: false,
-      oldMonth: i < new Date().getDate(),
-    };
-
-    if (
-      day.currentDate.getFullYear() === today.getFullYear() &&
-      day.currentDate.getMonth() === today.getMonth() &&
-      day.currentDate.getDate() === today.getDate()
-    ) {
-      day.today = true;
-    }
-
-    month.push(day);
-  }
-
-  // Fill in remaining days
-  if (month.length % 7) {
-    const remainingDaysCount = 7 - (month.length % 7);
-
-    for (let i = 1; i <= remainingDaysCount; i++) {
-      month.push({
-        currentDate: new Date(date.getFullYear(), date.getMonth() + 1, i),
-        nonMonth: true,
-        oldMonth: false,
-      });
-    }
-  }
-
-  return month;
 }
 
 function Header({ date, setDate }: HeaderProps) {
@@ -133,20 +102,12 @@ function Header({ date, setDate }: HeaderProps) {
   }
 }
 
-function Day({ dayNumber }: DayProps) {
-  return (
-    <>
-      <div className="day">
-        <div className="day-header">
-          <div className="day-number">{dayNumber}</div>
-          <button className="add-event-btn">+</button>
-        </div>
-      </div>
-    </>
+function DayGrid({ date, events, setShowAddEvent }: DayGridProps) {
+  const eventsThisMonth = events.filter(
+    (event) => event.date.getMonth() === date.getMonth()
   );
-}
+  const month = fillMonth(date, eventsThisMonth);
 
-function DayGrid({ month, setShowAddEvent }: DayGridProps) {
   return (
     <div className="days">
       {month.map((day, i) => (
@@ -176,10 +137,90 @@ function DayGrid({ month, setShowAddEvent }: DayGridProps) {
               +
             </button>
           </div>
+
+          {day.events?.length && (
+            <>
+              <div className="events">
+                {day.events.map((event) =>
+                  event.fullDay ? (
+                    <button className={`all-day-event ${event.color} event`}>
+                      <div className="event-name">{event.name}</div>
+                    </button>
+                  ) : (
+                    <button className="event">
+                      <div className={`color-dot ${event.color}`}></div>
+                      <div className="event-time">{event.startTime}</div>
+                      <div className="event-name">{event.name}</div>
+                    </button>
+                  )
+                )}
+              </div>
+            </>
+          )}
         </div>
       ))}
     </div>
   );
+}
+
+function fillMonth(date: Date, eventsThisMonth: CalendarEvent[]) {
+  const month: Month = [];
+
+  const firstDayNumber = getFirstDay(date);
+  const monthLength = getMonthLength(date);
+
+  const today = new Date();
+
+  // If first day is not Monday, add days to calendar
+  if (firstDayNumber > 0) {
+    for (let i = firstDayNumber - 1; i >= 0; i--) {
+      month.push({
+        currentDate: new Date(date.getFullYear(), date.getMonth(), 0 - i),
+        nonMonth: true,
+        oldMonth: true,
+      });
+    }
+  }
+
+  // Fill month with days
+  for (let i = 1; i <= monthLength; i++) {
+    const currentDate = new Date(date.getFullYear(), date.getMonth(), i);
+    const eventsToday = eventsThisMonth.filter(
+      (event) => event.date.getDate() === currentDate.getDate()
+    );
+
+    const day: Day = {
+      currentDate: currentDate,
+      nonMonth: false,
+      oldMonth: i < new Date().getDate(),
+      events: eventsToday,
+    };
+
+    if (
+      day.currentDate.getFullYear() === today.getFullYear() &&
+      day.currentDate.getMonth() === today.getMonth() &&
+      day.currentDate.getDate() === today.getDate()
+    ) {
+      day.today = true;
+    }
+
+    month.push(day);
+  }
+
+  // Fill in remaining days
+  if (month.length % 7) {
+    const remainingDaysCount = 7 - (month.length % 7);
+
+    for (let i = 1; i <= remainingDaysCount; i++) {
+      month.push({
+        currentDate: new Date(date.getFullYear(), date.getMonth() + 1, i),
+        nonMonth: true,
+        oldMonth: false,
+      });
+    }
+  }
+
+  return month;
 }
 
 function getFirstDay(date: Date) {
