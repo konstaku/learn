@@ -137,23 +137,34 @@ function DayGrid({ date, events, setShowAddEvent }: DayGridProps) {
               +
             </button>
           </div>
-
+          {/* Add events */}
           {day.events?.length && (
             <>
               <div className="events">
-                {day.events.map((event) =>
-                  event.fullDay ? (
-                    <button className={`all-day-event ${event.color} event`}>
-                      <div className="event-name">{event.name}</div>
-                    </button>
-                  ) : (
-                    <button className="event">
-                      <div className={`color-dot ${event.color}`}></div>
-                      <div className="event-time">{event.startTime}</div>
-                      <div className="event-name">{event.name}</div>
-                    </button>
+                {day.events
+                  .sort((a, b) =>
+                    a.fullDay && !b.fullDay
+                      ? -1
+                      : !a.fullDay && b.fullDay
+                      ? 1
+                      : 0
                   )
-                )}
+                  .map((event, index) =>
+                    event.fullDay ? (
+                      <button
+                        key={index}
+                        className={`all-day-event ${event.color} event`}
+                      >
+                        <div className="event-name">{event.name}</div>
+                      </button>
+                    ) : (
+                      <button key={index} className="event">
+                        <div className={`color-dot ${event.color}`}></div>
+                        <div className="event-time">{event.startTime}</div>
+                        <div className="event-name">{event.name}</div>
+                      </button>
+                    )
+                  )}
               </div>
             </>
           )}

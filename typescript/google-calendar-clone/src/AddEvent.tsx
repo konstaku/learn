@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import type { CalendarEvent, EventColor } from './Calendar';
 
 type AddEventProps = {
@@ -84,64 +84,7 @@ function AddEventBody({
   // const [NewEvent, setNewEvent] = useState<FormCalendarEvent>({});
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        console.log(`
-          Name: ${name}
-          allDay: ${allDay}
-          startTime: ${startTime}
-          endTime: ${endTime}
-          color: ${color}
-        `);
-
-        if (!name) {
-          return setErrors((currentErrors) => ({
-            ...currentErrors,
-            name: 'Name is required',
-          }));
-        }
-
-        if (endTime < startTime) {
-          return setErrors((currentErrors) => ({
-            ...currentErrors,
-            date: 'Event can not end before beginning',
-          }));
-        }
-
-        if (allDay) {
-          setEvents([
-            ...events,
-            {
-              date: date,
-              name: name,
-              fullDay: true,
-              color: color,
-            },
-          ]);
-        }
-
-        if (!allDay) {
-          setEvents([
-            ...events,
-            {
-              date: date,
-              name: name,
-              fullDay: false,
-              startTime: startTime,
-              endTime: endTime,
-              color: color,
-            },
-          ]);
-        }
-
-        if (errors) {
-          console.log('errors');
-        }
-
-        setShowAddEvent(null);
-      }}
-    >
+    <form onSubmit={validateAndSubmitEvent}>
       <div className="form-group">
         <label htmlFor="name">Name</label>
         <input
@@ -235,4 +178,54 @@ function AddEventBody({
       </div>
     </form>
   );
+
+  function validateAndSubmitEvent(e: FormEvent) {
+    e.preventDefault();
+
+    if (!name) {
+      return setErrors((currentErrors) => ({
+        ...currentErrors,
+        name: 'Name is required',
+      }));
+    }
+
+    if (endTime < startTime) {
+      return setErrors((currentErrors) => ({
+        ...currentErrors,
+        date: 'Event can not end before beginning',
+      }));
+    }
+
+    if (allDay) {
+      setEvents([
+        ...events,
+        {
+          date: date,
+          name: name,
+          fullDay: true,
+          color: color,
+        },
+      ]);
+    }
+
+    if (!allDay) {
+      setEvents([
+        ...events,
+        {
+          date: date,
+          name: name,
+          fullDay: false,
+          startTime: startTime,
+          endTime: endTime,
+          color: color,
+        },
+      ]);
+    }
+
+    if (errors) {
+      console.log('errors');
+    }
+
+    setShowAddEvent(null);
+  }
 }
