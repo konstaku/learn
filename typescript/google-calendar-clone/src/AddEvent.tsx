@@ -91,7 +91,7 @@ function AddEventBody({
   );
   const [errors, setErrors] = useState<FormErrors>({});
 
-  const { date } = event;
+  const { date, new: isNew } = event;
 
   return (
     <form onSubmit={validateAndSubmitEvent}>
@@ -193,7 +193,7 @@ function AddEventBody({
       </div>
       <div className="row">
         <button className="btn btn-success" type="submit">
-          Add
+          {isNew ? 'Add' : 'Save'}
         </button>
         <button className="btn btn-delete" type="button">
           Delete
@@ -204,8 +204,6 @@ function AddEventBody({
 
   function validateAndSubmitEvent(e: FormEvent) {
     e.preventDefault();
-
-    console.log(startTime, endTime);
 
     if (!name) {
       return setErrors((currentErrors) => ({
@@ -228,34 +226,37 @@ function AddEventBody({
       }));
     }
 
+    let eventToSave: CalendarEvent;
+    const eventId = isNew ? crypto.randomUUID() : event.id;
+
     if (allDay) {
-      setEvents([
-        ...events,
-        {
-          id: crypto.randomUUID(),
-          new: false,
-          date: date,
-          name: name,
-          fullDay: true,
-          color: color,
-        },
-      ]);
+      eventToSave = {
+        id: eventId,
+        new: false,
+        date: date,
+        name: name,
+        fullDay: true,
+        color: color,
+      };
+    } else {
+      eventToSave = {
+        id: eventId,
+        new: false,
+        date: date,
+        name: name,
+        fullDay: false,
+        startTime: startTime,
+        endTime: endTime,
+        color: color,
+      };
     }
 
-    if (!allDay) {
-      setEvents([
-        ...events,
-        {
-          id: crypto.randomUUID(),
-          new: false,
-          date: date,
-          name: name,
-          fullDay: false,
-          startTime: startTime,
-          endTime: endTime,
-          color: color,
-        },
-      ]);
+    if (isNew) {
+      setEvents([...events, eventToSave]);
+    } else {
+      setEvents(
+        events.map((ev) => (ev.id === eventToSave.id ? eventToSave : ev))
+      );
     }
 
     if (errors) {
