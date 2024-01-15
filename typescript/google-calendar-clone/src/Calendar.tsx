@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AddEvent from './AddEvent';
+import AddOrEditEvent from './AddEvent';
 
 // Props types
 type HeaderProps = {
@@ -9,7 +9,7 @@ type HeaderProps = {
 type DayGridProps = {
   date: Date;
   events: CalendarEvent[];
-  setShowAddEvent: (date: Date | null) => void;
+  setShowAddEvent: (event: CalendarEvent | NewCalendarEvent | null) => void;
 };
 
 type Day = {
@@ -23,6 +23,8 @@ type Month = Day[];
 
 export type EventColor = 'green' | 'red' | 'blue';
 type BaseEvent = {
+  id: string;
+  new: false;
   date: Date;
   name: string;
   color: EventColor;
@@ -36,13 +38,16 @@ type PartDayEvent = BaseEvent & {
   endTime: string;
 };
 export type CalendarEvent = FullDayEvent | PartDayEvent;
+export type NewCalendarEvent = Pick<BaseEvent, 'date'> & { new: true };
 
 const DAYS_IN_WEEK = 7;
 
 export default function Calendar() {
   const [date, setDate] = useState(() => new Date());
   const [events, setEvents] = useState<CalendarEvent[]>([]);
-  const [showAddEvent, setShowAddEvent] = useState<Date | null>(null);
+  const [showAddEvent, setShowAddEvent] = useState<
+    NewCalendarEvent | CalendarEvent | null
+  >(null);
 
   return (
     <>
@@ -54,7 +59,7 @@ export default function Calendar() {
           setShowAddEvent={setShowAddEvent}
         />
         {showAddEvent && (
-          <AddEvent
+          <AddOrEditEvent
             showAddEvent={showAddEvent}
             setShowAddEvent={setShowAddEvent}
             events={events}
@@ -130,44 +135,54 @@ function DayGrid({ date, events, setShowAddEvent }: DayGridProps) {
             </div>
             <button
               className="add-event-btn"
-              onClick={(e) =>
-                handleAddEvent(e, setShowAddEvent, day.currentDate)
+              onClick={() =>
+                handleAddEvent(setShowAddEvent, {
+                  date: day.currentDate,
+                  new: true,
+                })
               }
             >
               +
             </button>
           </div>
           {/* Add events */}
-          {day.events?.length && (
+          {day.events?.length ? (
             <>
               <div className="events">
-                {day.events
-                  .sort((a, b) =>
-                    a.fullDay && !b.fullDay
-                      ? -1
-                      : !a.fullDay && b.fullDay
-                      ? 1
-                      : 0
-                  )
-                  .map((event, index) =>
-                    event.fullDay ? (
-                      <button
-                        key={index}
-                        className={`all-day-event ${event.color} event`}
-                      >
-                        <div className="event-name">{event.name}</div>
-                      </button>
-                    ) : (
-                      <button key={index} className="event">
-                        <div className={`color-dot ${event.color}`}></div>
-                        <div className="event-time">{event.startTime}</div>
-                        <div className="event-name">{event.name}</div>
-                      </button>
-                    )
-                  )}
+                {day.events &&
+                  day.events
+                    .sort((a, b) => {
+                      if (a.fullDay && !b.fullDay) return -1;
+                      if (!a.fullDay && b.fullDay) return 1;
+                      if (!a.fullDay && !b.fullDay) {
+                        return a.endTime < b.endTime ? -1 : 1;
+                      }
+                      return 0;
+                    })
+                    .map((event, index) =>
+                      event.fullDay ? (
+                        <button
+                          key={index}
+                          onClick={() => handleAddEvent(setShowAddEvent, event)}
+                          className={`all-day-event ${event.color} event`}
+                        >
+                          <div className="event-name">{event.name}</div>
+                        </button>
+                      ) : (
+                        <button
+                          key={index}
+                          onClick={() => handleAddEvent(setShowAddEvent, event)}
+                          className="event"
+                        >
+                          <div className={`color-dot ${event.color}`}></div>
+                          <div className="event-time">{event.startTime}</div>
+                          <div className="event-name">{event.name}</div>
+                        </button>
+                      )
+                    )}
               </div>
             </>
-          )}
+          ) : undefined}
         </div>
       ))}
     </div>
@@ -243,10 +258,8 @@ function getMonthLength(date: Date) {
 }
 
 function handleAddEvent(
-  e: React.MouseEvent<HTMLButtonElement>,
-  setShowAddEvent: (date: Date | null) => void,
-  currentDate: Date
+  setShowAddEvent: (event: CalendarEvent | NewCalendarEvent) => void,
+  event: CalendarEvent | NewCalendarEvent
 ) {
-  console.log('event', e);
-  setShowAddEvent(currentDate);
+  setShowAddEvent(event);
 }

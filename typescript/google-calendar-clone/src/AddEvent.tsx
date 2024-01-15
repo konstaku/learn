@@ -1,9 +1,9 @@
 import { FormEvent, useState } from 'react';
-import type { CalendarEvent, EventColor } from './Calendar';
+import type { CalendarEvent, EventColor, NewCalendarEvent } from './Calendar';
 
-type AddEventProps = {
-  showAddEvent: Date;
-  setShowAddEvent: (date: Date | null) => void;
+export type AddEventProps = {
+  showAddEvent: CalendarEvent | NewCalendarEvent;
+  setShowAddEvent: (event: CalendarEvent | NewCalendarEvent | null) => void;
   events: CalendarEvent[];
   setEvents: (events: CalendarEvent[]) => void;
 };
@@ -13,21 +13,21 @@ type AddEventHeaderProps = Pick<
   'showAddEvent' | 'setShowAddEvent'
 >;
 
-// type FormCalendarEvent = Partial<CalendarEvent>;
-
 type FormErrors = {
   name?: string;
   date?: string;
 };
 
-export default function AddEvent({
-  setShowAddEvent,
+export default function AddOrEditEvent(props: AddEventProps) {
+  return handleAddEvent(props);
+}
+
+function handleAddEvent({
   showAddEvent,
+  setShowAddEvent,
   events,
   setEvents,
 }: AddEventProps) {
-  console.log('events:', events);
-
   return (
     <div className="modal">
       <div className="overlay"></div>
@@ -48,9 +48,11 @@ export default function AddEvent({
 }
 
 function AddEventHeader({
-  showAddEvent: date,
+  showAddEvent,
   setShowAddEvent,
 }: AddEventHeaderProps) {
+  const { date } = showAddEvent;
+
   return (
     <>
       <div className="modal-title">
@@ -69,19 +71,27 @@ function AddEventHeader({
 }
 
 function AddEventBody({
+  showAddEvent: event,
   setShowAddEvent,
-  showAddEvent: date,
   events,
   setEvents,
 }: AddEventProps) {
-  const [name, setName] = useState('');
-  const [allDay, setAllDay] = useState(false);
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
-  const [color, setColor] = useState<EventColor>('blue');
+  const [name, setName] = useState(() => (event.new ? '' : event.name));
+  const [allDay, setAllDay] = useState(() =>
+    event.new ? false : event.fullDay
+  );
+  const [startTime, setStartTime] = useState(() =>
+    event.new || event.fullDay ? '' : event.startTime
+  );
+  const [endTime, setEndTime] = useState(() =>
+    event.new || event.fullDay ? '' : event.endTime
+  );
+  const [color, setColor] = useState<EventColor>(() =>
+    event.new ? 'blue' : event.color
+  );
   const [errors, setErrors] = useState<FormErrors>({});
 
-  // const [NewEvent, setNewEvent] = useState<FormCalendarEvent>({});
+  const { date } = event;
 
   return (
     <form onSubmit={validateAndSubmitEvent}>
@@ -92,8 +102,14 @@ function AddEventBody({
           name="name"
           id="name"
           value={name}
+          style={errors.name ? { border: '1px solid red' } : {}}
           onChange={(e) => setName(e.target.value)}
         />
+        {errors.name && (
+          <span style={{ color: 'red', fontSize: '0.5rem' }}>
+            {errors.name}
+          </span>
+        )}
       </div>
       <div className="form-group checkbox">
         <input
@@ -114,8 +130,14 @@ function AddEventBody({
             id="start-time"
             defaultValue={startTime}
             disabled={allDay}
+            style={errors.date ? { border: '1px solid red' } : {}}
             onChange={(e) => setStartTime(e.target.value)}
           />
+          {errors.date && (
+            <span style={{ color: 'red', fontSize: '0.5rem' }}>
+              {errors.date}
+            </span>
+          )}
         </div>
         <div className="form-group">
           <label htmlFor="end-time">End Time</label>
@@ -125,6 +147,7 @@ function AddEventBody({
             id="end-time"
             disabled={allDay}
             defaultValue={endTime}
+            style={errors.date ? { border: '1px solid red' } : {}}
             onChange={(e) => setEndTime(e.target.value)}
           />
         </div>
@@ -182,10 +205,19 @@ function AddEventBody({
   function validateAndSubmitEvent(e: FormEvent) {
     e.preventDefault();
 
+    console.log(startTime, endTime);
+
     if (!name) {
       return setErrors((currentErrors) => ({
         ...currentErrors,
         name: 'Name is required',
+      }));
+    }
+
+    if (!allDay && (!startTime || !endTime)) {
+      return setErrors((currentErrors) => ({
+        ...currentErrors,
+        date: 'Event time is required',
       }));
     }
 
@@ -200,6 +232,8 @@ function AddEventBody({
       setEvents([
         ...events,
         {
+          id: crypto.randomUUID(),
+          new: false,
           date: date,
           name: name,
           fullDay: true,
@@ -212,6 +246,8 @@ function AddEventBody({
       setEvents([
         ...events,
         {
+          id: crypto.randomUUID(),
+          new: false,
           date: date,
           name: name,
           fullDay: false,
