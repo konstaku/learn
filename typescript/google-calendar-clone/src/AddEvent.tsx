@@ -18,11 +18,7 @@ type FormErrors = {
   date?: string;
 };
 
-export default function AddOrEditEvent(props: AddEventProps) {
-  return handleAddEvent(props);
-}
-
-function handleAddEvent({
+export default function AddOrEditEvent({
   showAddEvent,
   setShowAddEvent,
   events,
@@ -195,9 +191,17 @@ function AddEventBody({
         <button className="btn btn-success" type="submit">
           {isNew ? 'Add' : 'Save'}
         </button>
-        <button className="btn btn-delete" type="button">
-          Delete
-        </button>
+        {!isNew && (
+          <button
+            className="btn btn-delete"
+            onClick={() =>
+              deleteEvent(event, events, setEvents, setShowAddEvent)
+            }
+            type="button"
+          >
+            Delete
+          </button>
+        )}
       </div>
     </form>
   );
@@ -205,6 +209,7 @@ function AddEventBody({
   function validateAndSubmitEvent(e: FormEvent) {
     e.preventDefault();
 
+    // Validate and set errors if any
     if (!name) {
       return setErrors((currentErrors) => ({
         ...currentErrors,
@@ -226,6 +231,7 @@ function AddEventBody({
       }));
     }
 
+    // Create an event, preserve ID if it's not new
     let eventToSave: CalendarEvent;
     const eventId = isNew ? crypto.randomUUID() : event.id;
 
@@ -251,6 +257,7 @@ function AddEventBody({
       };
     }
 
+    // Add to event list, or replace in case of existing event
     if (isNew) {
       setEvents([...events, eventToSave]);
     } else {
@@ -263,6 +270,20 @@ function AddEventBody({
       console.log('errors');
     }
 
+    // Close modal
     setShowAddEvent(null);
   }
+}
+
+function deleteEvent(
+  eventToDelete: CalendarEvent,
+  events: CalendarEvent[],
+  setEvents: (events: CalendarEvent[]) => void,
+  setShowAddEvent: (n: null) => void
+) {
+  const filteredEvents = events.filter(
+    (event) => event.id !== eventToDelete.id
+  );
+  setEvents(filteredEvents);
+  setShowAddEvent(null);
 }
