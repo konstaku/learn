@@ -11,6 +11,15 @@ type DayGridProps = {
   events: CalendarEvent[];
   setShowAddEvent: (event: CalendarEvent | NewCalendarEvent | null) => void;
 };
+type EventProps = {
+  event: CalendarEvent;
+  index: number;
+  setShowAddEvent: (event: CalendarEvent | NewCalendarEvent | null) => void;
+};
+type ShowMoreButtonProps = {
+  eventsToday: number;
+  maxEvents: number;
+};
 
 type Day = {
   currentDate: Date;
@@ -173,17 +182,23 @@ function DayGrid({ date, events, setShowAddEvent }: DayGridProps) {
           {day.events?.length ? (
             <>
               <div className="events">
-                {day.events &&
+                {
+                  // prettier-ignore
                   day.events
                     .sort(sortEvents)
                     .slice(0, maxEvents)
-                    .map(mapEvents)}
-                {day.events?.length && day.events.length > maxEvents ? (
-                  <button className="events-view-more-btn">
-                    +{day.events.length - maxEvents} More
-                  </button>
-                ) : undefined}
+                    .map((event, index) => 
+                      <Event 
+                        event={event} 
+                        setShowAddEvent={setShowAddEvent} 
+                        index={index} 
+                      />)
+                }
               </div>
+              <ShowMoreButton
+                eventsToday={day.events.length}
+                maxEvents={maxEvents}
+              />
             </>
           ) : undefined}
         </div>
@@ -218,33 +233,43 @@ function DayGrid({ date, events, setShowAddEvent }: DayGridProps) {
     }
     return 0;
   }
+}
 
-  function mapEvents(event: CalendarEvent, index: number) {
-    if (event.fullDay) {
-      return (
-        <button
-          key={index}
-          onClick={() => handleAddEvent(setShowAddEvent, event)}
-          className={`all-day-event ${event.color} event`}
-        >
-          <div className="event-name">{event.name}</div>
-        </button>
-      );
-    } else {
-      return (
-        <button
-          key={index}
-          onClick={() => handleAddEvent(setShowAddEvent, event)}
-          className="event"
-        >
-          <div className={`color-dot ${event.color}`}></div>
-          <div className="event-time">{event.startTime}</div>
-          <div className="event-name">{event.name}</div>
-        </button>
-      );
-    }
+function Event({ event, index, setShowAddEvent }: EventProps) {
+  if (event.fullDay) {
+    return (
+      <button
+        key={index}
+        onClick={() => handleAddEvent(setShowAddEvent, event)}
+        className={`all-day-event ${event.color} event`}
+      >
+        <div className="event-name">{event.name}</div>
+      </button>
+    );
+  } else {
+    return (
+      <button
+        key={index}
+        onClick={() => handleAddEvent(setShowAddEvent, event)}
+        className="event"
+      >
+        <div className={`color-dot ${event.color}`}></div>
+        <div className="event-time">{event.startTime}</div>
+        <div className="event-name">{event.name}</div>
+      </button>
+    );
   }
 }
+
+function ShowMoreButton({ eventsToday, maxEvents }: ShowMoreButtonProps) {
+  return (
+    <button className="events-view-more-btn" hidden={eventsToday <= maxEvents}>
+      +{eventsToday - maxEvents} More
+    </button>
+  );
+}
+
+// Helpers
 
 function fillMonth(date: Date, eventsThisMonth: CalendarEvent[]) {
   const month: Month = [];

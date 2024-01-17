@@ -144,6 +144,7 @@ body {
   padding: var(--day-padding);
   overflow: hidden;
   display: flex;
+  height: 100%;
   flex-direction: column;
 }
 
@@ -274,13 +275,17 @@ body {
 .events {
   display: flex;
   flex-direction: column;
+  height: 100%;
   gap: 0.5rem;
   flex-grow: 1;
   overflow: hidden;
 }
 
 .events-view-more-btn {
+  position: sticky;
+  margin-bottom: 0;
   border: none;
+  justify-self: flex-end;
   background: none;
   font-weight: bold;
   color: #555;
@@ -425,7 +430,7 @@ body {
 }
 
 .color-radio + label::before {
-  content: "";
+  content: '';
   display: block;
   width: 1.75rem;
   height: 1.75rem;
@@ -442,14 +447,14 @@ body {
   outline: 1px solid black;
 }
 
-.color-radio[value="blue"] + label::before {
+.color-radio[value='blue'] + label::before {
   background-color: var(--blue-background);
 }
 
-.color-radio[value="red"] + label::before {
+.color-radio[value='red'] + label::before {
   background-color: var(--red-background);
 }
 
-.color-radio[value="green"] + label::before {
+.color-radio[value='green'] + label::before {
   background-color: var(--green-background);
 }
