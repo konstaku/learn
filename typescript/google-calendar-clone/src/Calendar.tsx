@@ -13,12 +13,16 @@ type DayGridProps = {
 };
 type EventProps = {
   event: CalendarEvent;
-  index: number;
   setShowAddEvent: (event: CalendarEvent | NewCalendarEvent | null) => void;
 };
 type ShowMoreButtonProps = {
-  eventsToday: number;
-  maxEvents: number;
+  eventNumber: number;
+};
+type CalendarCellProps = {
+  index: number;
+  day: Day;
+  setShowAddEvent: (event: CalendarEvent | NewCalendarEvent | null) => void;
+  windowHeight: number;
 };
 
 type Day = {
@@ -90,6 +94,7 @@ export default function Calendar() {
   );
 }
 
+// Components
 function Header({ date, setDate }: HeaderProps) {
   return (
     <>
@@ -130,116 +135,109 @@ function DayGrid({ date, events, setShowAddEvent }: DayGridProps) {
   const eventsThisMonth = events.filter(
     (event) => event.date.getMonth() === date.getMonth()
   );
-  const cellRef = useRef<HTMLDivElement>(null);
+
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const [maxEvents, setMaxEvents] = useState(calculateMaxEvents);
-  useEffect(trackWindowResize, []);
 
-  // let maxEvents = calculateMaxEvents();
-
-  // Do something when window height changes
-  useEffect(() => {
-    setMaxEvents(calculateMaxEvents());
-  }, [windowHeight]);
+  useEffect(() => trackWindowResize(setWindowHeight), []);
 
   const month = fillMonth(date, eventsThisMonth);
 
   return (
     <div className="days">
       {month.map((day, i) => (
-        <div
-          // Set first cell as a ref to calculate height
-          ref={i === 0 ? cellRef : undefined}
+        <CalendarCell
           key={new Date(day.currentDate).toString()}
-          className={`day ${day.nonMonth && 'non-month-day'} ${
-            day.oldMonth && 'old-month-day'
-          }`}
-        >
-          <div className="day-header">
-            {i < DAYS_IN_WEEK && (
-              <div className="week-name">
-                {day.currentDate.toLocaleDateString('default', {
-                  weekday: 'short',
-                })}
-              </div>
-            )}
-            <div className={`day-number ${day.today && 'today'}`}>
-              {day.currentDate.getDate()}
-            </div>
-            <button
-              className="add-event-btn"
-              onClick={() =>
-                handleAddEvent(setShowAddEvent, {
-                  date: day.currentDate,
-                  new: true,
-                })
-              }
-            >
-              +
-            </button>
-          </div>
-          {/* Add events */}
-          {day.events?.length ? (
-            <>
-              <div className="events">
-                {
-                  // prettier-ignore
-                  day.events
-                    .sort(sortEvents)
-                    .slice(0, maxEvents)
-                    .map((event, index) => 
-                      <Event 
-                        event={event} 
-                        setShowAddEvent={setShowAddEvent} 
-                        index={index} 
-                      />)
-                }
-              </div>
-              <ShowMoreButton
-                eventsToday={day.events.length}
-                maxEvents={maxEvents}
-              />
-            </>
-          ) : undefined}
-        </div>
+          index={i}
+          day={day}
+          setShowAddEvent={setShowAddEvent}
+          windowHeight={windowHeight}
+        />
       ))}
     </div>
   );
-
-  function calculateMaxEvents() {
-    const cellHeight = cellRef.current?.clientHeight;
-    if (!cellHeight) return 0;
-
-    const padding = 4;
-    const elemHeight = 24;
-
-    return Math.floor(cellHeight / (padding * 2 + elemHeight)) - 1;
-  }
-
-  function handleWindowResize() {
-    setWindowHeight(window.innerHeight);
-  }
-
-  function trackWindowResize() {
-    window.addEventListener('resize', handleWindowResize);
-    return () => window.removeEventListener('resize', handleWindowResize);
-  }
-
-  function sortEvents(a: CalendarEvent, b: CalendarEvent) {
-    if (a.fullDay && !b.fullDay) return -1;
-    if (!a.fullDay && b.fullDay) return 1;
-    if (!a.fullDay && !b.fullDay) {
-      return a.endTime < b.endTime ? -1 : 1;
-    }
-    return 0;
-  }
 }
 
-function Event({ event, index, setShowAddEvent }: EventProps) {
+function CalendarCell({
+  index: i,
+  day,
+  setShowAddEvent,
+  windowHeight,
+}: // maxEvents,
+CalendarCellProps) {
+  const cellRef = useRef<HTMLDivElement>(null);
+  const [maxEvents, setMaxEvents] = useState(() => calculateMaxEvents(cellRef));
+  // Do something when window height changes
+  useEffect(() => {
+    if (day.events?.length) {
+      setMaxEvents(calculateMaxEvents(cellRef));
+    }
+  }, [windowHeight]);
+
+  let showMore = day.events?.length
+    ? day.events.length - maxEvents <= 0
+      ? 0
+      : day.events.length - maxEvents
+    : 0;
+
+  return (
+    <div
+      // Set first cell as a ref to calculate height
+      // ref={i === 0 ? cellRef : undefined}
+      className={`day ${day.nonMonth && 'non-month-day'} ${
+        day.oldMonth && 'old-month-day'
+      }`}
+    >
+      <div className="day-header">
+        {i < DAYS_IN_WEEK && (
+          <div className="week-name">
+            {day.currentDate.toLocaleDateString('default', {
+              weekday: 'short',
+            })}
+          </div>
+        )}
+        <div className={`day-number ${day.today && 'today'}`}>
+          {day.currentDate.getDate()}
+        </div>
+        <button
+          className="add-event-btn"
+          onClick={() =>
+            handleAddEvent(setShowAddEvent, {
+              date: day.currentDate,
+              new: true,
+            })
+          }
+        >
+          +
+        </button>
+      </div>
+      {/* Add events */}
+      {day.events?.length ? (
+        <>
+          <div className="events" ref={cellRef}>
+            {
+              // prettier-ignore
+              day.events
+              .sort(sortEvents)
+              .slice(0, maxEvents)
+              .map((event, index) => 
+                <Event 
+                  event={event} 
+                  setShowAddEvent={setShowAddEvent} 
+                  key={index} 
+                />)
+            }
+          </div>
+          {showMore > 0 && <ShowMoreButton eventNumber={showMore} />}
+        </>
+      ) : undefined}
+    </div>
+  );
+}
+
+function Event({ event, setShowAddEvent }: EventProps) {
   if (event.fullDay) {
     return (
       <button
-        key={index}
         onClick={() => handleAddEvent(setShowAddEvent, event)}
         className={`all-day-event ${event.color} event`}
       >
@@ -249,7 +247,6 @@ function Event({ event, index, setShowAddEvent }: EventProps) {
   } else {
     return (
       <button
-        key={index}
         onClick={() => handleAddEvent(setShowAddEvent, event)}
         className="event"
       >
@@ -261,15 +258,37 @@ function Event({ event, index, setShowAddEvent }: EventProps) {
   }
 }
 
-function ShowMoreButton({ eventsToday, maxEvents }: ShowMoreButtonProps) {
-  return (
-    <button className="events-view-more-btn" hidden={eventsToday <= maxEvents}>
-      +{eventsToday - maxEvents} More
-    </button>
-  );
+// Helpers
+function handleWindowResize(setWindowHeight: (height: number) => void) {
+  setWindowHeight(window.innerHeight);
 }
 
-// Helpers
+function trackWindowResize(setWindowHeight: (n: number) => void) {
+  window.addEventListener('resize', () => handleWindowResize(setWindowHeight));
+  return () =>
+    window.removeEventListener('resize', () =>
+      handleWindowResize(setWindowHeight)
+    );
+}
+
+function ShowMoreButton({ eventNumber }: ShowMoreButtonProps) {
+  return <button className="events-view-more-btn">+{eventNumber} More</button>;
+}
+
+function calculateMaxEvents(cellRef: React.RefObject<HTMLDivElement>) {
+  const cellHeight = cellRef.current?.clientHeight;
+  if (!cellHeight) return 0;
+
+  const padding = 4;
+  const elemHeight = 24;
+  const eventFit = Math.floor(cellHeight / (padding * 2 + elemHeight));
+
+  console.log(
+    `This div is ${cellHeight}px high and can fit ${eventFit} events`
+  );
+
+  return eventFit;
+}
 
 function fillMonth(date: Date, eventsThisMonth: CalendarEvent[]) {
   const month: Month = [];
@@ -344,4 +363,13 @@ function handleAddEvent(
   event: CalendarEvent | NewCalendarEvent
 ) {
   setShowAddEvent(event);
+}
+
+function sortEvents(a: CalendarEvent, b: CalendarEvent) {
+  if (a.fullDay && !b.fullDay) return -1;
+  if (!a.fullDay && b.fullDay) return 1;
+  if (!a.fullDay && !b.fullDay) {
+    return a.endTime < b.endTime ? -1 : 1;
+  }
+  return 0;
 }
