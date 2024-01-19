@@ -1,5 +1,9 @@
 import { FormEvent, useState } from 'react';
-import type { CalendarEvent, EventColor, NewCalendarEvent } from './Calendar';
+import type {
+  CalendarEvent,
+  EventColor,
+  NewCalendarEvent,
+} from './components/Calendar';
 
 export type AddEventProps = {
   showAddEvent: CalendarEvent | NewCalendarEvent;
