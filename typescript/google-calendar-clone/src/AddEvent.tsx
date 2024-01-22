@@ -1,9 +1,10 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import type {
   CalendarEvent,
   EventColor,
   NewCalendarEvent,
 } from './components/Calendar';
+import { getReadableDate, handleCloseModal } from './utilities/helpers';
 
 export type AddEventProps = {
   showAddEvent: CalendarEvent | NewCalendarEvent;
@@ -12,10 +13,9 @@ export type AddEventProps = {
   setEvents: (events: CalendarEvent[]) => void;
 };
 
-type AddEventHeaderProps = Pick<
-  AddEventProps,
-  'showAddEvent' | 'setShowAddEvent'
->;
+type AddEventHeaderProps = {
+  modalRef: React.RefObject<HTMLDivElement>;
+} & Pick<AddEventProps, 'showAddEvent' | 'setShowAddEvent'>;
 
 type FormErrors = {
   name?: string;
@@ -28,13 +28,16 @@ export default function AddOrEditEvent({
   events,
   setEvents,
 }: AddEventProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div className="modal">
+    <div className="modal" ref={modalRef}>
       <div className="overlay"></div>
       <div className="modal-body">
         <AddEventHeader
           showAddEvent={showAddEvent}
           setShowAddEvent={setShowAddEvent}
+          modalRef={modalRef}
         />
         <AddEventBody
           showAddEvent={showAddEvent}
@@ -50,19 +53,19 @@ export default function AddOrEditEvent({
 function AddEventHeader({
   showAddEvent,
   setShowAddEvent,
+  modalRef,
 }: AddEventHeaderProps) {
-  const { date } = showAddEvent;
+  const { date, new: isNew } = showAddEvent;
 
   return (
     <>
       <div className="modal-title">
-        <div>Add Event</div>
-        <small>{`${date.getDate()}/${
-          (date.getMonth() + 1).toString().length > 1
-            ? (date.getMonth() + 1).toString()
-            : '0' + (date.getMonth() + 1).toString()
-        }/${date.getFullYear()}`}</small>
-        <button className="close-btn" onClick={() => setShowAddEvent(null)}>
+        <div>{isNew ? 'Add' : 'Edit'} Event</div>
+        <small>{getReadableDate(date)}</small>
+        <button
+          className="close-btn"
+          onClick={() => handleCloseModal(setShowAddEvent, modalRef.current)}
+        >
           &times;
         </button>
       </div>

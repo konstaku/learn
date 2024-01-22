@@ -313,12 +313,21 @@ body {
 }
 
 .modal.closing .overlay {
-  animation: fade-in 250ms forwards reverse;
+  animation: fade-out 250ms forwards;
 }
 
 @keyframes fade-in {
   100% {
     background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  100% {
+    background-color: transparent;
   }
 }
 
@@ -334,12 +343,20 @@ body {
 }
 
 .modal.closing .modal-body {
-  animation: pop-in 250ms forwards reverse;
+  animation: pop-out 250ms forwards;
 }
 
 @keyframes pop-in {
   100% {
     scale: 1;
+  }
+}
+@keyframes pop-out {
+  0% {
+    scale: 1;
+  }
+  100% {
+    scale: 0;
   }
 }
 

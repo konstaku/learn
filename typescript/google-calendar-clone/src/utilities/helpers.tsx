@@ -124,8 +124,10 @@ export function getMonthLength(date: Date) {
 
 export function handleAddEvent(
   setShowAddEvent: (event: CalendarEvent | NewCalendarEvent) => void,
+  setShowEventList: (date: Date | null) => void,
   event: CalendarEvent | NewCalendarEvent
 ) {
+  setShowEventList(null);
   setShowAddEvent(event);
 }
 
@@ -136,4 +138,23 @@ export function sortEvents(a: CalendarEvent, b: CalendarEvent) {
     return a.endTime < b.endTime ? -1 : 1;
   }
   return 0;
+}
+
+export function getReadableDate(date: Date) {
+  return `${date.getDate()}/${
+    (date.getMonth() + 1).toString().length > 1
+      ? (date.getMonth() + 1).toString()
+      : '0' + (date.getMonth() + 1).toString()
+  }/${date.getFullYear().toString().slice(2, 4)}`;
+}
+
+export function handleCloseModal(
+  callback: (value: null) => void,
+  ref: HTMLDivElement | null
+) {
+  setTimeout(() => ref?.classList.add('closing'));
+
+  setTimeout(() => {
+    callback(null);
+  }, 250);
 }

@@ -7,12 +7,14 @@ type DayGridProps = {
   date: Date;
   events: CalendarEvent[];
   setShowAddEvent: (event: CalendarEvent | NewCalendarEvent | null) => void;
+  setShowEventList: (date: Date | null) => void;
 };
 
 export default function DayGrid({
   date,
   events,
   setShowAddEvent,
+  setShowEventList,
 }: DayGridProps) {
   const eventsThisMonth = events.filter(
     (event) => event.date.getMonth() === date.getMonth()
@@ -32,6 +34,7 @@ export default function DayGrid({
           index={i}
           day={day}
           setShowAddEvent={setShowAddEvent}
+          setShowEventList={setShowEventList}
           windowHeight={windowHeight}
         />
       ))}

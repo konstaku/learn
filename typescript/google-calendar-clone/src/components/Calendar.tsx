@@ -3,6 +3,7 @@ import AddOrEditEvent from '../AddEvent';
 import CalendarHeader from './CalendarHeader';
 import DayGrid from './DayGrid';
 import { loadEvents } from '../utilities/helpers';
+import EventListModal from './EventListModal';
 
 export type Day = {
   currentDate: Date;
@@ -34,6 +35,7 @@ export type NewCalendarEvent = Pick<BaseEvent, 'date'> & { new: true };
 export default function Calendar() {
   const [date, setDate] = useState(() => new Date());
   const [events, setEvents] = useState<CalendarEvent[]>(loadEvents);
+  const [showEventList, setShowEventList] = useState<Date | null>(null);
   const [showAddEvent, setShowAddEvent] = useState<
     NewCalendarEvent | CalendarEvent | null
   >(null);
@@ -50,6 +52,7 @@ export default function Calendar() {
           date={date}
           events={events}
           setShowAddEvent={setShowAddEvent}
+          setShowEventList={setShowEventList}
         />
         {showAddEvent && (
           <AddOrEditEvent
@@ -57,6 +60,14 @@ export default function Calendar() {
             setShowAddEvent={setShowAddEvent}
             events={events}
             setEvents={setEvents}
+          />
+        )}
+        {showEventList && (
+          <EventListModal
+            date={showEventList}
+            events={events}
+            setShowAddEvent={setShowAddEvent}
+            setShowEventList={setShowEventList}
           />
         )}
       </div>

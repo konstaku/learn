@@ -11,6 +11,7 @@ type CalendarCellProps = {
   index: number;
   day: Day;
   setShowAddEvent: (event: CalendarEvent | NewCalendarEvent | null) => void;
+  setShowEventList: (date: Date | null) => void;
   windowHeight: number;
 };
 
@@ -18,7 +19,7 @@ type CalendarCellHeaderProps = Omit<CalendarCellProps, 'windowHeight'>;
 
 type ShowMoreButtonProps = {
   eventNumber: number;
-};
+} & Pick<CalendarCellProps, 'setShowEventList' | 'day'>;
 
 const DAYS_IN_WEEK = 7;
 
@@ -26,6 +27,7 @@ export default function CalendarCell({
   index,
   day,
   setShowAddEvent,
+  setShowEventList,
   windowHeight,
 }: CalendarCellProps) {
   const cellRef = useRef<HTMLDivElement>(null);
@@ -56,6 +58,7 @@ export default function CalendarCell({
         index={index}
         day={day}
         setShowAddEvent={setShowAddEvent}
+        setShowEventList={setShowEventList}
       />
       {day.events?.length ? (
         <>
@@ -69,11 +72,18 @@ export default function CalendarCell({
                   <Event 
                     event={event} 
                     setShowAddEvent={setShowAddEvent} 
+                    setShowEventList={setShowEventList}
                     key={index} 
                   />)
             }
           </div>
-          {showMoreCount > 0 && <ShowMoreButton eventNumber={showMoreCount} />}
+          {showMoreCount > 0 && (
+            <ShowMoreButton
+              day={day}
+              eventNumber={showMoreCount}
+              setShowEventList={setShowEventList}
+            />
+          )}
         </>
       ) : undefined}
     </div>
@@ -84,6 +94,7 @@ function CalendarCellHeader({
   index,
   day,
   setShowAddEvent,
+  setShowEventList,
 }: CalendarCellHeaderProps) {
   return (
     <div className="day-header">
@@ -100,7 +111,7 @@ function CalendarCellHeader({
       <button
         className="add-event-btn"
         onClick={() =>
-          handleAddEvent(setShowAddEvent, {
+          handleAddEvent(setShowAddEvent, setShowEventList, {
             date: day.currentDate,
             new: true,
           })
@@ -112,6 +123,17 @@ function CalendarCellHeader({
   );
 }
 
-function ShowMoreButton({ eventNumber }: ShowMoreButtonProps) {
-  return <button className="events-view-more-btn">+{eventNumber} More</button>;
+function ShowMoreButton({
+  day,
+  eventNumber,
+  setShowEventList,
+}: ShowMoreButtonProps) {
+  return (
+    <button
+      className="events-view-more-btn"
+      onClick={() => setShowEventList(day.currentDate)}
+    >
+      +{eventNumber} More
+    </button>
+  );
 }

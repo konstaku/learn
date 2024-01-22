@@ -1,12 +1,17 @@
 import { handleAddEvent } from '../utilities/helpers';
 import type { CalendarEvent, NewCalendarEvent } from './Calendar';
 
-type EventProps = {
+export type EventProps = {
   event: CalendarEvent;
   setShowAddEvent: (event: CalendarEvent | NewCalendarEvent | null) => void;
+  setShowEventList: (date: Date | null) => void;
 };
 
-export default function Event({ event, setShowAddEvent }: EventProps) {
+export default function Event({
+  event,
+  setShowAddEvent,
+  setShowEventList,
+}: EventProps) {
   let eventClassName: string;
   let childElements: JSX.Element;
 
@@ -26,7 +31,7 @@ export default function Event({ event, setShowAddEvent }: EventProps) {
 
   return (
     <button
-      onClick={() => handleAddEvent(setShowAddEvent, event)}
+      onClick={() => handleAddEvent(setShowAddEvent, setShowEventList, event)}
       className={eventClassName}
     >
       {childElements}
