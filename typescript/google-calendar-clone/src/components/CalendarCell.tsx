@@ -15,12 +15,6 @@ type CalendarCellProps = {
   windowHeight: number;
 };
 
-type CalendarCellHeaderProps = Omit<CalendarCellProps, 'windowHeight'>;
-
-type ShowMoreButtonProps = {
-  eventNumber: number;
-} & Pick<CalendarCellProps, 'setShowEventList' | 'day'>;
-
 const DAYS_IN_WEEK = 7;
 
 export default function CalendarCell({
@@ -63,19 +57,17 @@ export default function CalendarCell({
       {day.events?.length ? (
         <>
           <div className="events" ref={cellRef}>
-            {
-              // prettier-ignore
-              day.events
-                .sort(sortEvents)
-                .slice(0, maxEvents)
-                .map((event, index) => 
-                  <Event 
-                    event={event} 
-                    setShowAddEvent={setShowAddEvent} 
-                    setShowEventList={setShowEventList}
-                    key={index} 
-                  />)
-            }
+            {[...day.events]
+              .sort(sortEvents)
+              .slice(0, maxEvents)
+              .map((event, index) => (
+                <Event
+                  event={event}
+                  setShowAddEvent={setShowAddEvent}
+                  setShowEventList={setShowEventList}
+                  key={index}
+                />
+              ))}
           </div>
           {showMoreCount > 0 && (
             <ShowMoreButton
@@ -89,6 +81,8 @@ export default function CalendarCell({
     </div>
   );
 }
+
+type CalendarCellHeaderProps = Omit<CalendarCellProps, 'windowHeight'>;
 
 function CalendarCellHeader({
   index,
@@ -122,6 +116,10 @@ function CalendarCellHeader({
     </div>
   );
 }
+
+type ShowMoreButtonProps = {
+  eventNumber: number;
+} & Pick<CalendarCellProps, 'setShowEventList' | 'day'>;
 
 function ShowMoreButton({
   day,

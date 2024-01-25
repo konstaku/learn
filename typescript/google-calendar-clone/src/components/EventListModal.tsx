@@ -35,7 +35,7 @@ export default function EventListModal({
           </button>
         </div>
         <div className="events">
-          {events
+          {[...events]
             .filter((event) => event.date.toUTCString() === date.toUTCString())
             .sort(sortEvents)
             .map((event) => (
