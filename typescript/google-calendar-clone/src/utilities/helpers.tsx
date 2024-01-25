@@ -152,8 +152,9 @@ export function handleCloseModal(
   callback: (value: null) => void,
   ref: HTMLDivElement | null
 ) {
-  setTimeout(() => ref?.classList.add('closing'));
+  if (!ref) return console.error(`Can't animate close window: no ref`);
 
+  ref.classList.add('closing');
   setTimeout(() => {
     callback(null);
   }, 250);

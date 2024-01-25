@@ -1,5 +1,9 @@
 import { useRef } from 'react';
-import { getReadableDate, handleCloseModal } from '../utilities/helpers';
+import {
+  getReadableDate,
+  handleCloseModal,
+  sortEvents,
+} from '../utilities/helpers';
 import type { CalendarEvent, NewCalendarEvent } from './Calendar';
 import Event from './Event';
 
@@ -31,14 +35,17 @@ export default function EventListModal({
           </button>
         </div>
         <div className="events">
-          {
-            //prettier-ignore
-            events
-              .filter(event => event.date.toUTCString() === date.toUTCString())
-              .map((event) => (
-                <Event key={event.id} event={event} setShowAddEvent={setShowAddEvent} setShowEventList={setShowEventList} />
-              ))
-          }
+          {events
+            .filter((event) => event.date.toUTCString() === date.toUTCString())
+            .sort(sortEvents)
+            .map((event) => (
+              <Event
+                key={event.id}
+                event={event}
+                setShowAddEvent={setShowAddEvent}
+                setShowEventList={setShowEventList}
+              />
+            ))}
         </div>
       </div>
     </div>

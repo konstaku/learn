@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import AddOrEditEvent from '../AddEvent';
+import { loadEvents } from '../utilities/helpers';
+import AddOrEditEvent from './AddEvent';
 import CalendarHeader from './CalendarHeader';
 import DayGrid from './DayGrid';
-import { loadEvents } from '../utilities/helpers';
 import EventListModal from './EventListModal';
 
 export type Day = {
@@ -56,16 +56,16 @@ export default function Calendar() {
         />
         {showAddEvent && (
           <AddOrEditEvent
-            showAddEvent={showAddEvent}
-            setShowAddEvent={setShowAddEvent}
             events={events}
             setEvents={setEvents}
+            showAddEvent={showAddEvent}
+            setShowAddEvent={setShowAddEvent}
           />
         )}
         {showEventList && (
           <EventListModal
-            date={showEventList}
             events={events}
+            date={showEventList}
             setShowAddEvent={setShowAddEvent}
             setShowEventList={setShowEventList}
           />

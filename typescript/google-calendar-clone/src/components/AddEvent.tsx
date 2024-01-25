@@ -1,10 +1,6 @@
 import { FormEvent, useRef, useState } from 'react';
-import type {
-  CalendarEvent,
-  EventColor,
-  NewCalendarEvent,
-} from './components/Calendar';
-import { getReadableDate, handleCloseModal } from './utilities/helpers';
+import type { CalendarEvent, EventColor, NewCalendarEvent } from './Calendar';
+import { getReadableDate, handleCloseModal } from '../utilities/helpers';
 
 export type AddEventProps = {
   showAddEvent: CalendarEvent | NewCalendarEvent;
@@ -273,8 +269,8 @@ function AddEventBody({
       );
     }
 
-    if (errors) {
-      console.log('errors');
+    if (errors.date || errors.name) {
+      console.log(`errors:`, errors);
     }
 
     // Close modal
