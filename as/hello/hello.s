@@ -1,15 +1,10 @@
-.global _start
-.align 2
+        .globl _main
+        .p2align 2
+_main:
+        adr x0, msg
+        bl _puts
+        mov x0, #42
+        b _exit
 
-_start: mov     X0, #1
-        adr     X1, helloworld
-        mov     X2, #13
-        mov     X16, #4
-        svc     #0x80
-
-        mov X0, #0
-        mov X16, #1
-        svc #0x80
-
-helloworld:     .ascii "Hello World!\n"
-
+msg:
+        .asciz "Hey hey"
